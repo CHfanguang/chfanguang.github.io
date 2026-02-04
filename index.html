@@ -1,61 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shadow Moon</title>
-
+  <title>Shadow Moon 官方网站</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
       background: #ffffff;
-      color: #000;
+      color: #000000;
       line-height: 1.8;
     }
 
-    /* ===== 顶部标题区域 ===== */
-    header {
+    /* 吸顶标题 + 毛玻璃 */
+    .header {
       position: sticky;
       top: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 120px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(0px);
-      transition: all 0.3s ease;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.7);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      padding: 16px 20px;
     }
 
-    header.scrolled {
-      justify-content: space-between;
-      padding: 0 32px;
-      height: 70px;
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-    }
-
-    /* ===== Logo ===== */
     .logo {
-      font-size: 56px;
-      font-weight: 700;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
-
-    header.scrolled .logo {
       font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 1px;
     }
 
-    /* Google 风格彩色 */
     .logo span:nth-child(1) { color: #4285F4; }
     .logo span:nth-child(2) { color: #EA4335; }
     .logo span:nth-child(3) { color: #FBBC05; }
@@ -63,97 +39,104 @@
     .logo span:nth-child(5) { color: #34A853; }
     .logo span:nth-child(6) { color: #EA4335; }
     .logo span:nth-child(7) { color: #4285F4; }
-    .logo span:nth-child(8) { color: #34A853; }
-    .logo span:nth-child(9) { color: #EA4335; }
-    .logo span:nth-child(10){ color: #FBBC05; }
+    .logo span:nth-child(8) { color: #FBBC05; }
+    .logo span:nth-child(9) { color: #34A853; }
+    .logo span:nth-child(10) { color: #EA4335; }
 
-    /* ===== 右侧毛玻璃占位 ===== */
-    .frosted {
-      display: none;
-      width: 200px;
-      height: 36px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.4);
-      backdrop-filter: blur(10px);
-    }
-
-    header.scrolled .frosted {
-      display: block;
-    }
-
-    /* ===== 内容 ===== */
-    main {
+    .container {
       max-width: 900px;
-      margin: 60px auto;
-      padding: 0 24px;
-      font-size: 16px;
+      margin: 0 auto;
+      padding: 40px 20px;
     }
 
-    h2 {
-      margin: 40px 0 16px;
-      font-size: 22px;
+    .welcome {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
     }
 
-    p {
-      margin-bottom: 16px;
+    .welcome span {
+      color: #4285F4;
+      font-weight: 700;
+    }
+
+    .links a {
+      display: inline-block;
+      margin: 6px 0;
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    .price {
+      margin-top: 20px;
+      font-weight: 600;
+    }
+
+    .disclaimer-title {
+      margin-top: 30px;
+      font-weight: 800;
+    }
+
+    .footer {
+      margin-top: 60px;
+      text-align: center;
+      color: #999999;
+      font-size: 14px;
     }
   </style>
 </head>
-
 <body>
 
-  <header id="header">
+  <div class="header">
     <div class="logo">
-      <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span>
-      <span>w</span>
+      <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span><span>w</span>
+      <span> </span>
       <span>M</span><span>o</span><span>o</span><span>n</span>
     </div>
-    <div class="frosted"></div>
-  </header>
+  </div>
 
-  <main>
-    <h2>免责声明</h2>
+  <div class="container">
+    <div class="welcome">
+      <span>欢迎访问 Shadow Moon 官方网站</span>
+    </div>
 
-    <p>
-      Shadow Moon 及其关联实体（以下简称“本公司”）所提供的所有产品、
-      服务与信息仅用于技术研究、学习与合法用途。
-    </p>
+    <div class="links">
+      我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br/>
+      <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a>
+    </div>
 
-    <p>
-      使用者在使用本公司相关内容前，应自行确认其行为符合所在地法律法规。
-      任何因违反法律法规而产生的后果，均由使用者本人承担，
-      本公司不承担任何直接或间接责任。
-    </p>
+    <div class="price">
+      所有商品均为1元<br/>
+      仅限微信支付<br/>
+      赠送终身售后服务
+    </div>
 
-    <p>
-      本公司明确声明，不对任何第三方利用本公司产品、代码或技术
-      从事非法行为负责。
-    </p>
+    <div class="disclaimer-title">
+      免责声明
+    </div>
+    <div class="disclaimer">
+      本站所提供的所有软件与服务仅供学习与技术研究交流使用。<br/>
+      用户因使用本站内容所产生的一切后果需自行承担，与本站及运营者无关。<br/>
+      请在遵守当地法律法规的前提下合理使用相关产品与服务。
+    </div>
 
-    <!-- 下面是为了制造“很长”的滚动效果 -->
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-    <p>……（此处可继续扩展免责声明内容）</p>
-  </main>
+    <div class="links" style="margin-top:20px;">
+      <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">https://v.kuaishou.com/JE2u8ANT</a>
+    </div>
 
-  <script>
-    const header = document.getElementById('header');
+    <div style="margin-top:20px;">
+      我的世界 CH凡光
+    </div>
 
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
-  </script>
+    <div class="footer">
+      Powerd by Shadow Moon © CH凡光
+    </div>
+  </div>
 
 </body>
-  </html>
+</html>
