@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shadow Moon</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+      background: #ffffff;
+      color: #000;
+      line-height: 1.8;
+    }
+
+    /* ===== 顶部标题区域 ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(0px);
+      transition: all 0.3s ease;
+    }
+
+    header.scrolled {
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 70px;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* ===== Logo ===== */
+    .logo {
+      font-size: 56px;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    header.scrolled .logo {
+      font-size: 28px;
+    }
+
+    /* Google 风格彩色 */
+    .logo span:nth-child(1) { color: #4285F4; }
+    .logo span:nth-child(2) { color: #EA4335; }
+    .logo span:nth-child(3) { color: #FBBC05; }
+    .logo span:nth-child(4) { color: #4285F4; }
+    .logo span:nth-child(5) { color: #34A853; }
+    .logo span:nth-child(6) { color: #EA4335; }
+    .logo span:nth-child(7) { color: #4285F4; }
+    .logo span:nth-child(8) { color: #34A853; }
+    .logo span:nth-child(9) { color: #EA4335; }
+    .logo span:nth-child(10){ color: #FBBC05; }
+
+    /* ===== 右侧毛玻璃占位 ===== */
+    .frosted {
+      display: none;
+      width: 200px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    header.scrolled .frosted {
+      display: block;
+    }
+
+    /* ===== 内容 ===== */
+    main {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 24px;
+      font-size: 16px;
+    }
+
+    h2 {
+      margin: 40px 0 16px;
+      font-size: 22px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header id="header">
+    <div class="logo">
+      <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span>
+      <span>w</span>
+      <span>M</span><span>o</span><span>o</span><span>n</span>
+    </div>
+    <div class="frosted"></div>
+  </header>
+
+  <main>
+    <h2>免责声明</h2>
+
+    <p>
+      Shadow Moon 及其关联实体（以下简称“本公司”）所提供的所有产品、
+      服务与信息仅用于技术研究、学习与合法用途。
+    </p>
+
+    <p>
+      使用者在使用本公司相关内容前，应自行确认其行为符合所在地法律法规。
+      任何因违反法律法规而产生的后果，均由使用者本人承担，
+      本公司不承担任何直接或间接责任。
+    </p>
+
+    <p>
+      本公司明确声明，不对任何第三方利用本公司产品、代码或技术
+      从事非法行为负责。
+    </p>
+
+    <!-- 下面是为了制造“很长”的滚动效果 -->
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+    <p>……（此处可继续扩展免责声明内容）</p>
+  </main>
+
+  <script>
+    const header = document.getElementById('header');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+  </script>
+
+</body>
+  </html>
