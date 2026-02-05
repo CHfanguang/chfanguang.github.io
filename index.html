@@ -122,6 +122,37 @@
       background-size: cover;
     }
 
+    /* 底部导航栏 */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .bottom-nav a {
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .bottom-nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* 其他内容区域 */
+    .other-content {
+      padding: 40px 20px;
+      margin-top: 80px;
+    }
+
   </style>
 </head>
 <body class="metal-background">
@@ -174,6 +205,24 @@
     <div class="footer">
       Powerd by Shadow Moon © CH凡光
     </div>
+  </div>
+
+  <!-- 底部导航栏 -->
+  <div class="bottom-nav">
+    <a href="#">主页</a>
+    <a href="#" onclick="document.querySelector('.other-content').scrollIntoView({behavior: 'smooth'});">其他</a>
+  </div>
+
+  <!-- 其他内容 -->
+  <div class="other-content">
+    <h3>官方其他账号：</h3>
+    <p>tg：<a href="https://t.me/CHfanguang" target="_blank">t.me/CHfanguang</a></p>
+    <p>fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/" target="_blank">https://www.facebook.com/share/1bUbjR2mGj/</a></p>
+    <p>ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244" target="_blank">https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244</a></p>
+    <p>X（原推特）：<a href="https://x.com/chfanguang" target="_blank">https://x.com/chfanguang</a></p>
+    <p>snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK" target="_blank">https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK</a></p>
+    <p>discord：<a href="#" target="_blank">chfanguang</a></p>
+    <p>reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO" target="_blank">https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO</a></p>
   </div>
 
 </body>
