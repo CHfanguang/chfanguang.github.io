@@ -14,47 +14,34 @@ body{
   color:#000;
 }
 
-/* 顶部液态玻璃 */
-.header{
+/* 吸顶 LOGO */
+.top-logo{
   position:sticky;
-  top:0;
-  z-index:1000;
+  top:14px;
+  z-index:999;
+  margin:14px auto 30px;
+  width:fit-content;
+  padding:14px 28px;
+  background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
-  background:rgba(255,255,255,.45);
-  padding:16px 20px;
+  border-radius:30px;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 18px 40px rgba(0,0,0,.18);
 }
 
-/* Google 开机动画风格 LOGO */
 .logo{
-  display:flex;
-  gap:4px;
   font-size:30px;
-  font-weight:800;
-}
-.logo span{animation:boot 2.8s cubic-bezier(.4,0,.2,1) infinite}
-.logo span:nth-child(1){color:#4285F4}
-.logo span:nth-child(2){color:#EA4335}
-.logo span:nth-child(3){color:#FBBC05}
-.logo span:nth-child(4){color:#4285F4}
-.logo span:nth-child(5){color:#34A853}
-.logo span:nth-child(6){color:#EA4335}
-.logo span:nth-child(7){color:#4285F4}
-.logo span:nth-child(8){color:#FBBC05}
-.logo span:nth-child(9){color:#34A853}
-.logo span:nth-child(10){color:#EA4335}
-
-@keyframes boot{
-  0%{opacity:0;transform:translateY(12px)}
-  40%{opacity:1;transform:translateY(0)}
-  100%{opacity:1}
+  font-weight:900;
+  letter-spacing:.6px;
 }
 
-/* 内容 */
+/* 内容动画 */
 .container{
   max-width:900px;
   margin:auto;
-  padding:40px 20px 140px;
+  padding:20px 20px 140px;
   animation:iosIn .9s ease-out both;
 }
 @keyframes iosIn{
@@ -62,19 +49,34 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* iOS26 液态玻璃卡片 */
+/* iOS 液态玻璃 */
 .glass{
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
   border-radius:28px;
   padding:30px;
+  line-height:1.7;
   box-shadow:
     inset 0 1px 1px rgba(255,255,255,.7),
     0 30px 50px rgba(0,0,0,.18);
 }
 
-/* 底部液态导航 */
+.title{
+  font-size:26px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.footer{
+  text-align:center;
+  margin:80px 0 160px;
+  color:#888;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* 底部导航 */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -96,52 +98,51 @@ body{
   font-weight:700;
   color:#000;
 }
-
-.footer{
-  text-align:center;
-  color:#888;
-  margin-top:50px;
-}
-
-a{color:#000}
 </style>
 </head>
 
 <body>
 
-<!-- 顶部 -->
-<div class="header">
-  <div class="logo">
-    <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span><span>w</span>
-    <span>M</span><span>o</span><span>o</span><span>n</span>
-  </div>
+<!-- 吸顶 LOGO -->
+<div class="top-logo">
+  <span class="logo">
+    <span style="color:#4285F4;">S</span>
+    <span style="color:#EA4335;">h</span>
+    <span style="color:#FBBC05;">a</span>
+    <span style="color:#4285F4;">d</span>
+    <span style="color:#34A853;">o</span>
+    <span style="color:#EA4335;">w</span>
+    <span style="color:#000;"> Moon</span>
+  </span>
 </div>
 
-<!-- 主体 -->
 <div class="container">
   <div class="glass">
+    <div class="title">
+      <span style="color:#4285F4;">欢</span>
+      <span style="color:#EA4335;">迎</span>
+      <span style="color:#FBBC05;">访</span>
+      <span style="color:#4285F4;">问</span>
+      <span style="color:#34A853;"> </span>
+      <span style="color:#EA4335;">Shadow Moon</span>
+      <span style="color:#000;"> 官方网站</span>
+    </div>
 
-    <b style="color:#4285F4;font-size:20px;">
-      欢迎访问 Shadow Moon 官方网站
-    </b><br><br>
+    我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
+    <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
 
-    我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接、定制互联网网页购买链接：<br><br>
-    <a href="https://qm.qq.com/q/JYP3V4yogK 🔗" target="_blank">
-      https://qm.qq.com/q/JYP3V4yogK
-    </a><br><br>
-
-    所有商品均为1元<br>
+    所有商品均为 1 元<br>
     仅限微信支付<br>
     赠送终身售后服务<br><br>
 
-    官方QQ群聊：523725674<br><br>
+    <b>官方QQ群聊：</b>523725674<br><br>
 
     <b>免责声明</b><br>
-    本站所提供的内容仅供学习与技术交流使用。<br>
-    因使用本站内容产生的一切后果由用户自行承担。<br>
-    请在遵守当地法律法规的前提下合理使用。<br><br>
+    本站所展示内容仅供学习与技术交流使用。<br>
+    使用相关软件产生的任何后果均由使用者本人承担。<br>
+    请遵守所在地法律法规，合法使用本站服务。<br><br>
 
-    <a href="https://v.kuaishou.com/JE2u8ANT 🔗" target="_blank">
+    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">
       https://v.kuaishou.com/JE2u8ANT
     </a><br><br>
 
