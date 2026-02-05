@@ -1,229 +1,208 @@
+<!-- ===================== index.html（主页）===================== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Shadow Moon 官方网站</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      background: linear-gradient(145deg, #d1d1d1, #f0f0f0);
-      background-size: cover;
-      color: #000000;
-      line-height: 1.8;
-      overflow-x: hidden;
-    }
-
-    /* 吸顶标题 + 毛玻璃 */
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.7);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
-      padding: 16px 20px;
-    }
-
-    .logo {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      display: flex;
-      gap: 5px;
-      animation: logoAnim 2s ease-in-out infinite;
-    }
-
-    .logo span:nth-child(1) { color: #4285F4; }
-    .logo span:nth-child(2) { color: #EA4335; }
-    .logo span:nth-child(3) { color: #FBBC05; }
-    .logo span:nth-child(4) { color: #4285F4; }
-    .logo span:nth-child(5) { color: #34A853; }
-    .logo span:nth-child(6) { color: #EA4335; }
-    .logo span:nth-child(7) { color: #4285F4; }
-    .logo span:nth-child(8) { color: #FBBC05; }
-    .logo span:nth-child(9) { color: #34A853; }
-    .logo span:nth-child(10) { color: #EA4335; }
-
-    @keyframes logoAnim {
-      0% { transform: translateX(0); opacity: 0; }
-      50% { transform: translateX(5px); opacity: 1; }
-      100% { transform: translateX(0); opacity: 0; }
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px;
-      animation: scrollText 2s ease-in-out;
-    }
-
-    .welcome {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      animation: slideUp 1s ease-in-out;
-    }
-
-    .welcome span {
-      color: #4285F4;
-      font-weight: 700;
-    }
-
-    @keyframes slideUp {
-      0% { transform: translateY(100px); opacity: 0; }
-      100% { transform: translateY(0); opacity: 1; }
-    }
-
-    .links a {
-      display: inline-block;
-      margin: 6px 0;
-      color: #000;
-      text-decoration: none;
-      font-weight: 500;
-    }
-
-    .links a:hover {
-      text-decoration: underline;
-    }
-
-    .price {
-      margin-top: 20px;
-      font-weight: 600;
-    }
-
-    .disclaimer-title {
-      margin-top: 30px;
-      font-weight: 800;
-    }
-
-    .disclaimer {
-      margin-top: 20px;
-    }
-
-    .footer {
-      margin-top: 60px;
-      text-align: center;
-      color: #999999;
-      font-size: 14px;
-    }
-
-    .official-qq {
-      font-weight: 500;
-      margin-top: 20px;
-    }
-
-    /* 添加金属铝合金反光背景 */
-    .metal-background {
-      background: url('https://example.com/metal-texture.jpg') no-repeat center center fixed;
-      background-size: cover;
-    }
-
-    /* 底部导航栏 */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .bottom-nav a {
-      color: #000;
-      text-decoration: none;
-      font-weight: 600;
-    }
-
-    .bottom-nav a:hover {
-      text-decoration: underline;
-    }
-
-    /* 其他内容区域 */
-    .other-content {
-      padding: 40px 20px;
-      margin-top: 80px;
-    }
-
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Moon 官方网站</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial;
+  background:
+    linear-gradient(135deg,#dcdcdc,#f5f5f5 30%,#cfcfcf 60%,#f0f0f0);
+  color:#000;
+}
+.header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  backdrop-filter:blur(12px);
+  background:rgba(255,255,255,.7);
+  padding:16px 20px;
+}
+.logo{
+  display:flex;
+  font-size:30px;
+  font-weight:800;
+  gap:4px;
+}
+.logo span{
+  animation:boot 2.5s cubic-bezier(.4,0,.2,1) infinite;
+}
+.logo span:nth-child(1){color:#4285F4}
+.logo span:nth-child(2){color:#EA4335}
+.logo span:nth-child(3){color:#FBBC05}
+.logo span:nth-child(4){color:#4285F4}
+.logo span:nth-child(5){color:#34A853}
+.logo span:nth-child(6){color:#EA4335}
+.logo span:nth-child(7){color:#4285F4}
+.logo span:nth-child(8){color:#FBBC05}
+.logo span:nth-child(9){color:#34A853}
+.logo span:nth-child(10){color:#EA4335}
+@keyframes boot{
+  0%{opacity:0;transform:translateY(10px)}
+  40%{opacity:1;transform:translateY(0)}
+  100%{opacity:1}
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px 120px;
+}
+.block{
+  animation:ios 1s ease-out both;
+}
+@keyframes ios{
+  from{opacity:0;transform:translateY(60px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.welcome{
+  font-size:20px;
+  font-weight:700;
+  color:#4285F4;
+}
+.footer{
+  text-align:center;
+  color:#999;
+  margin-top:60px;
+}
+.bottom-nav{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:80%;
+  max-width:420px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(14px);
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  gap:80px;
+  padding:14px 0;
+}
+.bottom-nav a{
+  text-decoration:none;
+  font-weight:700;
+  color:#000;
+}
+</style>
 </head>
-<body class="metal-background">
+<body>
 
-  <div class="header">
-    <div class="logo">
-      <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span><span>w</span>
-      <span> </span>
-      <span>M</span><span>o</span><span>o</span><span>n</span>
-    </div>
+<div class="header">
+  <div class="logo">
+    <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span><span>w</span>
+    <span>M</span><span>o</span><span>o</span><span>n</span>
   </div>
+</div>
 
-  <div class="container">
-    <div class="welcome">
-      <span>欢迎访问 Shadow Moon 官方网站</span>
-    </div>
+<div class="container block">
+  <div class="welcome">欢迎访问 Shadow Moon 官方网站</div><br>
 
-    <div class="links">
-      我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br/>
-      <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a>
-    </div>
+  我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
+  <a href="https://qm.qq.com/q/JYP3V4yogK">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
 
-    <div class="price">
-      所有商品均为1元<br/>
-      仅限微信支付<br/>
-      赠送终身售后服务
-    </div>
+  所有商品均为1元<br>
+  仅限微信支付<br>
+  赠送终身售后服务<br><br>
 
-    <div class="official-qq">
-      官方QQ群聊：523725674
-    </div>
+  官方QQ群聊：523725674<br><br>
 
-    <div class="disclaimer-title">
-      免责声明
-    </div>
-    <div class="disclaimer">
-      本站所提供的所有软件与服务仅供学习与技术研究交流使用。<br/>
-      用户因使用本站内容所产生的一切后果需自行承担，与本站及运营者无关。<br/>
-      请在遵守当地法律法规的前提下合理使用相关产品与服务。
-    </div>
+  <b>免责声明</b><br>
+  本站内容仅供学习与技术交流使用。<br>
+  使用本站资源产生的任何后果由用户自行承担。<br>
+  请务必遵守当地法律法规。<br><br>
 
-    <div class="links" style="margin-top:20px;">
-      <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">https://v.kuaishou.com/JE2u8ANT</a>
-    </div>
+  <a href="https://v.kuaishou.com/JE2u8ANT">https://v.kuaishou.com/JE2u8ANT</a><br><br>
+  我的世界 CH凡光
 
-    <div style="margin-top:20px;">
-      我的世界 CH凡光
-    </div>
-
-    <div class="footer">
-      Powerd by Shadow Moon © CH凡光
-    </div>
+  <div class="footer">
+    Powerd by Shadow Moon © CH凡光
   </div>
+</div>
 
-  <!-- 底部导航栏 -->
-  <div class="bottom-nav">
-    <a href="#">主页</a>
-    <a href="#" onclick="document.querySelector('.other-content').scrollIntoView({behavior: 'smooth'});">其他</a>
-  </div>
+<div class="bottom-nav">
+  <a href="index.html">主页</a>
+  <a href="other.html">其他</a>
+</div>
 
-  <!-- 其他内容 -->
-  <div class="other-content">
-    <h3>官方其他账号：</h3>
-    <p>tg：<a href="https://t.me/CHfanguang" target="_blank">t.me/CHfanguang</a></p>
-    <p>fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/" target="_blank">https://www.facebook.com/share/1bUbjR2mGj/</a></p>
-    <p>ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244" target="_blank">https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244</a></p>
-    <p>X（原推特）：<a href="https://x.com/chfanguang" target="_blank">https://x.com/chfanguang</a></p>
-    <p>snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK" target="_blank">https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK</a></p>
-    <p>discord：<a href="#" target="_blank">chfanguang</a></p>
-    <p>reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO" target="_blank">https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO</a></p>
+</body>
+</html>
+<!-- ===================== other.html（其他页面）===================== -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Moon · 其他</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:
+    linear-gradient(135deg,#dcdcdc,#f5f5f5 30%,#cfcfcf 60%,#f0f0f0);
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:60px 20px 120px;
+}
+.card{
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(14px);
+  border-radius:20px;
+  padding:30px;
+  animation:ios 1s ease-out both;
+}
+@keyframes ios{
+  from{opacity:0;transform:translateY(60px)}
+  to{opacity:1;transform:translateY(0)}
+}
+a{color:#000}
+.bottom-nav{
+  position:fixed;
+  bottom:30px;
+  left:50%;
+  transform:translateX(-50%);
+  width:80%;
+  max-width:420px;
+  background:rgba(255,255,255,.6);
+  backdrop-filter:blur(14px);
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  gap:80px;
+  padding:14px 0;
+}
+.bottom-nav a{
+  text-decoration:none;
+  font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card">
+    <b>官方其他账号：</b><br><br>
+    tg：<a href="https://t.me/CHfanguang">t.me/CHfanguang</a><br>
+    fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/">Facebook</a><br>
+    ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244">Instagram</a><br>
+    X（原推特）：<a href="https://x.com/chfanguang">X</a><br>
+    snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK">Snapchat</a><br>
+    discord：chfanguang<br>
+    reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO">Reddit</a>
   </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html">主页</a>
+  <a href="other.html">其他</a>
+</div>
 
 </body>
 </html>
