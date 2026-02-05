@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Moon · 其他</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
+  background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
+  color:#000;
+}
+
+/* 内容动画 */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:60px 20px 140px;
+  animation:iosIn .9s ease-out both;
+}
+@keyframes iosIn{
+  from{opacity:0;transform:translateY(70px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* iOS26 液态玻璃 */
+.glass{
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 30px 50px rgba(0,0,0,.18);
+}
+
+/* 底部液态导航 */
+.bottom-nav{
+  position:fixed;
+  bottom:26px;
+  left:50%;
+  transform:translateX(-50%);
+  width:82%;
+  max-width:420px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  border-radius:30px;
+  display:flex;
+  justify-content:center;
+  gap:90px;
+  padding:16px 0;
+}
+
+.bottom-nav a{
+  text-decoration:none;
+  font-weight:700;
+  color:#000;
+}
+
+a{color:#000}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="glass">
+    <b>官方其他账号：</b><br><br>
+
+    tg：<a href="https://t.me/CHfanguang" target="_blank">t.me/CHfanguang</a><br>
+    fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/" target="_blank">Facebook</a><br>
+    ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244" target="_blank">Instagram</a><br>
+    X（原推特）：<a href="https://x.com/chfanguang" target="_blank">X</a><br>
+    snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK" target="_blank">Snapchat</a><br>
+    discord：chfanguang<br>
+    reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO" target="_blank">Reddit</a>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="index.html">主页</a>
+  <a href="other.html">其他</a>
+</div>
+
+</body>
+</html>
