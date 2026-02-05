@@ -9,9 +9,11 @@
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
-      background: #ffffff;
+      background: linear-gradient(145deg, #d1d1d1, #f0f0f0);
+      background-size: cover;
       color: #000000;
       line-height: 1.8;
+      overflow-x: hidden;
     }
 
     /* 吸顶标题 + 毛玻璃 */
@@ -30,6 +32,9 @@
       font-size: 28px;
       font-weight: 800;
       letter-spacing: 1px;
+      display: flex;
+      gap: 5px;
+      animation: logoAnim 2s ease-in-out infinite;
     }
 
     .logo span:nth-child(1) { color: #4285F4; }
@@ -43,21 +48,34 @@
     .logo span:nth-child(9) { color: #34A853; }
     .logo span:nth-child(10) { color: #EA4335; }
 
+    @keyframes logoAnim {
+      0% { transform: translateX(0); opacity: 0; }
+      50% { transform: translateX(5px); opacity: 1; }
+      100% { transform: translateX(0); opacity: 0; }
+    }
+
     .container {
       max-width: 900px;
       margin: 0 auto;
       padding: 40px 20px;
+      animation: scrollText 2s ease-in-out;
     }
 
     .welcome {
       font-size: 20px;
       font-weight: 600;
       margin-bottom: 24px;
+      animation: slideUp 1s ease-in-out;
     }
 
     .welcome span {
       color: #4285F4;
       font-weight: 700;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(100px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
     }
 
     .links a {
@@ -82,15 +100,31 @@
       font-weight: 800;
     }
 
+    .disclaimer {
+      margin-top: 20px;
+    }
+
     .footer {
       margin-top: 60px;
       text-align: center;
       color: #999999;
       font-size: 14px;
     }
+
+    .official-qq {
+      font-weight: 500;
+      margin-top: 20px;
+    }
+
+    /* 添加金属铝合金反光背景 */
+    .metal-background {
+      background: url('https://example.com/metal-texture.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
   </style>
 </head>
-<body>
+<body class="metal-background">
 
   <div class="header">
     <div class="logo">
@@ -114,6 +148,10 @@
       所有商品均为1元<br/>
       仅限微信支付<br/>
       赠送终身售后服务
+    </div>
+
+    <div class="official-qq">
+      官方QQ群聊：523725674
     </div>
 
     <div class="disclaimer-title">
