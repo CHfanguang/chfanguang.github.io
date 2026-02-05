@@ -1,36 +1,38 @@
-<!-- ===================== index.html（主页）===================== -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shadow Moon 官方网站</title>
+
 <style>
 *{box-sizing:border-box}
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",Arial;
-  background:
-    linear-gradient(135deg,#dcdcdc,#f5f5f5 30%,#cfcfcf 60%,#f0f0f0);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
+  background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
   color:#000;
 }
+
+/* 顶部液态玻璃 */
 .header{
   position:sticky;
   top:0;
   z-index:1000;
-  backdrop-filter:blur(12px);
-  background:rgba(255,255,255,.7);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  background:rgba(255,255,255,.45);
   padding:16px 20px;
 }
+
+/* Google 开机动画风格 LOGO */
 .logo{
   display:flex;
+  gap:4px;
   font-size:30px;
   font-weight:800;
-  gap:4px;
 }
-.logo span{
-  animation:boot 2.5s cubic-bezier(.4,0,.2,1) infinite;
-}
+.logo span{animation:boot 2.8s cubic-bezier(.4,0,.2,1) infinite}
 .logo span:nth-child(1){color:#4285F4}
 .logo span:nth-child(2){color:#EA4335}
 .logo span:nth-child(3){color:#FBBC05}
@@ -41,57 +43,73 @@ body{
 .logo span:nth-child(8){color:#FBBC05}
 .logo span:nth-child(9){color:#34A853}
 .logo span:nth-child(10){color:#EA4335}
+
 @keyframes boot{
-  0%{opacity:0;transform:translateY(10px)}
+  0%{opacity:0;transform:translateY(12px)}
   40%{opacity:1;transform:translateY(0)}
   100%{opacity:1}
 }
+
+/* 内容 */
 .container{
   max-width:900px;
   margin:auto;
-  padding:40px 20px 120px;
+  padding:40px 20px 140px;
+  animation:iosIn .9s ease-out both;
 }
-.block{
-  animation:ios 1s ease-out both;
-}
-@keyframes ios{
-  from{opacity:0;transform:translateY(60px)}
+@keyframes iosIn{
+  from{opacity:0;transform:translateY(70px)}
   to{opacity:1;transform:translateY(0)}
 }
-.welcome{
-  font-size:20px;
-  font-weight:700;
-  color:#4285F4;
+
+/* iOS26 液态玻璃卡片 */
+.glass{
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 30px 50px rgba(0,0,0,.18);
 }
-.footer{
-  text-align:center;
-  color:#999;
-  margin-top:60px;
-}
+
+/* 底部液态导航 */
 .bottom-nav{
   position:fixed;
-  bottom:30px;
+  bottom:26px;
   left:50%;
   transform:translateX(-50%);
-  width:80%;
+  width:82%;
   max-width:420px;
-  background:rgba(255,255,255,.6);
-  backdrop-filter:blur(14px);
-  border-radius:20px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  border-radius:30px;
   display:flex;
   justify-content:center;
-  gap:80px;
-  padding:14px 0;
+  gap:90px;
+  padding:16px 0;
 }
+
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
 }
+
+.footer{
+  text-align:center;
+  color:#888;
+  margin-top:50px;
+}
+
+a{color:#000}
 </style>
 </head>
+
 <body>
 
+<!-- 顶部 -->
 <div class="header">
   <div class="logo">
     <span>S</span><span>h</span><span>a</span><span>d</span><span>o</span><span>w</span>
@@ -99,106 +117,44 @@ body{
   </div>
 </div>
 
-<div class="container block">
-  <div class="welcome">欢迎访问 Shadow Moon 官方网站</div><br>
-
-  我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
-  <a href="https://qm.qq.com/q/JYP3V4yogK">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
-
-  所有商品均为1元<br>
-  仅限微信支付<br>
-  赠送终身售后服务<br><br>
-
-  官方QQ群聊：523725674<br><br>
-
-  <b>免责声明</b><br>
-  本站内容仅供学习与技术交流使用。<br>
-  使用本站资源产生的任何后果由用户自行承担。<br>
-  请务必遵守当地法律法规。<br><br>
-
-  <a href="https://v.kuaishou.com/JE2u8ANT">https://v.kuaishou.com/JE2u8ANT</a><br><br>
-  我的世界 CH凡光
-
-  <div class="footer">
-    Powerd by Shadow Moon © CH凡光
-  </div>
-</div>
-
-<div class="bottom-nav">
-  <a href="index.html">主页</a>
-  <a href="other.html">其他</a>
-</div>
-
-</body>
-</html>
-<!-- ===================== other.html（其他页面）===================== -->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 其他</title>
-<style>
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:
-    linear-gradient(135deg,#dcdcdc,#f5f5f5 30%,#cfcfcf 60%,#f0f0f0);
-}
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:60px 20px 120px;
-}
-.card{
-  background:rgba(255,255,255,.6);
-  backdrop-filter:blur(14px);
-  border-radius:20px;
-  padding:30px;
-  animation:ios 1s ease-out both;
-}
-@keyframes ios{
-  from{opacity:0;transform:translateY(60px)}
-  to{opacity:1;transform:translateY(0)}
-}
-a{color:#000}
-.bottom-nav{
-  position:fixed;
-  bottom:30px;
-  left:50%;
-  transform:translateX(-50%);
-  width:80%;
-  max-width:420px;
-  background:rgba(255,255,255,.6);
-  backdrop-filter:blur(14px);
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  gap:80px;
-  padding:14px 0;
-}
-.bottom-nav a{
-  text-decoration:none;
-  font-weight:700;
-}
-</style>
-</head>
-<body>
-
+<!-- 主体 -->
 <div class="container">
-  <div class="card">
-    <b>官方其他账号：</b><br><br>
-    tg：<a href="https://t.me/CHfanguang">t.me/CHfanguang</a><br>
-    fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/">Facebook</a><br>
-    ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244">Instagram</a><br>
-    X（原推特）：<a href="https://x.com/chfanguang">X</a><br>
-    snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK">Snapchat</a><br>
-    discord：chfanguang<br>
-    reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO">Reddit</a>
+  <div class="glass">
+
+    <b style="color:#4285F4;font-size:20px;">
+      欢迎访问 Shadow Moon 官方网站
+    </b><br><br>
+
+    我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
+    <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">
+      https://qm.qq.com/q/JYP3V4yogK
+    </a><br><br>
+
+    所有商品均为1元<br>
+    仅限微信支付<br>
+    赠送终身售后服务<br><br>
+
+    官方QQ群聊：523725674<br><br>
+
+    <b>免责声明</b><br>
+    本站所提供的内容仅供学习与技术交流使用。<br>
+    因使用本站内容产生的一切后果由用户自行承担。<br>
+    请在遵守当地法律法规的前提下合理使用。<br><br>
+
+    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">
+      https://v.kuaishou.com/JE2u8ANT
+    </a><br><br>
+
+    我的世界 CH凡光
+
+    <div class="footer">
+      Powerd by Shadow Moon © CH凡光
+    </div>
+
   </div>
 </div>
 
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
