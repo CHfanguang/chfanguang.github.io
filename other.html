@@ -80,13 +80,13 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 —— 完全还原原来尺寸，fixed 完美跟随视角 */
+/* 底部导航 —— 完全还原你最初的尺寸：width 82%，max-width 420px，padding 16px 0，gap 90px */
 .bottom-nav{
   position: fixed;
   bottom: 26px;
   left: 50%;
-  width: fit-content;
   transform: translateX(-50%);
+  width: 82%;
   max-width: 420px;
   background: rgba(255,255,255,.45);
   backdrop-filter: blur(30px) saturate(220%);
@@ -147,7 +147,7 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 —— width:82% + max-width:420px，和你最初一模一样 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
