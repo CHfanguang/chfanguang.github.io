@@ -62,6 +62,16 @@ body{
     0 30px 50px rgba(0,0,0,.18);
 }
 
+/* 夸克链接样式 */
+.download a {
+  color: #0066cc;
+  text-decoration: underline;
+  word-break: break-all;
+}
+.download a:hover {
+  color: #004499;
+}
+
 .footer{
   text-align:center;
   margin:80px 0 160px;
@@ -70,14 +80,14 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 —— 完全 fixed，不依赖 transform，永不降级 */
+/* 底部导航 —— 完全还原原来尺寸，fixed 完美跟随视角 */
 .bottom-nav{
   position: fixed;
   bottom: 26px;
-  left: 0;
-  right: 0;
+  left: 50%;
   width: fit-content;
-  margin: 0 auto;
+  transform: translateX(-50%);
+  max-width: 420px;
   background: rgba(255,255,255,.45);
   backdrop-filter: blur(30px) saturate(220%);
   -webkit-backdrop-filter: blur(30px) saturate(220%);
@@ -85,7 +95,7 @@ body{
   display: flex;
   justify-content: center;
   gap: 90px;
-  padding: 16px 32px;
+  padding: 16px 0;
   box-shadow: inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
   z-index: 999;
 }
@@ -124,10 +134,11 @@ body{
     snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK" target="_blank">Snapchat</a><br>
     discord：chfanguang<br>
     reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO" target="_blank">Reddit</a>
-<div class="download"><br>
-  官方软件下载地址：<span class="empty-link">https://pan.quark.cn/s/e9b47e5a065f</span>
-复制到夸克打开（更新/下载链接）
-</div>
+    <div class="download"><br>
+      官方软件下载地址：<a href="https://pan.quark.cn/s/e9b47e5a065f" target="_blank">https://pan.quark.cn/s/e9b47e5a065f</a><br>
+      复制到夸克打开（更新/下载链接）
+    </div>
+  </div>
 </div>
 
 <!-- 页脚 -->
@@ -136,7 +147,7 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 —— 已修正：直接放在 body 最末尾，纯 fixed，无 transform -->
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
