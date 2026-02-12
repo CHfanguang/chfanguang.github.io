@@ -80,7 +80,7 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 —— 纯毛玻璃，无边框无边线 */
+/* 底部导航 —— 高透毛玻璃，更透明，模糊更强 */
 .bottom-nav{
   position: fixed;
   bottom: 26px;
@@ -88,15 +88,15 @@ body{
   transform: translateX(-50%);
   width: 82%;
   max-width: 420px;
-  background: rgba(255,255,255,.45);
-  backdrop-filter: blur(30px) saturate(220%);
-  -webkit-backdrop-filter: blur(30px) saturate(220%);
+  background: rgba(255,255,255,.28);  /* 更透明，从0.45降到0.28 */
+  backdrop-filter: blur(40px) saturate(200%); /* 模糊更强，饱和度略降 */
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
   border-radius: 30px;
   display: flex;
   justify-content: center;
   gap: 90px;
   padding: 16px 0;
-  /* 无边框、无 outline、无 border */
+  /* 无边框、无阴影、无边线 */
   border: none;
   outline: none;
   box-shadow: none;
@@ -150,7 +150,7 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 —— 纯毛玻璃，无边框无阴影 -->
+<!-- 底部导航 —— 高透毛玻璃，更透更模糊 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
