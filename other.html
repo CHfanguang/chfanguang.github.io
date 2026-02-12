@@ -70,21 +70,24 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 */
+/* 底部导航 —— 完全 fixed，不依赖 transform，永不降级 */
 .bottom-nav{
-  position:fixed;
-  bottom:26px;
-  left:50%;
-  transform:translateX(-50%);
-  width:82%;
-  max-width:420px;
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(30px) saturate(220%);
-  border-radius:30px;
-  display:flex;
-  justify-content:center;
-  gap:90px;
-  padding:16px 0;
+  position: fixed;
+  bottom: 26px;
+  left: 0;
+  right: 0;
+  width: fit-content;
+  margin: 0 auto;
+  background: rgba(255,255,255,.45);
+  backdrop-filter: blur(30px) saturate(220%);
+  -webkit-backdrop-filter: blur(30px) saturate(220%);
+  border-radius: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 90px;
+  padding: 16px 32px;
+  box-shadow: inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
+  z-index: 999;
 }
 
 .bottom-nav a{
@@ -129,11 +132,11 @@ body{
 
 <!-- 页脚 -->
 <div class="footer">
-  Powerd by Shadow Moon<br>
+  Powered by Shadow Moon<br>
   © CH凡光
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 —— 已修正：直接放在 body 最末尾，纯 fixed，无 transform -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
