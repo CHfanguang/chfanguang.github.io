@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 像素发光</title>
+<title>Shadow Moon · 逐字彩色发光</title>
 <!-- 像素字体：Press Start 2P (完全独立，不影响原代码任何样式) -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
@@ -122,28 +122,28 @@ body{
   .pixel-ch { font-size: 28px; }
 }
 
-/* ===== 新增：让“欢迎进入……”整行发光 (同时保留原有的彩色字母) ===== */
-.glow-title {
-  display: inline-block;  /* 保证背景/阴影贴合内容 */
-  font-size: 26px;
-  font-weight: 900;
-  line-height: 1.4;
-  /* 发光核心：白色底光 + 多彩光晕 */
+/* ===== 让每个字的颜色发出对应颜色的光 (保留原始颜色，增加同色光晕) ===== */
+.title span {
+  /* 每个span根据自身文字颜色产生同色发光 */
   text-shadow: 
-    0 0 10px rgba(255, 255, 255, 0.9),
-    0 0 20px rgba(66, 133, 244, 0.7),
-    0 0 30px rgba(234, 67, 53, 0.7),
-    0 0 40px rgba(251, 188, 5, 0.6),
-    0 0 50px rgba(52, 168, 83, 0.6);
-  animation: flickerGlow 3s infinite alternate;
+    0 0 5px currentColor,
+    0 0 15px currentColor,
+    0 0 25px currentColor,
+    0 0 35px currentColor;
+  transition: text-shadow 0.2s ease;
 }
-/* 微妙的闪烁让发光更生动 (可选) */
-@keyframes flickerGlow {
-  0% { text-shadow: 0 0 8px #fff, 0 0 18px #4285F4, 0 0 28px #EA4335, 0 0 38px #FBBC05, 0 0 48px #34A853; }
-  100% { text-shadow: 0 0 12px #fff, 0 0 25px #4285F4, 0 0 35px #EA4335, 0 0 45px #FBBC05, 0 0 55px #34A853; }
+/* 可选的柔和呼吸效果 (让光微微变化) */
+.title:hover span {
+  text-shadow: 
+    0 0 8px currentColor,
+    0 0 20px currentColor,
+    0 0 32px currentColor,
+    0 0 48px currentColor;
 }
-/* 为了保证原.title内所有span颜色不受影响，我们套用.glow-title在包裹层上。
-   但原来的.title内部是分散的span，我们直接给整个.title加glow-title类，内联span颜色优先级更高，不会被覆盖 */
+/* 注：原代码中 .title 内部有7个span，分别有蓝/红/黄/绿/黑等颜色。
+   黑色(#000) 发光仍为黑色光晕，但几乎不可见，若希望黑色字也有白光可单独处理——但按需求“每个字的颜色发对应颜色的光”，黑色发光就是黑色，符合逻辑。
+   若希望“官方网站/软件”这几个黑色字发出白色光，可以微调，但为了严格对应颜色，保留黑色发光(微弱)。完全尊重您的描述。
+   如果想微调可后续告知。此处严格遵照“每个字的颜色发对应颜色的光”。 */
 </style>
 </head>
 <body>
@@ -170,8 +170,8 @@ body{
       <span class="pixel-line pixel-ch">CH凡光</span>
     </div>
     
-    <!-- 以下是原内容，只改了一处：给“欢迎进入……”整行的父级添加 glow-title 类使其发光，内部彩色span保持原样，未动一字 -->
-    <div class="title glow-title">
+    <!-- 以下是原内容，每一个span都保留了原始颜色，并且现在拥有了对应颜色的发光效果（通过上面新增的.title span规则） -->
+    <div class="title">
       <span style="color:#4285F4;">欢</span>
       <span style="color:#EA4335;">迎</span>
       <span style="color:#FBBC05;">进</span>
