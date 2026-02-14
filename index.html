@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -122,9 +123,8 @@ body{
   .pixel-ch { font-size: 28px; }
 }
 
-/* ===== 让每个字的颜色发出对应颜色的光 (保留原始颜色，增加同色光晕) ===== */
-.title span {
-  /* 每个span根据自身文字颜色产生同色发光 */
+/* ===== 让每个彩色字发出对应颜色的光，但黑色字不发光 ===== */
+.title span:not([style*="color:#000"]) {
   text-shadow: 
     0 0 5px currentColor,
     0 0 15px currentColor,
@@ -133,17 +133,17 @@ body{
   transition: text-shadow 0.2s ease;
 }
 /* 可选的柔和呼吸效果 (让光微微变化) */
-.title:hover span {
+.title span:not([style*="color:#000"]):hover {
   text-shadow: 
     0 0 8px currentColor,
     0 0 20px currentColor,
     0 0 32px currentColor,
     0 0 48px currentColor;
 }
-/* 注：原代码中 .title 内部有7个span，分别有蓝/红/黄/绿/黑等颜色。
-   黑色(#000) 发光仍为黑色光晕，但几乎不可见，若希望黑色字也有白光可单独处理——但按需求“每个字的颜色发对应颜色的光”，黑色发光就是黑色，符合逻辑。
-   若希望“官方网站/软件”这几个黑色字发出白色光，可以微调，但为了严格对应颜色，保留黑色发光(微弱)。完全尊重您的描述。
-   如果想微调可后续告知。此处严格遵照“每个字的颜色发对应颜色的光”。 */
+/* 黑色字完全无发光 (保留原样) */
+.title span[style*="color:#000"] {
+  text-shadow: none;
+}
 </style>
 </head>
 <body>
@@ -170,7 +170,7 @@ body{
       <span class="pixel-line pixel-ch">CH凡光</span>
     </div>
     
-    <!-- 以下是原内容，每一个span都保留了原始颜色，并且现在拥有了对应颜色的发光效果（通过上面新增的.title span规则） -->
+    <!-- 欢迎行：彩色字发光，黑色字不发光 (已通过CSS规则实现) -->
     <div class="title">
       <span style="color:#4285F4;">欢</span>
       <span style="color:#EA4335;">迎</span>
@@ -183,6 +183,10 @@ body{
 
     我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
     <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
+
+    <!-- 新增：备用链接 + 客服在线时间 (完全按照要求，换行) -->
+    备用链接：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">https://qm.qq.com/q/Gq3tfhiXG8</a><br>
+    购买销售/客服节假日08：00至22：00在线（最大回复消息延迟不超过30分）<br><br>
 
     所有商品均为 1 元<br>
     仅限微信支付<br>
