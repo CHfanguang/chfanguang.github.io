@@ -49,7 +49,7 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* iOS 液态玻璃 (合金背景/毛玻璃效果——与其他板块完全一致) */
+/* iOS 液态玻璃 (合金背景/毛玻璃效果) */
 .glass{
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
@@ -92,7 +92,7 @@ body{
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* 促销创意区域 (完全遵循原价：三件商品一元，没有额外赠送) */
+/* 促销创意区域 */
 .promo-creative {
   background: rgba(255, 215, 215, 0.3);
   border-radius: 40px;
@@ -138,7 +138,7 @@ body{
   45% { transform: scale(1.1); }
 }
 
-/* 商品列表 —— 像联系人卡片一样规则排列，一次性全展示 */
+/* 商品列表 */
 .product-grid {
   display: flex;
   flex-direction: column;
@@ -146,7 +146,6 @@ body{
   margin: 35px 0 20px;
 }
 
-/* 每个商品条目类似联系人行 */
 .product-item {
   display: flex;
   align-items: center;
@@ -165,7 +164,6 @@ body{
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
 
-/* 商品图标 */
 .product-icon {
   width: 50px;
   height: 50px;
@@ -181,7 +179,6 @@ body{
   flex-shrink: 0;
 }
 
-/* 商品信息区 */
 .product-info {
   flex: 1;
   display: flex;
@@ -223,7 +220,6 @@ body{
   letter-spacing: 1px;
 }
 
-/* 永久标签 */
 .product-tag {
   background: gold;
   color: #2c3e50;
@@ -248,7 +244,41 @@ body{
   box-shadow: 0 2px 0 #1e6e34;
 }
 
-/* 页脚与导航保持一致 */
+/* 绿色购买按钮 - 居中长方形 */
+.buy-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0 15px 0;
+}
+
+.buy-button {
+  display: inline-block;
+  background: #34a853;  /* 谷歌绿 */
+  color: white;
+  font-size: 24px;
+  font-weight: 800;
+  padding: 16px 50px;
+  border-radius: 20px;  /* 长方形带小圆角 */
+  text-decoration: none;
+  box-shadow: 0 8px 0 #1e6e34, 0 10px 25px rgba(52, 168, 83, 0.5);
+  transition: all 0.1s ease;
+  letter-spacing: 2px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+.buy-button:hover {
+  transform: translateY(2px);
+  box-shadow: 0 6px 0 #1e6e34, 0 10px 25px rgba(52, 168, 83, 0.5);
+}
+
+.buy-button:active {
+  transform: translateY(8px);
+  box-shadow: 0 0px 0 #1e6e34, 0 10px 25px rgba(52, 168, 83, 0.5);
+}
+
+/* 页脚 */
 .footer{
   text-align:center;
   margin:40px 0 100px;
@@ -307,30 +337,30 @@ body{
 <div class="container">
   <div class="glass">
 
-    <!-- 标题居中，情人节特惠 -->
+    <!-- 标题 -->
     <div class="notice-title">❤️ 情人节特惠 ❤️</div>
     <div style="text-align:center;">
       <span class="notice-sub">原价三件商品三元，现活动三件商品仅需一元</span>
     </div>
 
-    <!-- 创意推销区域 (永久商品强调) -->
+    <!-- 创意推销区域 -->
     <div class="promo-creative">
       <p>
         <span class="promo-heart">💘</span>
         <span class="promo-highlight">永久买断·三件1元</span>
         <span class="promo-heart">💘</span>
       </p>
-      <p>✨  Valentine‘s Special  ✨  原价3元 → 现价1元</p>
+      <p>✨ Valentine's Special ✨ 原价3元 → 现价1元</p>
       <p>💞 三款热门商品一次拥有：我的世界外挂 + VPN + 黑科技软件</p>
       <p style="font-size:22px; font-weight:bold; color:#c44;">🎁 重点是：买到就是【永久】！没有年卡、没有月租 🎁</p>
       <p>⭐ 一次付费，终身使用，售后服务也是永久的</p>
       <p>❤️ 三件商品合计1元，平均每件只要0.33元，永久陪伴 ❤️</p>
     </div>
 
-    <!-- 商品列表 —— 永久商品展示 -->
+    <!-- 商品列表 -->
     <div class="product-grid">
 
-      <!-- 商品 1 - 我的世界外挂 (永久) -->
+      <!-- 商品 1 -->
       <div class="product-item">
         <div class="product-icon">⚡</div>
         <div class="product-info">
@@ -344,7 +374,7 @@ body{
         </div>
       </div>
 
-      <!-- 商品 2 - VPN (永久，不是年卡) -->
+      <!-- 商品 2 -->
       <div class="product-item">
         <div class="product-icon">🔒</div>
         <div class="product-info">
@@ -358,7 +388,7 @@ body{
         </div>
       </div>
 
-      <!-- 商品 3 - 黑科技软件 (永久) -->
+      <!-- 商品 3 -->
       <div class="product-item">
         <div class="product-icon">🤖</div>
         <div class="product-info">
@@ -372,7 +402,7 @@ body{
         </div>
       </div>
 
-      <!-- 组合说明卡片 (强调永久) -->
+      <!-- 组合说明卡片 -->
       <div class="product-item" style="opacity:0.95; background:rgba(240,240,255,0.6);">
         <div class="product-icon" style="background: #9b59b6;">♾️</div>
         <div class="product-info">
@@ -398,17 +428,22 @@ body{
       </div>
     </div>
 
-    <!-- 支付说明 (强调永久) -->
+    <!-- 支付说明 -->
     <div style="background: rgba(0,0,0,0.03); border-radius: 30px; padding: 15px; margin-top: 20px; text-align: center; font-weight: 500;">
       💖 三件商品总价 1 元 · 仅限微信支付 · <span style="color:#d44; font-weight:800;">永久使用 + 终身售后服务</span>
     </div>
 
-    <!-- 免责声明 -->
+    <!-- 免责声明 + 绿色购买按钮 (居中) -->
     <div style="font-size: 13px; color: #666; margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 20px;">
       <b>免责声明</b><br>
       本站所展示内容仅供学习与技术交流使用。<br>
       使用相关软件产生的任何后果均由使用者本人承担。<br>
       请遵守所在地法律法规，合法使用本站服务。
+      
+      <!-- 绿色居中长方形按钮，点击跳转至指定QQ链接 -->
+      <div class="buy-button-container">
+        <a href="https://qm.qq.com/q/Gq3tfhiXG8" class="buy-button" target="_blank">点击购买</a>
+      </div>
     </div>
 
   </div>
@@ -420,7 +455,7 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 (通知页高亮) -->
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html" style="font-weight:900; color:#d44;">通知</a>
