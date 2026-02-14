@@ -92,7 +92,7 @@ body{
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* 绿色购买按钮样式 - 统一用于两处 */
+/* 绿色购买按钮样式 */
 .buy-button-container {
   display: flex;
   justify-content: center;
@@ -301,7 +301,7 @@ body{
   border-radius: 30px;
   display: flex;
   justify-content: center;
-  gap: 90px;  /* 统一间距 */
+  gap: 90px;  /* 固定间距，与其他板块完全一致 */
   padding: 16px 0;
   border: none;
   outline: none;
@@ -310,12 +310,16 @@ body{
 }
 
 .bottom-nav a{
-  text-decoration:none;
-  font-weight:700;
-  color: #000;  /* 统一黑色 */
+  text-decoration: none;
+  font-weight: 700;
+  color: #000;  /* 统一黑色，不高亮任何选项 */
+  font-size: 16px; /* 统一字体大小 */
 }
 
-/* 当前页不高亮，保持与其他一致 */
+/* 移除所有悬停变色效果，保持纯净 */
+.bottom-nav a:hover {
+  color: #000;
+}
 </style>
 </head>
 <body>
@@ -448,7 +452,7 @@ body{
       使用相关软件产生的任何后果均由使用者本人承担。<br>
       请遵守所在地法律法规，合法使用本站服务。
       
-      <!-- 底部绿色购买按钮（与标题下方按钮完全相同） -->
+      <!-- 底部绿色购买按钮 -->
       <div class="buy-button-container">
         <a href="https://qm.qq.com/q/Gq3tfhiXG8" class="buy-button" target="_blank">点击购买</a>
       </div>
@@ -463,7 +467,7 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 - 完全统一：gap:90px，所有链接黑色 -->
+<!-- ===== 底部导航 - 完全统一 ===== -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
