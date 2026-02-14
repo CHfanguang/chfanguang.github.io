@@ -287,7 +287,7 @@ body{
   line-height:1.6;
 }
 
-/* ===== 底部导航 - 与其他板块完全一致（复制自other.html） ===== */
+/* ===== 直接从other.html复制的底部导航 ===== */
 .bottom-nav{
   position: fixed;
   bottom: 26px;
@@ -300,8 +300,8 @@ body{
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   border-radius: 30px;
   display: flex;
-  justify-content: center;  /* 必须是center，不是space-evenly */
-  gap: 90px;  /* 固定90px间距 */
+  justify-content: center;
+  gap: 90px;
   padding: 16px 0;
   border: none;
   outline: none;
@@ -310,15 +310,9 @@ body{
 }
 
 .bottom-nav a{
-  text-decoration: none;
-  font-weight: 700;
-  color: #000;  /* 纯黑色 */
-  font-size: 16px;
-}
-
-/* 没有任何悬停效果 */
-.bottom-nav a:hover {
-  color: #000;
+  text-decoration:none;
+  font-weight:700;
+  color:#000;
 }
 </style>
 </head>
@@ -467,7 +461,7 @@ body{
   © CH凡光
 </div>
 
-<!-- ===== 底部导航 - 和其他板块100%相同 ===== -->
+<!-- ===== 直接从other.html复制的底部导航 ===== -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
