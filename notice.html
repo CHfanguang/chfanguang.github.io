@@ -82,12 +82,12 @@ body{
   margin: 0 0 30px 0;
   color: #d44;
   background: rgba(255,255,240,0.5);
-  padding: 12px 20px;
-  border-radius: 50px;
-  display: inline-block;
-  margin-left: auto;
-  margin-right: auto;
-  width: fit-content;
+  padding:12px 20px;
+  border-radius:50px;
+  display:inline-block;
+  margin-left:auto;
+  margin-right:auto;
+  width:fit-content;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
@@ -95,8 +95,10 @@ body{
 /* 绿色购买按钮样式 */
 .buy-button-container {
   display: flex;
+  flex-direction:column;
   justify-content: center;
-  margin: 30px 0 15px 0;
+  align-items:center;
+  margin: 30px 0 5px 0;
 }
 
 .buy-button {
@@ -124,6 +126,15 @@ body{
 .buy-button:active {
   transform: translateY(8px);
   box-shadow: 0 0px 0 #1e6e34, 0 10px 25px rgba(52, 168, 83, 0.5);
+}
+
+/* 按钮下方提示文字 */
+.btn-tip {
+  font-size: 12px;
+  color: #999;
+  font-style: italic;
+  margin-top: 4px;
+  text-align: center;
 }
 
 /* 促销创意区域 */
@@ -287,7 +298,7 @@ body{
   line-height:1.6;
 }
 
-/* ===== 已统一成代码1的底部导航（大小、间距完全一致）===== */
+/* ===== 底部导航 ===== */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -334,18 +345,18 @@ body{
 <div class="container">
   <div class="glass">
 
-    <!-- 标题区域 + 第一个购买按钮 -->
     <div class="notice-title">❤️ 情人节特惠 ❤️</div>
     <div style="text-align:center;">
       <span class="notice-sub">原价三件商品三元，现活动三件商品仅需一元</span>
     </div>
-    
-    <!-- 标题下方第一个绿色购买按钮 -->
+
+    <!-- 第一个绿色按钮 -->
     <div class="buy-button-container">
       <a href="https://qm.qq.com/q/Gq3tfhiXG8" class="buy-button" target="_blank">点击购买</a>
+      <div class="btn-tip">（若未能成功跳转请点击主页购买链接）</div>
+      <div class="btn-tip">（软件版请复制主页链接进入）</div>
     </div>
 
-    <!-- 创意推销区域 -->
     <div class="promo-creative">
       <p>
         <span class="promo-heart">💘</span>
@@ -359,9 +370,7 @@ body{
       <p>❤️ 三件商品合计1元，平均每件只要0.33元，永久陪伴 ❤️</p>
     </div>
 
-    <!-- 商品列表 -->
     <div class="product-grid">
-
       <!-- 商品 1 -->
       <div class="product-item">
         <div class="product-icon">⚡</div>
@@ -430,21 +439,21 @@ body{
       </div>
     </div>
 
-    <!-- 支付说明 -->
     <div style="background: rgba(0,0,0,0.03); border-radius: 30px; padding: 15px; margin-top: 20px; text-align: center; font-weight: 500;">
       💖 三件商品总价 1 元 · 仅限微信支付 · <span style="color:#d44; font-weight:800;">永久使用 + 终身售后服务</span>
     </div>
 
-    <!-- 免责声明 + 底部绿色购买按钮 -->
     <div style="font-size: 13px; color: #666; margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 20px;">
       <b>免责声明</b><br>
       本站所展示内容仅供学习与技术交流使用。<br>
       使用相关软件产生的任何后果均由使用者本人承担。<br>
       请遵守所在地法律法规，合法使用本站服务。
-      
-      <!-- 底部绿色购买按钮 -->
+
+      <!-- 底部绿色按钮 -->
       <div class="buy-button-container">
         <a href="https://qm.qq.com/q/Gq3tfhiXG8" class="buy-button" target="_blank">点击购买</a>
+        <div class="btn-tip">（若未能成功跳转请点击主页购买链接）</div>
+        <div class="btn-tip">（软件版请复制主页链接进入）</div>
       </div>
     </div>
 
@@ -457,7 +466,6 @@ body{
   © CH凡光
 </div>
 
-<!-- ===== 底部导航已和代码1统一 ===== -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
