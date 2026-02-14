@@ -49,8 +49,8 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* iOS 液态玻璃 */
-.glass{
+/* iOS 液态玻璃 - 基础样式 */
+.glass, .notice-glossy {
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
@@ -60,6 +60,24 @@ body{
   box-shadow:
     inset 0 1px 1px rgba(255,255,255,.7),
     0 30px 50px rgba(0,0,0,.18);
+}
+
+/* 通告区域专用样式 - 稍小一点，加警示效果 */
+.notice-glossy {
+  margin-top: 30px;
+  padding: 20px 25px;
+  border-left: 4px solid #ff3b30; /* 红色警示条 */
+}
+
+.notice-title {
+  color: #ff3b30;
+  font-weight: 700;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.notice-line {
+  margin: 5px 0;
 }
 
 /* 下载链接样式 */
@@ -139,6 +157,15 @@ body{
     <div class="download"><br>
       官方软件下载地址：<a href="https://pan.xunlei.com/s/VOlKbBSrT3ql-tiZ9zODM_ctA1?pwd=hxxk#" target="_blank">https://pan.xunlei.com/s/VOlKbBSrT3ql-tiZ9zODM_ctA1?pwd=hxxk#</a><br>
       复制到迅雷打开（更新/下载链接）
+    </div>
+    
+    <!-- 新增通告区域 - 液态玻璃包裹，严格按格式换行 -->
+    <div class="notice-glossy">
+      <div class="notice-title">⚠️ 临时通报</div>
+      <div class="notice-line">末年（年猫）</div>
+      <div class="notice-line">微信号：wxid_my5zcbwggb8i22</div>
+      <div class="notice-line">QQ号：2741320633</div>
+      <div class="notice-line" style="margin-top:10px; color:#ff3b30;">此人多次辱骂Shadow Moon以及用户</div>
     </div>
   </div>
 </div>
