@@ -16,7 +16,7 @@ body{
   color:#000;
 }
 
-/* 吸顶 LOGO (完全原样) —— 稍后只修改字母颜色，结构不变 */
+/* 吸顶 LOGO —— 结构不变，通过新增发光类实现效果 */
 .top-logo{
   position:sticky;
   top:14px;
@@ -34,6 +34,14 @@ body{
   font-size:30px;
   font-weight:900;
   letter-spacing:.6px;
+}
+/* 赋予每个字母发光效果 (使用currentColor继承各自颜色) */
+.logo span {
+  text-shadow: 0 0 6px currentColor, 0 0 12px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  transition: text-shadow 0.2s ease;
+}
+.logo span:hover {
+  text-shadow: 0 0 8px currentColor, 0 0 18px currentColor, 0 0 28px currentColor, 0 0 40px currentColor;
 }
 
 /* 内容动画 (完全原样) */
@@ -71,26 +79,28 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 (完全原样) —— 在保持原有结构上增加“通知”分区 */
+/* 底部导航 —— 选项离远点，但不改变导航栏整体大小 */
 .bottom-nav{
   position:fixed;
   bottom:26px;
   left:50%;
   transform:translateX(-50%);
   width:82%;
-  max-width:420px;
+  max-width:420px;          /* 保持原有最大宽度，不改变大小 */
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   border-radius:30px;
   display:flex;
-  justify-content:center;
-  gap:90px;
+  justify-content:space-evenly;  /* 使用space-evenly让选项均匀分布，间距自然变大 */
   padding:16px 0;
+  /* 移除固定gap，用space-evenly实现“离远点” */
 }
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
+  /* 可选增加左右内边距让点击区域更宽松，不影响导航栏整体尺寸 */
+  padding: 0 8px;
 }
 
 /* ===== 新增像素字体区域 (只加在开头) ===== */
@@ -147,8 +157,7 @@ body{
 </head>
 <body>
 
-<!-- 吸顶 LOGO (结构原样，只将Moon每个字母颜色改为绿蓝红黄) 
-     原代码: <span style="color:#000;"> Moon</span> 拆开 -->
+<!-- 吸顶 LOGO (结构完全不变，但每个span已通过.logo span规则获得发光效果) -->
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -157,7 +166,7 @@ body{
     <span style="color:#4285F4;">d</span>
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
-    <!-- 原先是黑色 Moon，现在将 Moon 拆分成 M o o n 四个字母，颜色顺序：绿 #34A853, 蓝 #4285F4, 红 #EA4335, 黄 #FBBC05 -->
+    <!-- Moon字母颜色：绿 #34A853, 蓝 #4285F4, 红 #EA4335, 黄 #FBBC05 -->
     <span style="color:#34A853;"> M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
@@ -188,7 +197,7 @@ body{
     我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
     <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
 
-    <!-- 新增：备用链接 + 客服在线时间 (完全按照要求，换行) -->
+    <!-- 备用链接 + 客服在线时间 -->
     备用链接：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">https://qm.qq.com/q/Gq3tfhiXG8</a><br>
     购买销售/客服节假日08：00至22：00在线（最大回复消息延迟不超过30分）<br><br>
 
@@ -217,20 +226,12 @@ body{
   </div>
 </div>
 
-<!-- 底部导航 (原样保留两个链接，并在中间插入一个“通知”分区，实现分区感) 
-     原结构：<a href="index.html">主页</a> 和 <a href="other.html">其他</a>
-     现在中间增加一个“通知”，并微调gap以保持视觉舒适，仍保留原背景和样式。
-     将gap从90px稍微调小让三个项目均匀分布，但保留原有样式意图。
-     使用分隔符或额外span来体现“分区”，但直接在导航里加第三个链接即可。
--->
-<div class="bottom-nav" style="gap: 40px;">   <!-- 加大gap不合适，改为40px使三个平分 -->
+<!-- 底部导航：选项离远点 (space-evenly)，通知链接指向 notice.html -->
+<div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="#" style="color:#000;">通知</a>   <!-- 新增通知分区，链接可保留当前页或预留 -->
+  <a href="notice.html">通知</a>   <!-- 修改为跳转到notice.html -->
   <a href="other.html">其他</a>
 </div>
-
-<!-- 为了维持原gap视觉效果，但三个链接用更合理的间距，也可以在中间加装饰，但客户要求“分个区，叫通知”，简单清晰。 
-     另可保留完全原样gap=90px只适合两个，因此微调gap。同时确保通知不破坏设计，保留字体颜色黑色。 -->
 
 </body>
 </html>
