@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 像素方块</title>
+<title>Shadow Moon · 像素发光</title>
 <!-- 像素字体：Press Start 2P (完全独立，不影响原代码任何样式) -->
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
@@ -93,10 +93,10 @@ body{
   color:#000;
 }
 
-/* ===== 新增像素字体区域 (只加在开头，不修改原内容任何一字) ===== */
+/* ===== 新增像素字体区域 (只加在开头) ===== */
 .pixel-header {
   text-align: center;
-  margin-bottom: 30px;  /* 与下方的.title保持间距，原样不动 */
+  margin-bottom: 30px;
   width: 100%;
 }
 .pixel-line {
@@ -106,22 +106,44 @@ body{
   text-transform: uppercase;
   line-height: 1.5;
   letter-spacing: 2px;
-  /* 半透明让毛玻璃背景透出来，同时发光 —— 像素方块感 */
   text-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 35px currentColor;
 }
 .pixel-shadow {
-  color: rgba(155, 77, 255, 0.9);  /* 紫色半透明，像霓虹像素 */
+  color: rgba(155, 77, 255, 0.9);
   font-size: 40px;
   margin-bottom: 8px;
 }
 .pixel-ch {
-  color: rgba(61, 126, 255, 0.9);   /* 蓝色半透明 */
+  color: rgba(61, 126, 255, 0.9);
   font-size: 38px;
 }
 @media (max-width: 550px) {
   .pixel-shadow { font-size: 30px; }
   .pixel-ch { font-size: 28px; }
 }
+
+/* ===== 新增：让“欢迎进入……”整行发光 (同时保留原有的彩色字母) ===== */
+.glow-title {
+  display: inline-block;  /* 保证背景/阴影贴合内容 */
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1.4;
+  /* 发光核心：白色底光 + 多彩光晕 */
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.9),
+    0 0 20px rgba(66, 133, 244, 0.7),
+    0 0 30px rgba(234, 67, 53, 0.7),
+    0 0 40px rgba(251, 188, 5, 0.6),
+    0 0 50px rgba(52, 168, 83, 0.6);
+  animation: flickerGlow 3s infinite alternate;
+}
+/* 微妙的闪烁让发光更生动 (可选) */
+@keyframes flickerGlow {
+  0% { text-shadow: 0 0 8px #fff, 0 0 18px #4285F4, 0 0 28px #EA4335, 0 0 38px #FBBC05, 0 0 48px #34A853; }
+  100% { text-shadow: 0 0 12px #fff, 0 0 25px #4285F4, 0 0 35px #EA4335, 0 0 45px #FBBC05, 0 0 55px #34A853; }
+}
+/* 为了保证原.title内所有span颜色不受影响，我们套用.glow-title在包裹层上。
+   但原来的.title内部是分散的span，我们直接给整个.title加glow-title类，内联span颜色优先级更高，不会被覆盖 */
 </style>
 </head>
 <body>
@@ -142,15 +164,14 @@ body{
 <div class="container">
   <div class="glass">
     
-    <!-- ★ 新增像素标题：放在最顶部，绝对不动下方任何原内容 ★ 
-         完全按照要求：Shadow Moon 和 CH凡光 字体改为像素方块 (Press Start 2P) -->
+    <!-- 像素标题（完全不变） -->
     <div class="pixel-header">
       <span class="pixel-line pixel-shadow">Shadow Moon</span>
       <span class="pixel-line pixel-ch">CH凡光</span>
     </div>
     
-    <!-- 以下所有内容保持原样，一字未改，一个标点都没变 -->
-    <div class="title">
+    <!-- 以下是原内容，只改了一处：给“欢迎进入……”整行的父级添加 glow-title 类使其发光，内部彩色span保持原样，未动一字 -->
+    <div class="title glow-title">
       <span style="color:#4285F4;">欢</span>
       <span style="color:#EA4335;">迎</span>
       <span style="color:#FBBC05;">进</span>
