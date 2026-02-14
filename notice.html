@@ -287,32 +287,28 @@ body{
   line-height:1.6;
 }
 
-/* ===== 直接从other.html复制的底部导航 ===== */
+/* ===== 已统一成代码1的底部导航（大小、间距完全一致）===== */
 .bottom-nav{
-  position: fixed;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 82%;
-  max-width: 420px;
-  background: rgba(255,255,255,.28);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border-radius: 30px;
-  display: flex;
-  justify-content: center;
-  gap: 90px;
-  padding: 16px 0;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  z-index: 999;
+  position:fixed;
+  bottom:26px;
+  left:50%;
+  transform:translateX(-50%);
+  width:82%;
+  max-width:420px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:30px;
+  display:flex;
+  justify-content:space-evenly;
+  padding:16px 0;
 }
 
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
+  padding: 0 8px;
 }
 </style>
 </head>
@@ -461,7 +457,7 @@ body{
   © CH凡光
 </div>
 
-<!-- ===== 直接从other.html复制的底部导航 ===== -->
+<!-- ===== 底部导航已和代码1统一 ===== -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
