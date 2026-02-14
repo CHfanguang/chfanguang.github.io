@@ -163,4 +163,394 @@ body{
 </div>
 
 </body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow Moon · 像素光晕</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(145deg, #c0c0c0 0%, #efefef 25%, #b5b5b5 50%, #e8e8e8 80%, #cecece 100%);
+      color: #111;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 吸顶LOGO (保持原样) */
+    .top-logo {
+      position: sticky;
+      top: 16px;
+      z-index: 999;
+      margin: 16px auto 22px;
+      width: fit-content;
+      padding: 12px 32px;
+      background: rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(36px) saturate(240%);
+      -webkit-backdrop-filter: blur(36px) saturate(240%);
+      border-radius: 60px;
+      box-shadow: 
+        inset 0 2px 3px rgba(255, 255, 255, 0.8),
+        0 20px 40px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
+    }
+
+    /* 内容动画 */
+    .container {
+      max-width: 920px;
+      margin: 0 auto 40px;
+      padding: 0 20px 100px;
+      animation: iosIn 0.8s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+      flex: 1;
+    }
+
+    @keyframes iosIn {
+      0% { opacity: 0; transform: translateY(70px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* iOS 磨砂玻璃卡片 */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(32px) saturate(200%);
+      -webkit-backdrop-filter: blur(32px) saturate(200%);
+      border-radius: 40px;
+      padding: 36px 38px;
+      box-shadow: 
+        inset 0 2px 3px rgba(255,255,255,0.8),
+        0 30px 55px -10px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255,255,255,0.2);
+      transition: all 0.2s ease;
+    }
+
+    /* ===== 新增像素标题区域 (居中, 像素字体, 发光, 与玻璃互动) ===== */
+    .pixel-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 10px 0 5px;
+    }
+
+    .pixel-line {
+      display: block;
+      font-family: 'Press Start 2P', 'Courier New', 'VT323', 'Consolas', monospace;
+      font-size: 38px;            /* 像素感大字号 */
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 
+        0 0 8px currentColor,
+        0 0 18px currentColor,
+        0 0 35px currentColor;    /* 三层发光 */
+      transition: text-shadow 0.2s;
+      line-height: 1.4;
+    }
+
+    /* 第一行 Shadow Moon (紫色) 带毛玻璃底层互动 —— 半透明让模糊背景透出来 */
+    .pixel-shadow {
+      color: #9b4dff;              /* 亮紫色 */
+      font-size: 44px;             /* 稍微突出 */
+      margin-bottom: 6px;
+    }
+
+    /* 第二行 CH凡光 (蓝色) */
+    .pixel-ch {
+      color: #3d7eff;              /* 明亮蓝 */
+      font-size: 42px;
+    }
+
+    /* 为了让毛玻璃透出来, 文字本身半透明? 但发光需要实色才有光感. 使用半透明色可让背景模糊更明显 */
+    /* 调整: 让文字颜色带有轻微透明度, 背景模糊就能透上来, 同时发光仍显著 */
+    .pixel-shadow {
+      color: rgba(170, 90, 255, 0.85);   /* 半透明紫 */
+    }
+    .pixel-ch {
+      color: rgba(70, 140, 255, 0.88);   /* 半透明蓝 */
+    }
+    /* 发光效果用text-shadow实现, 颜色使用纯色光晕, 不受透明度影响太多 */
+    /* 像素字体回退 */
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+    /* 本地备用 */
+    .pixel-line {
+      font-family: 'Press Start 2P', 'VT323', 'Courier New', monospace;
+    }
+
+    /* 标题区渐变文字 */
+    .rainbow-title {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.2px;
+    }
+    .rainbow-title span {
+      display: inline-block;
+    }
+
+    /* 商品块、群组块 */
+    .highlight-block {
+      background: rgba(0, 0, 0, 0.03);
+      border-radius: 28px;
+      padding: 22px 26px;
+      margin: 24px 0 28px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: inset 0 1px 4px rgba(255,255,255,0.8), 0 8px 18px rgba(0,0,0,0.1);
+    }
+
+    .price-tag {
+      display: inline-block;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
+      font-size: 22px;
+      font-weight: 800;
+      padding: 8px 24px;
+      border-radius: 100px;
+      margin: 12px 0 8px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      color: #0a2c3d;
+    }
+
+    .link-card {
+      background: rgba(255,255,255,0.6);
+      border-radius: 30px;
+      padding: 14px 22px;
+      word-break: break-all;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.9);
+      margin: 15px 0;
+      transition: 0.1s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .link-card a {
+      text-decoration: none;
+      color: #0f3b5c;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .link-card a:hover {
+      text-decoration: underline;
+      color: #000;
+    }
+
+    .badge {
+      background: #1a1a1a;
+      color: white;
+      border-radius: 60px;
+      padding: 6px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-block;
+      letter-spacing: 0.5px;
+    }
+
+    hr {
+      margin: 30px 0 25px;
+      border: none;
+      height: 2px;
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(2px);
+      border-radius: 5px;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 45px;
+      color: #3b3b3b;
+      font-size: 15px;
+      font-weight: 500;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+      letter-spacing: 0.5px;
+    }
+
+    /* 底部固定导航 (完全保留, 未调整) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(35px) saturate(250%);
+      -webkit-backdrop-filter: blur(35px) saturate(250%);
+      border-radius: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 70px;
+      padding: 16px 10px;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 18px;
+      color: #111;
+      transition: 0.15s;
+      padding: 4px 12px;
+      border-radius: 40px;
+    }
+    .bottom-nav a:hover {
+      background: rgba(0,0,0,0.1);
+      backdrop-filter: blur(5px);
+    }
+
+    .disclaimer {
+      font-size: 15px;
+      background: rgba(255,255,255,0.25);
+      padding: 18px 22px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin: 26px 0 10px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.5);
+      padding: 8px 25px;
+      border-radius: 40px;
+      font-weight: 600;
+      border: 1px solid white;
+    }
+
+    .c-blue { color: #1a5be0; }
+    .c-red { color: #d32f2f; }
+    .c-yellow { color: #f5a623; }
+    .c-green { color: #2b8c4c; }
+    .c-black { color: #111; }
+
+    /* 小屏调整字体 */
+    @media (max-width: 550px) {
+      .pixel-shadow {
+        font-size: 32px;
+      }
+      .pixel-ch {
+        font-size: 30px;
+      }
+      .glass-card {
+        padding: 25px 18px;
+      }
+    }
+  </style>
+  <!-- 加载像素字体 (Press Start 2P) 以获得经典像素感 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- 吸顶 LOGO (完全保留原配色与样式) -->
+<div class="top-logo">
+  <span class="logo">
+    <span style="color:#4285F4;">S</span>
+    <span style="color:#EA4335;">h</span>
+    <span style="color:#FBBC05;">a</span>
+    <span style="color:#4285F4;">d</span>
+    <span style="color:#34A853;">o</span>
+    <span style="color:#EA4335;">w</span>
+    <span style="color:#000000;"> Moon</span>
+  </span>
+</div>
+
+<main class="container">
+  <div class="glass-card">
+
+    <!-- 新增像素标题区域 (居中, 发光, 与毛玻璃互动) -->
+    <div class="pixel-header">
+      <span class="pixel-line pixel-shadow">Shadow Moon</span>
+      <span class="pixel-line pixel-ch">CH凡光</span>
+    </div>
+
+    <!-- 原有欢迎标题 (保留彩色字母) -->
+    <div class="rainbow-title">
+      <span style="color:#4285F4;">欢</span>
+      <span style="color:#EA4335;">迎</span>
+      <span style="color:#FBBC05;">进</span>
+      <span style="color:#4285F4;">入</span>
+      <span style="color:#34A853;"> </span>
+      <span style="color:#EA4335;">Shadow Moon</span>
+      <span style="color:#000000;"> 官方网站/软件</span>
+    </div>
+
+    <!-- 核心商品区域 -->
+    <div class="highlight-block">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;">
+        <span class="badge">🔥 限时特惠</span>
+        <span class="badge" style="background:#2b5f8a;">微信专属</span>
+      </div>
+
+      <div style="font-size: 20px; font-weight: 700; margin-bottom: 6px;">
+        <span class="c-blue">我的世界</span> 外挂 · VPN · 黑科技软件
+      </div>
+
+      <div class="price-tag">
+        ⚡ 全商品 1 元 ⚡
+      </div>
+
+      <div style="font-size: 17px; margin: 15px 0 10px; font-weight: 500;">
+        💎 赠送终身售后服务 &nbsp;|&nbsp; 仅限微信支付
+      </div>
+
+      <div class="link-card">
+        📦 <strong>立即购买 / 联系客服</strong> <br>
+        <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank" rel="noopener">https://qm.qq.com/q/JYP3V4yogK</a>
+      </div>
+
+      <!-- 官方QQ群 -->
+      <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; background: rgba(255,255,255,0.3); border-radius: 50px; padding: 12px 22px; margin: 16px 0 6px;">
+        <span style="font-weight:700; font-size:18px;">👥 官方QQ群聊：</span>
+        <span style="background:#000; color:white; padding:6px 25px; border-radius:40px; font-size:20px; letter-spacing:1.5px;">523725674</span>
+      </div>
+    </div>
+
+    <!-- 快手信息 & 视频链接 -->
+    <div style="margin: 20px 0 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;">
+      <div class="social-link">
+        <span style="font-size:18px;">📱 快手账号：</span>
+        <strong style="font-size:19px;">我的世界CH凡光</strong>
+      </div>
+      <div class="link-card" style="max-width: 400px; margin:0;">
+        ▶️ 视频链接 <br>
+        <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">https://v.kuaishou.com/JE2u8ANT</a>
+      </div>
+    </div>
+
+    <!-- 免责声明 -->
+    <div class="disclaimer">
+      <div style="font-weight:800; font-size:18px; margin-bottom:10px;">⚖️ 免责声明</div>
+      <p style="margin:0 0 8px 0;">本站所展示内容仅供学习与技术交流使用。<br>使用相关软件产生的任何后果均由使用者本人承担。<br>请遵守所在地法律法规，合法使用本站服务。</p>
+    </div>
+
+    <!-- 底部版权区域 -->
+    <div class="footer-note">
+      Powerd by Shadow Moon &nbsp; | &nbsp; © CH凡光
+    </div>
+
+  </div> <!-- glass-card -->
+</main>
+
+<!-- 底部导航 (完全保留未动) -->
+<div class="bottom-nav">
+  <a href="index.html">主页</a>
+  <a href="other.html">其他</a>
+</div>
+
+</body>
 </html>
