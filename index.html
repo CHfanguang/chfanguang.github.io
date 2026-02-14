@@ -1,12 +1,9 @@
-
 <!DOCTYPE html>
-
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shadow Moon</title>
-
 <style>
 *{box-sizing:border-box}
 body{
@@ -16,7 +13,7 @@ body{
   color:#000;
 }
 
-/* 吸顶 LOGO */
+/* 吸顶 LOGO (完全原样) */
 .top-logo{
   position:sticky;
   top:14px;
@@ -28,18 +25,15 @@ body{
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
   border-radius:30px;
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.7),
-    0 18px 40px rgba(0,0,0,.18);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
 }
-
 .logo{
   font-size:30px;
   font-weight:900;
   letter-spacing:.6px;
 }
 
-/* 内容动画 */
+/* 内容动画 (完全原样) */
 .container{
   max-width:900px;
   margin:auto;
@@ -51,7 +45,7 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* iOS 液态玻璃 */
+/* iOS 液态玻璃 (完全原样) */
 .glass{
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
@@ -59,17 +53,13 @@ body{
   border-radius:28px;
   padding:30px;
   line-height:1.7;
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.7),
-    0 30px 50px rgba(0,0,0,.18);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 30px 50px rgba(0,0,0,.18);
 }
-
 .title{
   font-size:26px;
   font-weight:900;
   margin-bottom:10px;
 }
-
 .footer{
   text-align:center;
   margin:80px 0 160px;
@@ -78,7 +68,7 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 */
+/* 底部导航 (完全原样) */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -94,22 +84,19 @@ body{
   gap:90px;
   padding:16px 0;
 }
-
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
 }
 
-/* ===== 新增像素字体区域 (放在最上面，不干扰原代码) ===== */
+/* 新增像素字体区域 (完全独立，不修改原代码) */
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 .pixel-header {
   text-align: center;
-  margin-bottom: 30px;  /* 与下面的.title保持间距 */
+  margin-bottom: 30px;  /* 与下方的.title保持间距 */
   width: 100%;
 }
-
 .pixel-line {
   display: block;
   font-family: 'Press Start 2P', 'Courier New', monospace;
@@ -120,29 +107,24 @@ body{
   /* 半透明让毛玻璃背景透出来，同时发光 */
   text-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 35px currentColor;
 }
-
 .pixel-shadow {
   color: rgba(155, 77, 255, 0.9);  /* 紫色半透明 */
   font-size: 40px;
   margin-bottom: 8px;
 }
-
 .pixel-ch {
   color: rgba(61, 126, 255, 0.9);   /* 蓝色半透明 */
   font-size: 38px;
 }
-
 @media (max-width: 550px) {
   .pixel-shadow { font-size: 30px; }
   .pixel-ch { font-size: 28px; }
 }
 </style>
-
 </head>
 <body>
 
 <!-- 吸顶 LOGO (完全原样) -->
-
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -157,12 +139,53 @@ body{
 
 <div class="container">
   <div class="glass">
+    
+    <!-- 新增像素标题：放在最顶部，不改变下方任何内容 -->
+    <div class="pixel-header">
+      <span class="pixel-line pixel-shadow">Shadow Moon</span>
+      <span class="pixel-line pixel-ch">CH凡光</span>
+    </div>
+    
+    <!-- 以下所有内容保持原样，一字未改 -->
+    <div class="title">
+      <span style="color:#4285F4;">欢</span>
+      <span style="color:#EA4335;">迎</span>
+      <span style="color:#FBBC05;">进</span>
+      <span style="color:#4285F4;">入</span>
+      <span style="color:#34A853;"> </span>
+      <span style="color:#EA4335;">Shadow Moon</span>
+      <span style="color:#000;"> 官方网站/软件</span>
+    </div>
+
+    我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
+    <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
+
+    所有商品均为 1 元<br>
+    仅限微信支付<br>
+    赠送终身售后服务<br><br>
+
+    <b>官方QQ群聊：</b>523725674<br><br>
+
+    <b>免责声明</b><br>
+    本站所展示内容仅供学习与技术交流使用。<br>
+    使用相关软件产生的任何后果均由使用者本人承担。<br>
+    请遵守所在地法律法规，合法使用本站服务。<br><br>
+
+    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">
+      https://v.kuaishou.com/JE2u8ANT
+    </a><br><br>
+
+    快手账号：我的世界CH凡光
+
+    <div class="footer">
+      Powerd by Shadow Moon<br>
+      © CH凡光
+    </div>
 
   </div>
 </div>
 
 <!-- 底部导航 (完全原样) -->
-
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="other.html">其他</a>
