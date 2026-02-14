@@ -80,48 +80,42 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 —— 高透毛玻璃 (间距调整为适合三个链接) */
+/* ===== 已统一成代码1主页的底部导航 ===== */
 .bottom-nav{
-  position: fixed;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 82%;
-  max-width: 420px;
-  background: rgba(255,255,255,.28);
-  backdrop-filter: blur(40px) saturate(200%);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  border-radius: 30px;
-  display: flex;
-  justify-content: space-evenly;  /* 改为均匀分布，适应三个选项 */
-  padding: 16px 0;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  z-index: 999;
+  position:fixed;
+  bottom:26px;
+  left:50%;
+  transform:translateX(-50%);
+  width:82%;
+  max-width:420px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:30px;
+  display:flex;
+  justify-content:space-evenly;
+  padding:16px 0;
 }
-
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
+  padding: 0 8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 吸顶 LOGO —— Moon字母颜色改为绿、蓝、红、黄排列，与主站一致 -->
+<!-- 吸顶 LOGO -->
 <div class="top-logo">
   <span class="logo">
-    <!-- Shadow部分 (保持原彩色) -->
     <span style="color:#4285F4;">S</span>
     <span style="color:#EA4335;">h</span>
     <span style="color:#FBBC05;">a</span>
     <span style="color:#4285F4;">d</span>
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
-    <!-- 修改 Moon 部分：由原来的黑色拆分为四个字母，按顺序绿 #34A853, 蓝 #4285F4, 红 #EA4335, 黄 #FBBC05，并保留前面的空格 -->
     <span style="color:#34A853;"> M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
@@ -153,10 +147,10 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 —— 新增“通知”链接，跳转到 notice.html -->
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="notice.html">通知</a>   <!-- 新增的通知分区，指向notice.html -->
+  <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
 
