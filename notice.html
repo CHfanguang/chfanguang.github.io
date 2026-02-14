@@ -14,7 +14,7 @@ body{
   color:#000;
 }
 
-/* 吸顶 LOGO (与主站风格完全一致) */
+/* 吸顶 LOGO */
 .top-logo{
   position:sticky;
   top:14px;
@@ -49,7 +49,7 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* iOS 液态玻璃 (合金背景/毛玻璃效果) */
+/* iOS 液态玻璃 */
 .glass{
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
@@ -244,7 +244,7 @@ body{
   box-shadow: 0 2px 0 #1e6e34;
 }
 
-/* 绿色购买按钮 - 居中长方形 */
+/* 绿色购买按钮 */
 .buy-button-container {
   display: flex;
   justify-content: center;
@@ -253,12 +253,12 @@ body{
 
 .buy-button {
   display: inline-block;
-  background: #34a853;  /* 谷歌绿 */
+  background: #34a853;
   color: white;
   font-size: 24px;
   font-weight: 800;
   padding: 16px 50px;
-  border-radius: 20px;  /* 长方形带小圆角 */
+  border-radius: 20px;
   text-decoration: none;
   box-shadow: 0 8px 0 #1e6e34, 0 10px 25px rgba(52, 168, 83, 0.5);
   transition: all 0.1s ease;
@@ -287,7 +287,7 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 */
+/* 底部导航 - 完全与其他板块一致：gap:90px，所有链接黑色 */
 .bottom-nav{
   position: fixed;
   bottom: 26px;
@@ -300,7 +300,8 @@ body{
   -webkit-backdrop-filter: blur(40px) saturate(200%);
   border-radius: 30px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  gap: 90px;  /* 与其他板块完全一致的间距 */
   padding: 16px 0;
   border: none;
   outline: none;
@@ -311,7 +312,7 @@ body{
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
-  color:#000;
+  color: #000;  /* 所有链接统一黑色，没有红色高亮 */
 }
 </style>
 </head>
@@ -433,14 +434,14 @@ body{
       💖 三件商品总价 1 元 · 仅限微信支付 · <span style="color:#d44; font-weight:800;">永久使用 + 终身售后服务</span>
     </div>
 
-    <!-- 免责声明 + 绿色购买按钮 (居中) -->
+    <!-- 免责声明 + 绿色购买按钮 -->
     <div style="font-size: 13px; color: #666; margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 20px;">
       <b>免责声明</b><br>
       本站所展示内容仅供学习与技术交流使用。<br>
       使用相关软件产生的任何后果均由使用者本人承担。<br>
       请遵守所在地法律法规，合法使用本站服务。
       
-      <!-- 绿色居中长方形按钮，点击跳转至指定QQ链接 -->
+      <!-- 绿色居中长方形按钮 -->
       <div class="buy-button-container">
         <a href="https://qm.qq.com/q/Gq3tfhiXG8" class="buy-button" target="_blank">点击购买</a>
       </div>
@@ -455,10 +456,10 @@ body{
   © CH凡光
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 - 完全与其他板块一致：gap:90px，所有链接黑色 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="notice.html" style="font-weight:900; color:#d44;">通知</a>
+  <a href="notice.html">通知</a>  <!-- 现在也是黑色，与其他选项一致 -->
   <a href="other.html">其他</a>
 </div>
 
