@@ -1,1 +1,431 @@
-1
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shadow Moon · 通知</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
+  background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
+  color:#000;
+}
+
+/* 吸顶 LOGO (与主站风格完全一致) */
+.top-logo{
+  position:sticky;
+  top:14px;
+  z-index:999;
+  margin:14px auto 30px;
+  width:fit-content;
+  padding:14px 28px;
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:30px;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 18px 40px rgba(0,0,0,.18);
+}
+
+.logo{
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:.6px;
+}
+
+/* 内容动画 */
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px 20px 140px;
+  animation:iosIn .9s ease-out both;
+}
+@keyframes iosIn{
+  from{opacity:0;transform:translateY(70px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* iOS 液态玻璃 (合金背景/毛玻璃效果——与其他板块完全一致) */
+.glass{
+  background:rgba(255,255,255,.45);
+  backdrop-filter:blur(30px) saturate(220%);
+  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  border-radius:28px;
+  padding:30px;
+  line-height:1.7;
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    0 30px 50px rgba(0,0,0,.18);
+}
+
+/* 通知页面特有样式 */
+.notice-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  margin: 10px 0 5px 0;
+  background: linear-gradient(135deg, #ff4d4d, #ff9a9e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 15px rgba(255, 77, 77, 0.3);
+}
+
+.notice-sub {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 30px 0;
+  color: #d44;
+  background: rgba(255,255,240,0.5);
+  padding: 12px 20px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* 促销创意区域 (完全遵循原价：三件商品一元，没有额外赠送) */
+.promo-creative {
+  background: rgba(255, 215, 215, 0.3);
+  border-radius: 40px;
+  padding: 25px;
+  margin: 25px 0 35px 0;
+  text-align: center;
+  border: 2px dashed #ff8888;
+}
+
+.promo-creative p {
+  font-size: 18px;
+  margin: 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.promo-highlight {
+  background: #ff4d4d;
+  color: white;
+  padding: 8px 22px;
+  border-radius: 40px;
+  font-weight: 800;
+  font-size: 22px;
+  display: inline-block;
+  box-shadow: 0 8px 0 #b32d2d, 0 10px 20px rgba(255,77,77,0.4);
+  transform: translateY(-2px);
+  margin: 5px 0;
+}
+
+.promo-heart {
+  font-size: 28px;
+  filter: drop-shadow(0 0 8px #ff3366);
+  animation: heartbeat 1.5s ease infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.15); }
+  35% { transform: scale(1.05); }
+  45% { transform: scale(1.1); }
+}
+
+/* 商品列表 —— 像联系人卡片一样规则排列，一次性全展示 */
+.product-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 35px 0 20px;
+}
+
+/* 每个商品条目类似联系人行 */
+.product-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 60px;
+  padding: 10px 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04), inset 0 1px 2px rgba(255,255,255,0.8);
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.product-item:hover {
+  transform: scale(1.01);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+/* 商品图标 */
+.product-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f86a6a, #d64444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  font-size: 24px;
+  color: white;
+  box-shadow: 0 6px 0 #913030, 0 5px 15px rgba(220,60,60,0.4);
+  flex-shrink: 0;
+}
+
+/* 商品信息区 */
+.product-info {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 20px;
+}
+
+.product-name {
+  font-weight: 800;
+  font-size: 20px;
+  min-width: 120px;
+  color: #2c3e50;
+}
+
+.product-price-area {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.old-price {
+  color: #888;
+  font-size: 16px;
+  text-decoration: line-through;
+  text-decoration-color: #ff5555;
+  text-decoration-thickness: 2px;
+}
+
+.new-price {
+  background: #ff4d4d;
+  color: white;
+  font-weight: 900;
+  font-size: 22px;
+  padding: 4px 18px;
+  border-radius: 40px;
+  box-shadow: 0 4px 0 #b33232;
+  letter-spacing: 1px;
+}
+
+/* 永久标签 */
+.product-tag {
+  background: gold;
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 5px 15px;
+  border-radius: 40px;
+  margin-left: auto;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 #b38f20;
+}
+
+.permanent-tag {
+  background: #34a853;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 5px 15px;
+  border-radius: 40px;
+  margin-left: 5px;
+  white-space: nowrap;
+  box-shadow: 0 2px 0 #1e6e34;
+}
+
+/* 页脚与导航保持一致 */
+.footer{
+  text-align:center;
+  margin:40px 0 100px;
+  color:#888;
+  font-size:14px;
+  line-height:1.6;
+}
+
+/* 底部导航 */
+.bottom-nav{
+  position: fixed;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 82%;
+  max-width: 420px;
+  background: rgba(255,255,255,.28);
+  backdrop-filter: blur(40px) saturate(200%);
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 16px 0;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  z-index: 999;
+}
+
+.bottom-nav a{
+  text-decoration:none;
+  font-weight:700;
+  color:#000;
+}
+</style>
+</head>
+<body>
+
+<!-- 吸顶 LOGO -->
+<div class="top-logo">
+  <span class="logo">
+    <span style="color:#4285F4;">S</span>
+    <span style="color:#EA4335;">h</span>
+    <span style="color:#FBBC05;">a</span>
+    <span style="color:#4285F4;">d</span>
+    <span style="color:#34A853;">o</span>
+    <span style="color:#EA4335;">w</span>
+    <span style="color:#34A853;"> M</span>
+    <span style="color:#4285F4;">o</span>
+    <span style="color:#EA4335;">o</span>
+    <span style="color:#FBBC05;">n</span>
+  </span>
+</div>
+
+<!-- 主要内容区 -->
+<div class="container">
+  <div class="glass">
+
+    <!-- 标题居中，情人节特惠 -->
+    <div class="notice-title">❤️ 情人节特惠 ❤️</div>
+    <div style="text-align:center;">
+      <span class="notice-sub">原价三件商品三元，现活动三件商品仅需一元</span>
+    </div>
+
+    <!-- 创意推销区域 (永久商品强调) -->
+    <div class="promo-creative">
+      <p>
+        <span class="promo-heart">💘</span>
+        <span class="promo-highlight">永久买断·三件1元</span>
+        <span class="promo-heart">💘</span>
+      </p>
+      <p>✨  Valentine‘s Special  ✨  原价3元 → 现价1元</p>
+      <p>💞 三款热门商品一次拥有：我的世界外挂 + VPN + 黑科技软件</p>
+      <p style="font-size:22px; font-weight:bold; color:#c44;">🎁 重点是：买到就是【永久】！没有年卡、没有月租 🎁</p>
+      <p>⭐ 一次付费，终身使用，售后服务也是永久的</p>
+      <p>❤️ 三件商品合计1元，平均每件只要0.33元，永久陪伴 ❤️</p>
+    </div>
+
+    <!-- 商品列表 —— 永久商品展示 -->
+    <div class="product-grid">
+
+      <!-- 商品 1 - 我的世界外挂 (永久) -->
+      <div class="product-item">
+        <div class="product-icon">⚡</div>
+        <div class="product-info">
+          <span class="product-name">我的世界·外挂</span>
+          <div class="product-price-area">
+            <span class="old-price">¥1</span>
+            <span class="new-price">¥0.33</span>
+          </div>
+          <span class="product-tag">活动价</span>
+          <span class="permanent-tag">永久</span>
+        </div>
+      </div>
+
+      <!-- 商品 2 - VPN (永久，不是年卡) -->
+      <div class="product-item">
+        <div class="product-icon">🔒</div>
+        <div class="product-info">
+          <span class="product-name">VPN·永久版</span>
+          <div class="product-price-area">
+            <span class="old-price">¥1</span>
+            <span class="new-price">¥0.33</span>
+          </div>
+          <span class="product-tag">活动价</span>
+          <span class="permanent-tag">永久</span>
+        </div>
+      </div>
+
+      <!-- 商品 3 - 黑科技软件 (永久) -->
+      <div class="product-item">
+        <div class="product-icon">🤖</div>
+        <div class="product-info">
+          <span class="product-name">黑科技软件</span>
+          <div class="product-price-area">
+            <span class="old-price">¥1</span>
+            <span class="new-price">¥0.34</span>
+          </div>
+          <span class="product-tag">约0.34元</span>
+          <span class="permanent-tag">永久</span>
+        </div>
+      </div>
+
+      <!-- 组合说明卡片 (强调永久) -->
+      <div class="product-item" style="opacity:0.95; background:rgba(240,240,255,0.6);">
+        <div class="product-icon" style="background: #9b59b6;">♾️</div>
+        <div class="product-info">
+          <span class="product-name">永久套装</span>
+          <div class="product-price-area">
+            <span class="old-price">¥3</span>
+            <span class="new-price" style="background:#9b59b6; box-shadow:0 4px 0 #6c3b8a;">¥1/三件</span>
+          </div>
+          <span class="product-tag" style="background:#e0b0ff;">永久有效</span>
+        </div>
+      </div>
+
+      <div class="product-item" style="opacity:0.95; background:rgba(255,240,245,0.6);">
+        <div class="product-icon" style="background: #e67e22;">⏳</div>
+        <div class="product-info">
+          <span class="product-name">终身售后</span>
+          <div class="product-price-area">
+            <span class="old-price" style="visibility:hidden;">¥0</span>
+            <span class="new-price" style="background:#e67e22; box-shadow:0 4px 0 #b85e0e;">随商品赠送</span>
+          </div>
+          <span class="product-tag" style="background:#f9caa7;">永久服务</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 支付说明 (强调永久) -->
+    <div style="background: rgba(0,0,0,0.03); border-radius: 30px; padding: 15px; margin-top: 20px; text-align: center; font-weight: 500;">
+      💖 三件商品总价 1 元 · 仅限微信支付 · <span style="color:#d44; font-weight:800;">永久使用 + 终身售后服务</span>
+    </div>
+
+    <!-- 免责声明 -->
+    <div style="font-size: 13px; color: #666; margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.2); border-radius: 20px;">
+      <b>免责声明</b><br>
+      本站所展示内容仅供学习与技术交流使用。<br>
+      使用相关软件产生的任何后果均由使用者本人承担。<br>
+      请遵守所在地法律法规，合法使用本站服务。
+    </div>
+
+  </div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+  Powered by Shadow Moon<br>
+  © CH凡光
+</div>
+
+<!-- 底部导航 (通知页高亮) -->
+<div class="bottom-nav">
+  <a href="index.html">主页</a>
+  <a href="notice.html" style="font-weight:900; color:#d44;">通知</a>
+  <a href="other.html">其他</a>
+</div>
+
+</body>
+</html>
