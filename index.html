@@ -16,7 +16,7 @@ body{
   color:#000;
 }
 
-/* 吸顶 LOGO —— 移除发光效果，确保Shadow和Moon两个单词有间距 */
+/* 吸顶 LOGO —— 完全去除发光，Shadow和Moon之间用普通空格连接 */
 .top-logo{
   position:sticky;
   top:14px;
@@ -34,10 +34,9 @@ body{
   font-size:30px;
   font-weight:900;
   letter-spacing:.6px;
-  /* 确保单词间距正常 */
   word-spacing: normal;
 }
-/* 移除所有发光效果 */
+/* 确保没有任何发光 */
 .logo span {
   text-shadow: none;
 }
@@ -84,24 +83,22 @@ body{
   left:50%;
   transform:translateX(-50%);
   width:82%;
-  max-width:420px;          /* 保持原有最大宽度，不改变大小 */
+  max-width:420px;
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   border-radius:30px;
   display:flex;
-  justify-content:space-evenly;  /* 使用space-evenly让选项均匀分布，间距自然变大 */
+  justify-content:space-evenly;
   padding:16px 0;
-  /* 移除固定gap，用space-evenly实现“离远点” */
 }
 .bottom-nav a{
   text-decoration:none;
   font-weight:700;
   color:#000;
-  /* 可选增加左右内边距让点击区域更宽松，不影响导航栏整体尺寸 */
   padding: 0 8px;
 }
 
-/* ===== 新增像素字体区域 (只加在开头) ===== */
+/* ===== 新增像素字体区域 ===== */
 .pixel-header {
   text-align: center;
   margin-bottom: 30px;
@@ -139,7 +136,6 @@ body{
     0 0 35px currentColor;
   transition: text-shadow 0.2s ease;
 }
-/* 可选的柔和呼吸效果 (让光微微变化) */
 .title span:not([style*="color:#000"]):hover {
   text-shadow: 
     0 0 8px currentColor,
@@ -147,7 +143,6 @@ body{
     0 0 32px currentColor,
     0 0 48px currentColor;
 }
-/* 黑色字完全无发光 (保留原样) */
 .title span[style*="color:#000"] {
   text-shadow: none;
 }
@@ -155,10 +150,10 @@ body{
 </head>
 <body>
 
-<!-- 吸顶 LOGO —— 现在Shadow和Moon两个单词之间有明显的空格间距（单词间距，不是字母间距） -->
+<!-- 吸顶 LOGO —— Shadow和Moon之间只用一个普通空格，间距恢复正常 -->
 <div class="top-logo">
   <span class="logo">
-    <!-- Shadow单词 (彩色) -->
+    <!-- Shadow单词 -->
     <span style="color:#4285F4;">S</span>
     <span style="color:#EA4335;">h</span>
     <span style="color:#FBBC05;">a</span>
@@ -166,10 +161,10 @@ body{
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
     
-    <!-- 关键修改：这里用一个独立的空格span来表示两个单词之间的间隔，让Shadow和Moon成为两个独立的单词 -->
-    <span style="color:transparent; display:inline-block; width:0.5em;">&nbsp;</span>
+    <!-- 一个普通空格，不透明不变宽，就是正常字符空格 -->
+    <span style="color:#000000;"> </span>
     
-    <!-- Moon单词 (彩色：绿蓝红黄) -->
+    <!-- Moon单词 -->
     <span style="color:#34A853;">M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
@@ -180,13 +175,13 @@ body{
 <div class="container">
   <div class="glass">
     
-    <!-- 像素标题（完全不变） -->
+    <!-- 像素标题 -->
     <div class="pixel-header">
       <span class="pixel-line pixel-shadow">Shadow Moon</span>
       <span class="pixel-line pixel-ch">CH凡光</span>
     </div>
     
-    <!-- 欢迎行：彩色字发光，黑色字不发光 (已通过CSS规则实现) -->
+    <!-- 欢迎行 -->
     <div class="title">
       <span style="color:#4285F4;">欢</span>
       <span style="color:#EA4335;">迎</span>
@@ -200,7 +195,6 @@ body{
     我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
     <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
 
-    <!-- 备用链接 + 客服在线时间 -->
     备用链接：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">https://qm.qq.com/q/Gq3tfhiXG8</a><br>
     购买销售/客服节假日08：00至22：00在线（最大回复消息延迟不超过30分）<br><br>
 
@@ -229,10 +223,10 @@ body{
   </div>
 </div>
 
-<!-- 底部导航：选项离远点 (space-evenly)，通知链接指向 notice.html -->
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="notice.html">通知</a>   <!-- 跳转到notice.html -->
+  <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
 
