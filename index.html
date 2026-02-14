@@ -16,7 +16,7 @@ body{
   color:#000;
 }
 
-/* 吸顶 LOGO —— 结构不变，通过新增发光类实现效果 */
+/* 吸顶 LOGO —— 移除发光效果，增加Shadow与Moon的间隔 */
 .top-logo{
   position:sticky;
   top:14px;
@@ -35,13 +35,9 @@ body{
   font-weight:900;
   letter-spacing:.6px;
 }
-/* 赋予每个字母发光效果 (使用currentColor继承各自颜色) */
+/* 移除所有发光效果 —— 之前.logo span的text-shadow已删除，确保无发光 */
 .logo span {
-  text-shadow: 0 0 6px currentColor, 0 0 12px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
-  transition: text-shadow 0.2s ease;
-}
-.logo span:hover {
-  text-shadow: 0 0 8px currentColor, 0 0 18px currentColor, 0 0 28px currentColor, 0 0 40px currentColor;
+  text-shadow: none; /* 明确无发光 */
 }
 
 /* 内容动画 (完全原样) */
@@ -157,17 +153,24 @@ body{
 </head>
 <body>
 
-<!-- 吸顶 LOGO (结构完全不变，但每个span已通过.logo span规则获得发光效果) -->
+<!-- 吸顶 LOGO —— 增加Shadow与Moon之间的间隔：在w和M之间加入一个空格span，并赋予透明色或普通空格 -->
 <div class="top-logo">
   <span class="logo">
+    <!-- Shadow部分 (彩色) -->
     <span style="color:#4285F4;">S</span>
     <span style="color:#EA4335;">h</span>
     <span style="color:#FBBC05;">a</span>
     <span style="color:#4285F4;">d</span>
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
-    <!-- Moon字母颜色：绿 #34A853, 蓝 #4285F4, 红 #EA4335, 黄 #FBBC05 -->
-    <span style="color:#34A853;"> M</span>
+    <!-- 间隔：用一个空格并赋予任意颜色，但为了视觉上不突兀且保持单词间隔，使用透明的空格或普通空格。添加一个带空格的span，不设颜色则继承父级黑色，但父级.logo本身无颜色设置，默认继承body黑色。这里使用实体空格&nbsp;并设为透明？最简单：增加一个带空格的span，不设颜色即为默认黑色，但黑色在吸顶栏不显眼，且我们希望视觉上仅是空格。直接加一个空格字符，但为了控制宽度，使用margin-right更稳妥。然而结构要求纯字母span，所以我们在最后一个字母和M之间手动添加一个空格字符（不是span），但原代码中"M"前面已经有一个空格（" M"），现保留并在之前再增加一个空格字符。最干净：在w的span后面、M的span前面，增加一个只包含空格( &nbsp; )的span，颜色设为任意但不影响整体，也可不设颜色让它默认。为了确保明显间隔，同时增加margin。但仅增加一个空格字符可能不够明显，因此我们再在CSS中对.logo加入word-spacing或对特定span加margin。但由于要求不改变原有结构太多，简单方法：在w和M之间增加一个仅包含两个空格字符的span，并设置一定宽度。为简洁且不影响颜色，使用以下方案。
+       原代码中"M"前已有一个空格(" M")，现在我们在w之后增加一个独立的空格span，内部包含两个&nbsp;，并设置display:inline-block; width:0.5em; 但最简单：直接在"M"前加两个空格字符(但会被HTML折叠成一个)。所以稳妥：增加一个span，内容为"  "（两个空格），并设置white-space:pre。但最好简单用margin。
+       根据用户要求“shadow和moon单词有间隔”，当前"M"前已经有一个空格，视觉上已经有了间隔，但可能不够。我们可以在最后一个"w"的span后增加一个带空格的span，并为其设置margin-right:8px，同时内容可为空格或不设置内容仅用margin。但用margin无需额外字符。
+       保持结构纯粹，为最后一个"w"的span增加margin-right:10px，使Shadow与Moon产生间距。但原每个字母独立，若给w加右边距，则间隔产生在w和下一个字母(M的空格)之间。也可给包含" M"的span加margin-left。
+       为简单且显眼，我给包裹" M"的span增加margin-left:8px；同时保留原空格。
+  -->
+    <!-- 在w之后、M之前增加间隔：通过给M所在的第一个span添加左外边距实现 -->
+    <span style="color:#34A853; margin-left: 12px;"> M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
     <span style="color:#FBBC05;">n</span>
@@ -229,7 +232,7 @@ body{
 <!-- 底部导航：选项离远点 (space-evenly)，通知链接指向 notice.html -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="notice.html">通知</a>   <!-- 修改为跳转到notice.html -->
+  <a href="notice.html">通知</a>   <!-- 跳转到notice.html -->
   <a href="other.html">其他</a>
 </div>
 
