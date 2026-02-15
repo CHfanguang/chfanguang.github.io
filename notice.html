@@ -14,6 +14,12 @@ body{
   color:#000;
 }
 
+/* 出场动画（和别的板块一样） */
+@keyframes iosIn{
+  from{opacity:0;transform:translateY(70px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
 /* 吸顶 LOGO 原样 */
 .top-logo{
   position:sticky;
@@ -55,32 +61,18 @@ body{
   text-shadow: 0 0 10px #00ffff, 0 0 15px #00ffff;
 }
 
-/* 副标题 */
-.sub-title {
-  text-align: center;
-  margin: 0 auto 40px;
-  line-height: 1.6;
-}
-.sub-pixel-1 {
-  font-size: 26px;
-  font-weight: bold;
-}
-.sub-pixel-2 {
-  font-size: 22px;
-  font-weight: bold;
-}
-
-/* 青色液态玻璃 */
-.cyan-glass {
-  max-width:900px;
-  margin: auto;
-  padding: 30px 20px 80px;
+/* 小型青色液态玻璃 + 出场动画 */
+.cyan-box {
+  width: fit-content;
+  margin: 0 auto 22px;
+  padding: 18px 32px;
   background: rgba(0, 220, 220, 0.15);
   backdrop-filter: blur(30px) saturate(200%);
   -webkit-backdrop-filter: blur(30px) saturate(200%);
   border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 28px;
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+  border-radius: 20px;
+  text-align: center;
+  animation: iosIn .9s ease-out both;
 }
 
 /* 中间内容 */
@@ -88,7 +80,7 @@ body{
   text-align:center;
   font-size: 32px;
   font-weight: bold;
-  margin: 50px 0;
+  line-height: 1.6;
 }
 
 /* 页脚原样 */
@@ -143,19 +135,18 @@ body{
   </span>
 </div>
 
-<!-- 青色玻璃包裹 -->
-<div class="cyan-glass">
+<!-- 第一个小液态玻璃：包标题 -->
+<div class="cyan-box" style="animation-delay: 0.1s">
+  <div class="pixel-font sub-pixel-1 glow-purple">Shadow Moon</div>
+  <div class="pixel-font sub-pixel-2 glow-blue">CH凡光</div>
+</div>
 
-  <div class="sub-title">
-    <div class="pixel-font sub-pixel-1 glow-purple">Shadow Moon</div>
-    <div class="pixel-font sub-pixel-2 glow-blue">CH凡光</div>
-  </div>
-
+<!-- 第二个小液态玻璃：包祝福 -->
+<div class="cyan-box" style="animation-delay: 0.3s">
   <div class="content pixel-font glow-cyan">
     新年快乐 🧧<br>
     马年大吉 · 万事顺意
   </div>
-
 </div>
 
 <!-- 页脚 完全原样 -->
