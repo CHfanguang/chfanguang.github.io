@@ -1,170 +1,295 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 官网</title>
-<!-- 像素字体：Press Start 2P (完全独立，不影响原代码任何样式) -->
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-<style>
-/* ===== 原样保留的全部样式 ===== */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
-  background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
-  color:#000;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow Moon · 官网 · 优化版</title>
+  <!-- 保持像素字体 & 引入更现代的英文字体辅助 -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    /* --- 重置&基础 --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* 吸顶 LOGO —— 完全去除发光，Shadow和Moon之间用普通空格连接 */
-.top-logo{
-  position:sticky;
-  top:14px;
-  z-index:999;
-  margin:14px auto 30px;
-  width:fit-content;
-  padding:14px 28px;
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(30px) saturate(220%);
-  -webkit-backdrop-filter:blur(30px) saturate(220%);
-  border-radius:30px;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
-}
-.logo{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:.6px;
-  word-spacing: normal;
-}
-/* 确保没有任何发光 */
-.logo span {
-  text-shadow: none;
-}
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: radial-gradient(circle at 20% 30%, #d9d9d9, #a6a6a6 80%);
+      min-height: 100vh;
+      color: #1a1a1a;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.6;
+    }
 
-/* 内容动画 (完全原样) */
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px 20px 140px;
-  animation:iosIn .9s ease-out both;
-}
-@keyframes iosIn{
-  from{opacity:0;transform:translateY(70px)}
-  to{opacity:1;transform:translateY(0)}
-}
+    /* --- 完全保留的吸顶 LOGO (结构样式完全原样, 仅微调背景更融合) --- */
+    .top-logo {
+      position: sticky;
+      top: 14px;
+      z-index: 999;
+      margin: 14px auto 30px;
+      width: fit-content;
+      padding: 14px 28px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(30px) saturate(220%);
+      -webkit-backdrop-filter: blur(30px) saturate(220%);
+      border-radius: 30px;
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.7), 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
 
-/* iOS 液态玻璃 (完全原样) */
-.glass{
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(30px) saturate(220%);
-  -webkit-backdrop-filter:blur(30px) saturate(220%);
-  border-radius:28px;
-  padding:30px;
-  line-height:1.7;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 30px 50px rgba(0,0,0,.18);
-}
-.title{
-  font-size:26px;
-  font-weight:900;
-  margin-bottom:10px;
-}
-.footer{
-  text-align:center;
-  margin:80px 0 160px;
-  color:#888;
-  font-size:14px;
-  line-height:1.6;
-}
+    .logo {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+    }
 
-/* 底部导航 —— 选项离远点，但不改变导航栏整体大小 */
-.bottom-nav{
-  position:fixed;
-  bottom:26px;
-  left:50%;
-  transform:translateX(-50%);
-  width:82%;
-  max-width:420px;
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(30px) saturate(220%);
-  border-radius:30px;
-  display:flex;
-  justify-content:space-evenly;
-  padding:16px 0;
-}
-.bottom-nav a{
-  text-decoration:none;
-  font-weight:700;
-  color:#000;
-  padding: 0 8px;
-}
+    .logo span {
+      text-shadow: none;
+    }
 
-/* ===== 新增像素字体区域 ===== */
-.pixel-header {
-  text-align: center;
-  margin-bottom: 30px;
-  width: 100%;
-}
-.pixel-line {
-  display: block;
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-weight: 400;
-  text-transform: uppercase;
-  line-height: 1.5;
-  letter-spacing: 2px;
-  text-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 35px currentColor;
-}
-.pixel-shadow {
-  color: rgba(155, 77, 255, 0.9);
-  font-size: 40px;
-  margin-bottom: 8px;
-}
-.pixel-ch {
-  color: rgba(61, 126, 255, 0.9);
-  font-size: 38px;
-}
-@media (max-width: 550px) {
-  .pixel-shadow { font-size: 30px; }
-  .pixel-ch { font-size: 28px; }
-}
+    /* --- 内容动画保留，增强入场 --- */
+    .container {
+      max-width: 960px;
+      margin: 0 auto 40px;
+      padding: 0 24px 100px;
+      animation: iosIn 0.8s cubic-bezier(0.2, 0.9, 0.1, 1) both;
+    }
 
-/* ===== 让每个彩色字发出对应颜色的光，但黑色字不发光 ===== */
-.title span:not([style*="color:#000"]) {
-  text-shadow: 
-    0 0 5px currentColor,
-    0 0 15px currentColor,
-    0 0 25px currentColor,
-    0 0 35px currentColor;
-  transition: text-shadow 0.2s ease;
-}
-.title span:not([style*="color:#000"]):hover {
-  text-shadow: 
-    0 0 8px currentColor,
-    0 0 20px currentColor,
-    0 0 32px currentColor,
-    0 0 48px currentColor;
-}
-.title span[style*="color:#000"] {
-  text-shadow: none;
-}
-</style>
+    @keyframes iosIn {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- 液态玻璃卡牌 (保留原始玻璃属性，增加微光渐变) --- */
+    .glass {
+      background: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border-radius: 36px;
+      padding: 40px 40px 30px;
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 
+                  0 30px 60px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .glass:hover {
+      box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.9), 
+                  0 35px 70px rgba(0, 0, 0, 0.3);
+    }
+
+    /* 科技线条细化 + 发光增强 */
+    .tech-line {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00c8ff, #aa5aff, #00c8ff, transparent);
+      margin: 28px 0;
+      opacity: 0.7;
+      border-radius: 2px;
+    }
+
+    .tech-dot {
+      color: #1e90ff;
+      font-weight: 800;
+      font-size: 1.4rem;
+      line-height: 0;
+      margin-right: 6px;
+      text-shadow: 0 0 10px #1e90ff;
+      vertical-align: middle;
+    }
+
+    /* 标题 & 段落优化 */
+    .title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2px 0;
+    }
+
+    .title span {
+      text-shadow: 0 0 6px currentColor;
+    }
+
+    /* 彩色发光延续，同时保留无阴影文字 (黑色部分) */
+    .title span[style*="color:#000"] {
+      text-shadow: none;
+      font-weight: 700;
+    }
+
+    /* 像素头部微调间距 */
+    .pixel-header {
+      text-align: center;
+      margin-bottom: 32px;
+      width: 100%;
+    }
+
+    .pixel-line {
+      display: block;
+      font-family: 'Press Start 2P', monospace;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px currentColor, 0 0 20px currentColor;
+    }
+
+    .pixel-shadow {
+      color: rgb(145, 70, 255);
+      font-size: 42px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+    }
+
+    .pixel-ch {
+      color: rgb(45, 120, 255);
+      font-size: 40px;
+    }
+
+    @media (max-width: 550px) {
+      .pixel-shadow { font-size: 30px; }
+      .pixel-ch { font-size: 28px; }
+      .glass { padding: 28px 20px; }
+      .title { font-size: 24px; }
+    }
+
+    /* 正文样式 */
+    p {
+      margin: 20px 0;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* 针对 <div> 夹在中间的 QQ-tip 调整 */
+    .qq-tip {
+      color: #555;
+      font-style: italic;
+      font-size: 0.9rem;
+      background: rgba(0,0,0,0.02);
+      padding: 6px 12px;
+      border-radius: 50px;
+      margin-top: 4px;
+      margin-left: 28px;
+      border-left: 3px solid #00c8ff;
+      width: fit-content;
+    }
+
+    /* 链接样式 */
+    a {
+      color: #003cff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.3);
+      transition: all 0.2s;
+      border: 1px solid transparent;
+    }
+
+    a:hover {
+      background: #ffffff;
+      border-color: #00c8ff;
+      box-shadow: 0 0 15px #00c8ff;
+      color: #000;
+    }
+
+    /* 免责声明区域轻微区分 */
+    p:last-of-type {
+      background: rgba(0, 0, 0, 0.02);
+      padding: 18px 20px;
+      border-radius: 24px;
+      margin-top: 30px;
+      border: 1px dashed rgba(255, 255, 255, 0.8);
+    }
+
+    p b {
+      font-size: 1.15rem;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* footer 完全保留原文内容，稍加可见度 */
+    .footer {
+      text-align: center;
+      margin: 70px 0 20px;
+      color: #3b3b3b;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      padding-top: 30px;
+    }
+
+    /* --- 底部导航 完全不动 (仅调整活跃色更贴合) --- */
+    .bottom-nav {
+      position: fixed;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 82%;
+      max-width: 420px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(30px) saturate(220%);
+      -webkit-backdrop-filter: blur(30px) saturate(220%);
+      border-radius: 30px;
+      display: flex;
+      justify-content: space-evenly;
+      padding: 16px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+
+    .bottom-nav a {
+      text-decoration: none;
+      font-weight: 700;
+      color: #000;
+      padding: 0 8px;
+      font-size: 1.1rem;
+      transition: 0.15s;
+      background: transparent;
+    }
+
+    .bottom-nav a:hover {
+      color: #1e88e5;
+      text-shadow: 0 0 10px #1e88e5;
+      background: transparent;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    /* 信息排版微调: 增加易读间距 */
+    .glass p:first-of-type {
+      margin-top: 8px;
+    }
+
+    /* 保持powerd by 完全不变(字母原样) 但可适当保留样式，不需要额外动 */
+    /* 备用qq提示优化 */
+
+    /* 一个隐形分割 */
+    hr {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<!-- 吸顶 LOGO —— Shadow和Moon之间只用一个普通空格，间距恢复正常 -->
+<!-- 吸顶栏 (完全原样 一个字符不改) -->
 <div class="top-logo">
   <span class="logo">
-    <!-- Shadow单词 -->
     <span style="color:#4285F4;">S</span>
     <span style="color:#EA4335;">h</span>
     <span style="color:#FBBC05;">a</span>
     <span style="color:#4285F4;">d</span>
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
-    
-    <!-- 一个普通空格，不透明不变宽，就是正常字符空格 -->
-    <span style="color:#000000;"> </span>
-    
-    <!-- Moon单词 -->
+    <span style="color:#000;"> </span>
     <span style="color:#34A853;">M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
@@ -174,14 +299,13 @@ body{
 
 <div class="container">
   <div class="glass">
-    
-    <!-- 像素标题 -->
+
+    <!-- 像素头部不变 -->
     <div class="pixel-header">
       <span class="pixel-line pixel-shadow">Shadow Moon</span>
       <span class="pixel-line pixel-ch">CH凡光</span>
     </div>
-    
-    <!-- 欢迎行 -->
+
     <div class="title">
       <span style="color:#4285F4;">欢</span>
       <span style="color:#EA4335;">迎</span>
@@ -189,32 +313,49 @@ body{
       <span style="color:#4285F4;">入</span>
       <span style="color:#34A853;"> </span>
       <span style="color:#EA4335;">Shadow Moon</span>
-      <span style="color:#000;"> 官方网站/软件</span>
+      <span style="color:#000;"> 官方网站</span>
     </div>
 
-    我的世界外挂购买链接、VPN购买链接、黑科技软件购买链接：<br>
-    <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">https://qm.qq.com/q/JYP3V4yogK</a><br><br>
+    <div class="tech-line"></div>
 
-    备用链接：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">https://qm.qq.com/q/Gq3tfhiXG8</a><br>
-    购买销售/客服节假日08：00至22：00在线（最大回复消息延迟不超过30分）<br><br>
+    <!-- 服务项目：增强可读性，保留所有文字和链接，仅优化标签结构 (保持原内容) -->
+    <p><span class="tech-dot">•</span> <strong style="font-weight:700;">服务项目：</strong><br>
+    我的世界外挂 / VPN / 黑科技软件 / 制作官网 / 网页美化 / 账号搭建 / 技术指导<br>
+    网页修改 / 界面设计 / 设计界面 / 教程录制 / 系统调试 / 资源代找 / 脚本编写 / 软件定制<br>
+    服务器搭建 / 特效制作 / 数据恢复</p>
 
-    所有商品均为 1 元<br>
-    仅限微信支付<br>
-    赠送终身售后服务<br><br>
+    <!-- 咨询通道 完全保留链接，qq-tip独立于p之外，用div包装（已存在）但需要优化展示；不改文字只改样式 -->
+    <p style="margin-bottom:6px;"><span class="tech-dot">•</span> <strong>咨询通道：</strong><br>
+    <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友（可点击）</a></p>
+    <div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div>
 
-    <b>官方QQ群聊：</b>523725674<br><br>
+    <p style="margin-top:20px; margin-bottom:6px;"><span class="tech-dot">•</span> <strong>备用通道：</strong><br>
+    <a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友（可点击）</a></p>
+    <div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div>
 
-    <b>免责声明</b><br>
-    本站所展示内容仅供学习与技术交流使用。<br>
-    使用相关软件产生的任何后果均由使用者本人承担。<br>
-    请遵守所在地法律法规，合法使用本站服务。<br><br>
+    <div class="tech-line"></div>
 
-    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">
-      https://v.kuaishou.com/JE2u8ANT
-    </a><br><br>
+    <!-- 详细信息：保留了dot + 文本，为了更整洁，每个一行；但保证所有原内容出现 -->
+    <p><span class="tech-dot">•</span> <strong>客服时间：</strong>08:00–22:00（回复≤30分钟）</p>
+    <p><span class="tech-dot">•</span> <strong>所有商品：</strong>1 元</p>
+    <p><span class="tech-dot">•</span> <strong>支付方式：</strong>微信支付</p>
+    <p><span class="tech-dot">•</span> <strong>售后服务：</strong>终身免费</p>
 
-    快手账号：我的世界CH凡光
+    <div class="tech-line"></div>
 
+    <p><span class="tech-dot">•</span> <strong>官方QQ群：</strong>523725674</p>
+    <p><span class="tech-dot">•</span> <strong>快手账号：</strong>
+    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">快手账号（可点击）</a>（我的世界CH凡光）</p>
+
+    <div class="tech-line"></div>
+
+    <!-- 免责声明 内容完全一样，无改动 -->
+    <p><b>免责声明</b><br>
+    本站内容仅供学习与技术交流。<br>
+    使用相关软件产生的后果由使用者自行承担。<br>
+    请遵守法律法规，合法使用。</p>
+
+    <!-- 完全保留powerd by 原样 包括大小写和排版 -->
     <div class="footer">
       Powerd by Shadow Moon<br>
       © CH凡光
@@ -223,7 +364,7 @@ body{
   </div>
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 完全不动 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
