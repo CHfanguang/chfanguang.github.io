@@ -12,15 +12,10 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
   background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
   color:#000;
+  padding-bottom: 120px;
 }
 
-/* 出场动画（和别的板块一样） */
-@keyframes iosIn{
-  from{opacity:0;transform:translateY(70px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* 吸顶 LOGO 原样 */
+/* 吸顶 LOGO */
 .top-logo{
   position:sticky;
   top:14px;
@@ -42,57 +37,41 @@ body{
   letter-spacing:.6px;
 }
 
-/* 像素字体只用于这里 */
-.pixel-font {
-  font-family: "Courier New", monospace !important;
-  letter-spacing: 2px;
-}
-
-/* 发光效果 */
-.glow-purple {
-  color: #9333ff;
-  text-shadow: 0 0 10px #9333ff, 0 0 20px #9333ff;
-}
-.glow-blue {
-  color: #3366ff;
-  text-shadow: 0 0 10px #3366ff, 0 0 20px #3366ff;
-}
-.glow-cyan {
-  text-shadow: 0 0 10px #00ffff, 0 0 15px #00ffff;
-}
-
-/* 小型青色液态玻璃 + 出场动画 */
-.cyan-box {
-  width: fit-content;
-  margin: 0 auto 22px;
-  padding: 18px 32px;
-  background: rgba(0, 220, 220, 0.15);
-  backdrop-filter: blur(30px) saturate(200%);
-  -webkit-backdrop-filter: blur(30px) saturate(200%);
-  border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 20px;
+/* 新闻标题 */
+.news-title {
   text-align: center;
-  animation: iosIn .9s ease-out both;
-}
-
-/* 中间内容 */
-.content{
-  text-align:center;
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
-  line-height: 1.6;
+  font-style: italic;
+  color: #000;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-/* 页脚原样 */
+/* 新闻内容 */
+.news-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 0 20px;
+  font-size: 16px;
+  line-height: 1.8;
+  text-align: justify;
+}
+.news-content p {
+  margin: 0;
+  text-indent: 2em; /* 开头空两格 */
+}
+
+/* 页脚 */
 .footer{
   text-align:center;
-  margin:40px 0 100px;
+  margin:60px 0 40px;
   color:#888;
   font-size:14px;
   line-height:1.6;
 }
 
-/* 底部导航原样 */
+/* 底部导航 */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -119,7 +98,7 @@ body{
 
 <body>
 
-<!-- 吸顶栏 完全原样 -->
+<!-- 吸顶栏 -->
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -135,27 +114,19 @@ body{
   </span>
 </div>
 
-<!-- 第一个小液态玻璃：包标题 -->
-<div class="cyan-box" style="animation-delay: 0.1s">
-  <div class="pixel-font sub-pixel-1 glow-purple">Shadow Moon</div>
-  <div class="pixel-font sub-pixel-2 glow-blue">CH凡光</div>
+<!-- 新闻内容 -->
+<div class="news-title">快讯网页新闻📰</div>
+<div class="news-content">
+  <p>快手账号：Daquavis中文频道在微信视频号搬运的视频涉嫌侵权，原作者：北禁Krideoen找到Daquavis中文频道时，表示回复私信删视频即可。CH凡光决定帮助Daquavis中文频道解决侵权事件，CH凡光想尽量保留视频。但北禁Krideoen拿出了铁证，充分证明了视频版权为北禁Krideoen团队所有，CH凡光眼看自己团队被动，想让Daquavis中文频道将视频删除，可Daquavis中文频道始终不愿意。第二天：北禁Krideoen放出狠话：不删就给全家户籍开出；此时：CH凡光团队就已经处于劣势状态了。但Daquavis中文频道还是不改以往态度，坚持不删。北禁Krideoen团队得知Daquavis中文频道的态度，勃然大怒，把罪过全归于CH凡光自己一人身上，还叫来自己的3个朋友，一起语言攻击CH凡光，CH凡光现在处于一对四的劣势状态。经过CH凡光的一再劝说，Daquavis中文频道终于同意删除视频。但Daquavis中文频道表示：我以后还会找北禁Krideoen的茬，事情并没有结束。CH凡光认为现应该以大局为重，并表示：Daquavis中文频道这决定可能会牵连到CH凡光团队，我们不能赌北禁Krideoen到底会不会开户，一旦赌错，那将会是最大的一次损失…………</p>
 </div>
 
-<!-- 第二个小液态玻璃：包祝福 -->
-<div class="cyan-box" style="animation-delay: 0.3s">
-  <div class="content pixel-font glow-cyan">
-    新年快乐 🧧<br>
-    马年大吉 · 万事顺意
-  </div>
-</div>
-
-<!-- 页脚 完全原样 -->
+<!-- 页脚 -->
 <div class="footer">
   Powered by Shadow Moon<br>
   © CH凡光
 </div>
 
-<!-- 导航栏 完全原样 -->
+<!-- 底部导航 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
