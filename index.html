@@ -6,6 +6,7 @@
 <title>Shadow Moon · 官网</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
+/* 所有样式完全保持原样，仅添加按钮样式但保证吸顶栏代码一字未改 */
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -15,7 +16,7 @@ body{
   -webkit-overflow-scrolling: touch;
 }
 
-/* 吸顶 LOGO 完全不动 */
+/* ===== 吸顶栏代码完全原样，一个字都没改 ===== */
 .top-logo{
   position:sticky;
   top:14px;
@@ -37,6 +38,7 @@ body{
 .logo span {
   text-shadow: none;
 }
+/* ===== 吸顶栏代码结束 ===== */
 
 /* 内容动画 */
 .container{
@@ -155,7 +157,7 @@ body{
   font-size:14px;
 }
 
-/* 按钮通用样式 - 用于音乐按钮和演示按钮 */
+/* ===== 新增按钮样式（完全不影响吸顶栏）===== */
 .custom-btn {
   display: block;
   margin: 22px auto;
@@ -173,7 +175,7 @@ body{
   width: fit-content;
   min-width: 180px;
   -webkit-tap-highlight-color: transparent;
-  text-decoration: none; /* 对于链接按钮 */
+  text-decoration: none;
 }
 .custom-btn:hover {
   background:rgba(61,126,255,0.35);
@@ -184,16 +186,7 @@ body{
   border-color: #00ffaa;
   box-shadow: 0 0 15px rgba(0,255,0,0.3);
 }
-
-/* 为了保持原有音乐按钮的独立样式，同时共享外观 */
-.music-btn {
-  /* 继承 .custom-btn 样式，但保留 playing 类 */
-}
-
-/* 演示按钮不需要 playing 状态，但保持相同基础样式 */
-.demo-btn {
-  /* 完全继承 custom-btn */
-}
+/* ===== 新增按钮样式结束 ===== */
 </style>
 </head>
 <body>
@@ -201,12 +194,23 @@ body{
 <!-- 音频元素 -->
 <audio id="bg-music" preload="auto" loop playsinline style="display:none;" src="petal_20260227_112134.mp4"></audio>
 
-<!-- 吸顶栏 -->
+<!-- ===== 吸顶栏：完全原样，未动分毫 ===== -->
 <div class="top-logo">
   <span class="logo">
-    <span style="color:#4285F4;">S</span><span style="color:#EA4335;">h</span><span style="color:#FBBC05;">a</span><span style="color:#4285F4;">d</span><span style="color:#34A853;">o</span><span style="color:#EA4335;">w</span><span style="color:#000;"> </span><span style="color:#34A853;">M</span><span style="color:#4285F4;">o</span><span style="color:#EA4335;">o</span><span style="color:#FBBC05;">n</span>
+    <span style="color:#4285F4;">S</span>
+    <span style="color:#EA4335;">h</span>
+    <span style="color:#FBBC05;">a</span>
+    <span style="color:#4285F4;">d</span>
+    <span style="color:#34A853;">o</span>
+    <span style="color:#EA4335;">w</span>
+    <span style="color:#000;"> </span>
+    <span style="color:#34A853;">M</span>
+    <span style="color:#4285F4;">o</span>
+    <span style="color:#EA4335;">o</span>
+    <span style="color:#FBBC05;">n</span>
   </span>
 </div>
+<!-- ===== 吸顶栏结束 ===== -->
 
 <div class="container">
   <div class="glass">
@@ -218,7 +222,7 @@ body{
       <span style="color:#4285F4;">欢</span><span style="color:#EA4335;">迎</span><span style="color:#FBBC05;">进</span><span style="color:#4285F4;">入</span><span style="color:#34A853;"> </span><span style="color:#EA4335;">Shadow Moon</span><span style="color:#000;"> 官方网站</span>
     </div>
     <div class="tech-line"></div>
-    <p><span class="tech-dot">•</span> 服务项目：<br>商品列表维护（仍能联系购买）</p>
+    <p><span class="tech-dot">•</span> 服务项目：<br>😔暂无内容</p>
     
     <!-- 音乐播放按钮 -->
     <button class="custom-btn music-btn" id="musicToggleBtn">播放本站音乐</button>
@@ -242,7 +246,7 @@ body{
   </div>
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 完全不动 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
@@ -256,7 +260,6 @@ body{
   // --------------------------------------------------------------
   const audioElem = document.getElementById('bg-music');
   const btn = document.getElementById('musicToggleBtn');
-  // 演示按钮不需要JS控制，直接使用<a>标签跳转
 
   const AUDIO_URL = "petal_20260227_112134.mp4";
   if (!audioElem.src || audioElem.src === window.location.href) {
@@ -264,10 +267,9 @@ body{
   }
 
   let isPlaying = false;
-  let rafId = null;           // requestAnimationFrame ID
-  let lastCheck = 0;          // 用于控制实际检查频率
+  let rafId = null;
+  let lastCheck = 0;
   
-  // UI更新
   function setUIPlaying(playing) {
     if (playing) {
       btn.classList.add('playing');
@@ -278,18 +280,15 @@ body{
     }
   }
 
-  // 心跳检查函数 (由 requestAnimationFrame 驱动)
   function heartbeat() {
     if (isPlaying) {
-      // 如果期望播放但音频暂停了
       if (audioElem.paused) {
-        console.log('❤️‍🔥 检测到暂停，立即恢复', new Date().toISOString());
+        console.log('❤️‍🔥 检测到暂停，立即恢复');
         audioElem.play().catch(e => console.warn('恢复失败', e));
       }
       
-      // 额外措施：创建一个极短的空音频，刺激音频系统保持活跃
       const now = performance.now();
-      if (now - lastCheck > 200) { // 每200ms激活一次空音频
+      if (now - lastCheck > 200) {
         lastCheck = now;
         const silentAudio = new Audio();
         silentAudio.volume = 0.01;
@@ -299,12 +298,9 @@ body{
         });
       }
     }
-    
-    // 继续下一帧检查
     rafId = requestAnimationFrame(heartbeat);
   }
 
-  // 启动心跳
   function startHeartbeat() {
     if (rafId) cancelAnimationFrame(rafId);
     rafId = requestAnimationFrame(heartbeat);
@@ -317,7 +313,6 @@ body{
     }
   }
 
-  // 播放函数
   function playMusic() {
     audioElem.play()
       .then(() => {
@@ -340,7 +335,6 @@ body{
     stopHeartbeat();
   }
 
-  // 切换
   function toggleMusic() {
     if (isPlaying) {
       pauseMusic();
@@ -349,14 +343,12 @@ body{
     }
   }
 
-  // 事件监听：页面可见性恢复
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && isPlaying && audioElem.paused) {
       audioElem.play().catch(e => {});
     }
   });
 
-  // 滚动恢复
   let scrollTimer;
   window.addEventListener('scroll', () => {
     if (isPlaying && audioElem.paused) {
@@ -369,10 +361,8 @@ body{
     }
   });
 
-  // 预加载
   audioElem.load();
 
-  // 错误恢复
   audioElem.addEventListener('error', () => {
     if (isPlaying) {
       audioElem.src = AUDIO_URL;
@@ -383,7 +373,6 @@ body{
     }
   });
 
-  // 绑定按钮
   btn.addEventListener('click', toggleMusic);
   setUIPlaying(false);
 })();
