@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Shadow Moon · 演示页面</title>
+  
+  <!-- 字体 & 框架 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  
+  <style>
+    /* ===== 全局重置 ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #030614;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* ===== 吸顶栏 - 整块设计 + CH凡光花字 ===== */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 90px;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 2px solid;
+      border-image: linear-gradient(90deg, #00F0FF, #B026FF, #FFD700, #00F0FF) 1;
+      box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #00F0FF, #B026FF);
+      border-radius: 50%;
+      box-shadow: 0 0 30px #00F0FF;
+      animation: pulse 2s infinite;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      background: linear-gradient(135deg, #fff, #00F0FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+    }
+
+    /* CH凡光花字区域 */
+    .flower-text {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: linear-gradient(90deg, rgba(0,240,255,0.1), rgba(176,38,255,0.1));
+      padding: 10px 25px;
+      border-radius: 50px;
+      border: 1px solid;
+      border-image: linear-gradient(90deg, #FFD700, #00F0FF, #B026FF) 1;
+      animation: borderGlow 3s infinite;
+    }
+
+    .ch-name {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 24px;
+      background: linear-gradient(135deg, #FFD700, #FFA500, #FF69B4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px #FFD700, 0 0 40px #FF69B4;
+      letter-spacing: 4px;
+      animation: sparkle 1.5s infinite;
+    }
+
+    .ch-decoration {
+      font-size: 30px;
+      filter: drop-shadow(0 0 10px #FFD700);
+      animation: rotate 4s infinite;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 1; text-shadow: 0 0 20px #FFD700, 0 0 40px #FF69B4; }
+      50% { opacity: 0.9; text-shadow: 0 0 30px #FFD700, 0 0 60px #FF69B4, 0 0 80px #00F0FF; }
+    }
+
+    @keyframes borderGlow {
+      0%, 100% { border-color: #FFD700; box-shadow: 0 0 20px #FFD700; }
+      33% { border-color: #00F0FF; box-shadow: 0 0 20px #00F0FF; }
+      66% { border-color: #B026FF; box-shadow: 0 0 20px #B026FF; }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(10deg); }
+      75% { transform: rotate(-10deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 30px #00F0FF; }
+      50% { opacity: 0.8; transform: scale(1.1); box-shadow: 0 0 50px #B026FF; }
+    }
+
+    /* ===== 粒子画布背景 ===== */
+    #particleCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ===== Swiper 主容器 ===== */
+    .swiper {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      z-index: 10;
+    }
+
+    .swiper-slide {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* ===== 通用内容容器 ===== */
+    .content {
+      max-width: 1000px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+      z-index: 20;
+    }
+
+    /* ===== 宣传词通用样式 ===== */
+    .slogan {
+      font-size: 60px;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 30px;
+    }
+
+    .slogan-gradient {
+      background: linear-gradient(135deg, #FFD700, #00F0FF, #B026FF, #FF69B4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% 300%;
+      animation: gradientFlow 5s infinite;
+    }
+
+    @keyframes gradientFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .slogan-small {
+      font-size: 24px;
+      color: rgba(255,255,255,0.8);
+      letter-spacing: 2px;
+    }
+
+    .highlight {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 40px;
+      color: #FFD700;
+      text-shadow: 0 0 30px #FFD700, 0 0 60px #FF69B4;
+      margin: 20px 0;
+    }
+
+    /* 个性卡片 */
+    .personality-card {
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 40px;
+      padding: 40px;
+      box-shadow: 0 0 50px rgba(255,215,0,0.2);
+    }
+
+    .ch-badge {
+      display: inline-block;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 20px;
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #FFD700, #FF69B4);
+      border-radius: 50px;
+      color: #000;
+      margin: 10px;
+      box-shadow: 0 0 30px #FFD700;
+    }
+
+    /* 特性网格 */
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .feature-item {
+      font-size: 18px;
+      padding: 15px 25px;
+      background: rgba(255,215,0,0.1);
+      border: 1px solid #FFD700;
+      border-radius: 30px;
+      color: #FFD700;
+      animation: float 3s infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* 返回主页按钮 */
+    .back-home-btn {
+      display: inline-block;
+      padding: 20px 50px;
+      font-size: 24px;
+      font-weight: 800;
+      color: #000;
+      background: linear-gradient(135deg, #FFD700, #00F0FF, #B026FF);
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 0 30px #FFD700;
+      animation: btnPulse 2s infinite;
+      margin-top: 40px;
+      transition: all 0.3s ease;
+    }
+
+    .back-home-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 50px #FFD700, 0 0 100px #00F0FF;
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* ===== 每页个性样式 ===== */
+    .page1 .slogan { font-size: 70px; }
+    .page2 .slogan { font-size: 60px; }
+    .page3 .slogan { font-size: 55px; }
+    .page4 .slogan { font-size: 50px; }
+    .page5 .slogan { font-size: 65px; }
+
+    /* 装饰星星 */
+    .star {
+      position: absolute;
+      color: #FFD700;
+      font-size: 30px;
+      animation: twinkle 2s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* ===== 导航点样式 ===== */
+    .swiper-pagination-bullet {
+      width: 12px;
+      height: 12px;
+      background: rgba(255,215,0,0.3);
+      opacity: 1;
+    }
+
+    .swiper-pagination-bullet-active {
+      background: #FFD700;
+      box-shadow: 0 0 20px #FFD700;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .header { padding: 0 20px; }
+      .logo-text { font-size: 18px; }
+      .ch-name { font-size: 16px; }
+      .slogan { font-size: 40px !important; }
+      .highlight { font-size: 30px; }
+      .back-home-btn { padding: 15px 30px; font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 吸顶栏 - 整块设计 + CH凡光花字 -->
+  <header class="header">
+    <div class="logo-container">
+      <div class="logo-icon"></div>
+      <div class="logo-text">SHADOW MOON</div>
+    </div>
+    <div class="flower-text">
+      <span class="ch-decoration">✨</span>
+      <span class="ch-name">CH凡光</span>
+      <span class="ch-decoration">✨</span>
+    </div>
+    <div style="width: 100px;"><!-- 占位保持平衡 --></div>
+  </header>
+
+  <!-- 粒子背景 -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Swiper 轮播主内容 - 7页宣传词 -->
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      
+      <!-- 第1页：开场 -->
+      <div class="swiper-slide page1">
+        <div class="content">
+          <div class="star" style="top: 20%; left: 10%;">⭐</div>
+          <div class="star" style="top: 70%; right: 15%;">🌟</div>
+          <div class="slogan">
+            <span class="slogan-gradient">CH凡光</span>
+          </div>
+          <div class="slogan-small">Shadow Moon 创始人 · 核心技术</div>
+          <div class="highlight">凡光所至</div>
+          <div class="feature-item" style="margin-top: 40px;">✨ 江湖人称 · 技术鬼才 ✨</div>
+        </div>
+      </div>
+
+      <!-- 第2页：个人标签 -->
+      <div class="swiper-slide page2">
+        <div class="content">
+          <div class="personality-card">
+            <div class="slogan" style="font-size: 45px;">
+              <span class="slogan-gradient">代码魔术师</span>
+            </div>
+            <div class="features-grid">
+              <div class="feature-item"># 全栈开发</div>
+              <div class="feature-item"># 安全专家</div>
+              <div class="feature-item"># 创新先锋</div>
+              <div class="feature-item"># 技术布道者</div>
+            </div>
+            <div class="ch-badge">CH凡光</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第3页：理念 -->
+      <div class="swiper-slide page3">
+        <div class="content">
+          <div class="slogan">
+            <span class="slogan-gradient">凡光之道</span>
+          </div>
+          <div style="font-size: 28px; margin: 40px 0; color: #8899aa;">
+            用技术创造价值<br>用代码改变世界
+          </div>
+          <div class="feature-item" style="font-size: 22px;">⚡ 极简 · 极致 · 极客 ⚡</div>
+        </div>
+      </div>
+
+      <!-- 第4页：成就 -->
+      <div class="swiper-slide page4">
+        <div class="content">
+          <div class="slogan">
+            <span class="slogan-gradient">十年一剑</span>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 50px; margin: 50px 0;">
+            <div>
+              <div style="font-size: 50px; color: #FFD700;">100+</div>
+              <div>项目经验</div>
+            </div>
+            <div>
+              <div style="font-size: 50px; color: #00F0FF;">10000+</div>
+              <div>服务用户</div>
+            </div>
+          </div>
+          <div class="ch-badge">CH凡光</div>
+        </div>
+      </div>
+
+      <!-- 第5页：特色 -->
+      <div class="swiper-slide page5">
+        <div class="content">
+          <div class="slogan">
+            <span class="slogan-gradient">凡光特色</span>
+          </div>
+          <div class="features-grid">
+            <div class="feature-item">✨ 一元革命</div>
+            <div class="feature-item">✨ 终身服务</div>
+            <div class="feature-item">✨ 技术无界</div>
+            <div class="feature-item">✨ 创新无限</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第6页：承诺 -->
+      <div class="swiper-slide page6">
+        <div class="content">
+          <div class="personality-card">
+            <div class="slogan" style="font-size: 40px;">
+              <span class="slogan-gradient">凡光承诺</span>
+            </div>
+            <div style="font-size: 24px; margin: 30px 0; line-height: 1.8;">
+              不讲价 · 不赊账 · 不放弃<br>
+              每一位用户 · 都是朋友
+            </div>
+            <div class="ch-badge">说到做到</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第7页：返回主页按钮 -->
+      <div class="swiper-slide page7">
+        <div class="content">
+          <div class="slogan" style="font-size: 45px;">
+            <span class="slogan-gradient">CH凡光</span>
+          </div>
+          <div style="font-size: 30px; margin: 30px 0; color: #FFD700;">Shadow Moon</div>
+          <div style="margin: 50px 0;">
+            <a href="index.html" class="back-home-btn">🚀 返回主页 🚀</a>
+          </div>
+          <div class="feature-item" style="font-size: 18px;">感谢您的观看</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 分页器（导航点） -->
+    <div class="swiper-pagination"></div>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    (function() {
+      // ===== 初始化 Swiper（自动滑动）=====
+      const swiper = new Swiper('.swiper', {
+        autoplay: {
+          delay: 4500,        // 4.5秒一屏
+          disableOnInteraction: false,
+        },
+        speed: 1000,
+        loop: true,
+        effect: 'slide',       // 滑动切换效果
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+      });
+
+      // ===== 粒子背景 =====
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      let width, height;
+      let particles = [];
+
+      function initParticles() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        
+        particles = [];
+        const particleCount = 100;
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2 + 1,
+            speedX: (Math.random() - 0.5) * 0.3,
+            speedY: (Math.random() - 0.5) * 0.3,
+            color: `rgba(255, 215, 0, ${Math.random() * 0.5})`
+          });
+        }
+      }
+
+      function drawParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+          
+          p.x += p.speedX;
+          p.y += p.speedY;
+          
+          if (p.x < 0 || p.x > width) p.speedX *= -1;
+          if (p.y < 0 || p.y > height) p.speedY *= -1;
+        });
+        requestAnimationFrame(drawParticles);
+      }
+
+      window.addEventListener('resize', initParticles);
+      initParticles();
+      drawParticles();
+
+      // ===== 随机生成一些漂浮星星 =====
+      function createStars() {
+        const stars = document.querySelectorAll('.star');
+        stars.forEach(star => {
+          setInterval(() => {
+            star.style.opacity = Math.random() * 0.7 + 0.3;
+          }, 500);
+        });
+      }
+      createStars();
+    })();
+  </script>
+</body>
+</html>
