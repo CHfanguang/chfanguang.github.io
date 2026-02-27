@@ -155,8 +155,8 @@ body{
   font-size:14px;
 }
 
-/* 按钮样式 */
-.custom-btn {
+/* 按钮样式 - 仅保留演示按钮 */
+.demo-btn {
   display: block;
   margin: 22px auto;
   padding: 12px 30px;
@@ -175,23 +175,15 @@ body{
   -webkit-tap-highlight-color: transparent;
   text-decoration: none;
 }
-.custom-btn:hover {
+.demo-btn:hover {
   background:rgba(61,126,255,0.35);
   transform: translateY(-2px);
-}
-.custom-btn.playing {
-  background:rgba(0,255,0,0.15);
-  border-color: #00ffaa;
-  box-shadow: 0 0 15px rgba(0,255,0,0.3);
 }
 </style>
 </head>
 <body>
 
-<!-- 单个音频元素 -->
-<audio id="bg-music" preload="auto" loop playsinline src="petal_20260227_112134.mp4"></audio>
-
-<!-- 吸顶栏完全原样 -->
+<!-- 吸顶栏：完全原样 -->
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -220,11 +212,8 @@ body{
     <div class="tech-line"></div>
     <p><span class="tech-dot">•</span> 服务项目：<br>我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
     
-    <!-- 音乐播放按钮 (初始显示暂停，因为自动播放) -->
-    <button class="custom-btn music-btn" id="musicToggleBtn">暂停本站音乐</button>
-    
-    <!-- 演示模式按钮 -->
-    <a href="act.html" class="custom-btn demo-btn" id="demoBtn">进入演示模式</a>
+    <!-- 仅保留：演示模式按钮 (点击跳转act.html) -->
+    <a href="act.html" class="demo-btn">进入演示模式</a>
     
     <p><span class="tech-dot">•</span> 咨询通道：<br><a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div>
     <p><span class="tech-dot">•</span> 备用通道：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div>
@@ -242,236 +231,13 @@ body{
   </div>
 </div>
 
-<!-- 底部导航 -->
+<!-- 底部导航 完全不动 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
 
-<script>
-(function() {
-  // ========== 单音频 + 淡入淡出 + 自动播放 ==========
-  const audio = document.getElementById('bg-music');
-  const btn = document.getElementById('musicToggleBtn');
-  
-  const AUDIO_URL = "petal_20260227_112134.mp4";
-  const TARGET_VOLUME = 0.7;  // 目标音量
-  const FADE_DURATION = 2000;  // 淡入淡出时长 2秒
-  
-  // 状态变量
-  let isPlaying = false;       // 实际播放状态
-  let fadeInterval = null;     // 淡变定时器
-  let heartbeatInterval = null; // 心跳检测
-  
-  // 设置初始音量为0（为淡入做准备）
-  audio.volume = 0;
-  
-  // UI更新
-  function setUIPlaying(playing) {
-    if (playing) {
-      btn.classList.add('playing');
-      btn.textContent = '暂停本站音乐';
-    } else {
-      btn.classList.remove('playing');
-      btn.textContent = '播放本站音乐';
-    }
-  }
-  
-  // 淡入函数
-  function fadeIn(callback) {
-    if (fadeInterval) clearInterval(fadeInterval);
-    
-    const steps = 30;
-    const stepTime = FADE_DURATION / steps;
-    let step = 0;
-    
-    audio.volume = 0;
-    
-    fadeInterval = setInterval(() => {
-      step++;
-      audio.volume = Math.min(TARGET_VOLUME, (step / steps) * TARGET_VOLUME);
-      
-      if (step >= steps) {
-        clearInterval(fadeInterval);
-        fadeInterval = null;
-        audio.volume = TARGET_VOLUME;
-        if (callback) callback();
-      }
-    }, stepTime);
-  }
-  
-  // 淡出函数
-  function fadeOut(callback) {
-    if (fadeInterval) clearInterval(fadeInterval);
-    
-    const steps = 30;
-    const stepTime = FADE_DURATION / steps;
-    let step = 0;
-    const startVol = audio.volume;
-    
-    fadeInterval = setInterval(() => {
-      step++;
-      audio.volume = Math.max(0, startVol * (1 - step / steps));
-      
-      if (step >= steps) {
-        clearInterval(fadeInterval);
-        fadeInterval = null;
-        audio.volume = 0;
-        audio.pause(); // 淡出完成后暂停
-        if (callback) callback();
-      }
-    }, stepTime);
-  }
-  
-  // 播放（带淡入）
-  function playMusic() {
-    if (isPlaying) return;
-    
-    // 如果已经淡出到0但没暂停，先暂停
-    audio.pause();
-    
-    // 重置时间（如果需要从头播放可以取消注释下一行）
-    // audio.currentTime = 0;
-    
-    audio.play()
-      .then(() => {
-        fadeIn();              // 淡入
-        isPlaying = true;
-        setUIPlaying(true);
-      })
-      .catch(e => {
-        console.error('播放失败', e);
-        alert('无法播放音乐，请检查音频文件');
-        isPlaying = false;
-        setUIPlaying(false);
-      });
-  }
-  
-  // 暂停（带淡出）
-  function pauseMusic() {
-    if (!isPlaying) return;
-    
-    fadeOut(() => {
-      isPlaying = false;
-      setUIPlaying(false);
-    });
-  }
-  
-  // 切换播放/暂停
-  function toggleMusic() {
-    if (isPlaying) {
-      pauseMusic();
-    } else {
-      playMusic();
-    }
-  }
-  
-  // 心跳检测（防止卡顿/中断）
-  function startHeartbeat() {
-    let lastTime = 0;
-    let stuckCount = 0;
-    
-    heartbeatInterval = setInterval(() => {
-      if (!isPlaying) return;  // 没在播放就不检测
-      
-      const currentTime = audio.currentTime;
-      
-      if (Math.abs(currentTime - lastTime) < 0.1) {
-        stuckCount++;
-        if (stuckCount >= 3) { // 连续3秒没动
-          console.log('检测到卡顿，尝试恢复');
-          audio.play().catch(e => {});
-          stuckCount = 0;
-        }
-      } else {
-        stuckCount = 0;
-      }
-      
-      lastTime = currentTime;
-    }, 1000);
-  }
-  
-  // ========== 自动播放 ==========
-  function initAutoPlay() {
-    audio.load();
-    
-    // 尝试自动播放
-    audio.play()
-      .then(() => {
-        console.log('自动播放成功');
-        fadeIn();              // 淡入
-        isPlaying = true;
-        setUIPlaying(true);
-      })
-      .catch(e => {
-        console.warn('自动播放被浏览器阻止，等待用户交互', e);
-        // 浏览器阻止了自动播放，按钮显示"播放本站音乐"
-        isPlaying = false;
-        setUIPlaying(false);
-        
-        // 监听第一次点击页面时启动
-        const startOnInteraction = () => {
-          audio.play()
-            .then(() => {
-              fadeIn();
-              isPlaying = true;
-              setUIPlaying(true);
-            })
-            .catch(e => console.error('用户交互后仍无法播放', e));
-          
-          document.removeEventListener('click', startOnInteraction);
-          document.removeEventListener('touchstart', startOnInteraction);
-        };
-        
-        document.addEventListener('click', startOnInteraction);
-        document.addEventListener('touchstart', startOnInteraction);
-      });
-  }
-  
-  // ========== 初始化 ==========
-  initAutoPlay();
-  startHeartbeat();
-  
-  // 绑定按钮事件
-  btn.addEventListener('click', toggleMusic);
-  
-  // 页面可见性变化恢复
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && isPlaying && audio.paused) {
-      audio.play()
-        .then(() => {
-          // 不需要淡入，直接设置音量
-          audio.volume = TARGET_VOLUME;
-        })
-        .catch(e => {});
-    }
-  });
-  
-  // 错误恢复
-  audio.addEventListener('error', () => {
-    if (isPlaying) {
-      console.log('音频出错，尝试重新加载');
-      audio.src = AUDIO_URL;
-      audio.load();
-      setTimeout(() => {
-        if (isPlaying) {
-          audio.play()
-            .then(() => {
-              audio.volume = TARGET_VOLUME;
-            })
-            .catch(e => {});
-        }
-      }, 500);
-    }
-  });
-  
-  // 清理资源
-  window.addEventListener('beforeunload', () => {
-    if (heartbeatInterval) clearInterval(heartbeatInterval);
-    if (fadeInterval) clearInterval(fadeInterval);
-  });
-})();
-</script>
+<!-- 所有音乐相关代码已完全移除 -->
 </body>
 </html>
