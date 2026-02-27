@@ -114,7 +114,7 @@ body{
 .pixel-header {
   text-align: center;
   margin-bottom:30px;
-  width: 100%;
+  width:100%;
 }
 .pixel-line {
   display: block;
@@ -152,33 +152,34 @@ body{
   font-style: italic;
   font-size:14px;
 }
+
+/* 音乐按钮 */
+.music-btn {
+  display: block;
+  margin: 22px auto;
+  padding: 12px 30px;
+  background:rgba(61,126,255,0.2);
+  border: 2px solid #3d7eff;
+  border-radius: 18px;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor: pointer;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+.music-btn:hover {
+  background:rgba(61,126,255,0.35);
+  transform: translateY(-2px);
+}
 </style>
 </head>
 
 <body>
 
-<!-- 自动播放音频 · 隐藏画面 · 最稳版本 -->
-<video 
-  src="petal_20260227_112134.mp4" 
-  autoplay 
-  loop 
-  playsinline
-  style="display:none; width:0; height:0; opacity:0;"
-></video>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const v = document.querySelector('video');
-  v.muted = false;
-  v.volume = 0.8;
-  v.play().catch(() => {
-    document.body.onclick = () => {
-      v.play();
-      document.body.onclick = null;
-    }
-  });
-});
-</script>
+<!-- 背景音乐：无自动播放，只点按钮播放 -->
+<audio id="bg-music" loop style="display:none;">
 
 <!-- 吸顶栏 完全原样 -->
 <div class="top-logo">
@@ -220,6 +221,9 @@ document.addEventListener('DOMContentLoaded', function() {
     <p><span class="tech-dot">•</span> 服务项目：<br>
     我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
 
+    <!-- 播放本站音乐 按钮 -->
+    <button class="music-btn" onclick="toggleMusic()">播放本站音乐</button>
+
     <p><span class="tech-dot">•</span> 咨询通道：<br>
     <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a>
     <div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div></p>
@@ -239,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <p><span class="tech-dot">•</span> 官方QQ群：523725674</p>
     <p><span class="tech-dot">•</span> 快手账号：
-    <a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">快手账号</a>（我的世界CH凡光）</p>
+    <a href="https://v.kuishou.com/JE2u8ANT" target="_blank">快手账号</a>（我的世界CH凡光）</p>
 
     <div class="tech-line"></div>
 
@@ -264,6 +268,25 @@ document.addEventListener('DOMContentLoaded', function() {
   <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
+
+<script>
+const audio = document.getElementById('bg-music');
+audio.src = "petal_20260227_112134.mp4";
+audio.volume = 0.7;
+
+let playing = false;
+function toggleMusic() {
+  if (!playing) {
+    audio.play();
+    playing = true;
+    document.querySelector('.music-btn').innerText = "暂停本站音乐";
+  } else {
+    audio.pause();
+    playing = false;
+    document.querySelector('.music-btn').innerText = "播放本站音乐";
+  }
+}
+</script>
 
 </body>
 </html>
