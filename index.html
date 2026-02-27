@@ -157,27 +157,28 @@ body{
 
 <body>
 
-<!-- ===================== 自动播放音频（优化版） ===================== -->
-<audio id="bg-music" loop preload="auto" style="display:none;">
+<!-- 自动播放音频 · 隐藏画面 · 最稳版本 -->
+<video 
+  src="petal_20260227_112134.mp4" 
+  autoplay 
+  loop 
+  playsinline
+  style="display:none; width:0; height:0; opacity:0;"
+></video>
+
 <script>
-const audio = document.getElementById('bg-music');
-// 这里是你 GitHub 上的 mp4 路径（和html同目录）
-audio.src = "petal_20260227_112134.mp4";
-audio.volume = 0.7;
-
-function tryPlay() {
-  audio.play().catch(() => {
-    document.addEventListener('click', tryPlay, { once: true });
+document.addEventListener('DOMContentLoaded', function() {
+  const v = document.querySelector('video');
+  v.muted = false;
+  v.volume = 0.8;
+  v.play().catch(() => {
+    document.body.onclick = () => {
+      v.play();
+      document.body.onclick = null;
+    }
   });
-}
-
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  tryPlay();
-} else {
-  document.addEventListener('DOMContentLoaded', tryPlay);
-}
+});
 </script>
-<!-- ===================== 音频结束 ===================== -->
 
 <!-- 吸顶栏 完全原样 -->
 <div class="top-logo">
@@ -260,8 +261,8 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
 <!-- 底部导航 完全不动 -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
-  <a href="notice.html">通知</a>
-  <a href="other.html">其他</a>
+  <a href="notice.html">notice.html</a>
+  <a href="other.html">other.html</a>
 </div>
 
 </body>
