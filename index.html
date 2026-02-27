@@ -157,6 +157,28 @@ body{
 
 <body>
 
+<!-- ===================== 自动播放音频（优化版） ===================== -->
+<audio id="bg-music" loop preload="auto" style="display:none;">
+<script>
+const audio = document.getElementById('bg-music');
+// 这里是你 GitHub 上的 mp4 路径（和html同目录）
+audio.src = "petal_20260227_112134.mp4";
+audio.volume = 0.7;
+
+function tryPlay() {
+  audio.play().catch(() => {
+    document.addEventListener('click', tryPlay, { once: true });
+  });
+}
+
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  tryPlay();
+} else {
+  document.addEventListener('DOMContentLoaded', tryPlay);
+}
+</script>
+<!-- ===================== 音频结束 ===================== -->
+
 <!-- 吸顶栏 完全原样 -->
 <div class="top-logo">
   <span class="logo">
