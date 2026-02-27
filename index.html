@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 官网</title>
+<title>Shadow Moon · 官网 (修复空白)</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
@@ -152,10 +152,34 @@ body{
   font-style: italic;
   font-size:14px;
 }
+
+/* 音乐按钮 */
+.music-btn {
+  display: block;
+  margin: 22px auto;
+  padding: 12px 30px;
+  background:rgba(61,126,255,0.2);
+  border: 2px solid #3d7eff;
+  border-radius: 18px;
+  color:#000;
+  font-size:16px;
+  font-weight:bold;
+  cursor: pointer;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+.music-btn:hover {
+  background:rgba(61,126,255,0.35);
+  transform: translateY(-2px);
+}
 </style>
 </head>
 
 <body>
+
+<!-- ★ 关键修复：audio 必须正确闭合，否则页面空白。添加 src 并确保闭合。同时保留 mp4 作为背景音乐（大多数浏览器支持.mp4音频） -->
+<audio id="bg-music" loop style="display:none;" src="petal_20260227_112134.mp4"></audio>
 
 <!-- 吸顶栏 完全原样 -->
 <div class="top-logo">
@@ -197,13 +221,15 @@ body{
     <p><span class="tech-dot">•</span> 服务项目：<br>
     我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
 
+    <button class="music-btn" onclick="toggleMusic()">播放本站音乐</button>
+
     <p><span class="tech-dot">•</span> 咨询通道：<br>
     <a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a>
-    <div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div></p>
+    </p><div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div><p></p>
 
     <p><span class="tech-dot">•</span> 备用通道：
     <a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友</a>
-    <div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div></p>
+    </p><div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div><p></p>
 
     <div class="tech-line"></div>
 
@@ -241,6 +267,65 @@ body{
   <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
+
+<script>
+// 完全重写音乐控制逻辑，确保 audio 元素存在且路径正确
+const audio = document.getElementById('bg-music');
+// 如果audio标签没有src或为空，则动态设置（但已在html中设置，这里做保护）
+if (!audio.src || audio.src === window.location.href) {
+  audio.src = "petal_20260227_112134.mp4";
+}
+audio.volume = 0.7;
+
+let isPlaying = false;
+function toggleMusic() {
+  // 处理可能因为文件不存在/格式不支持导致的错误
+  audio.play().then(() => {
+    isPlaying = true;
+    document.querySelector(".music-btn").textContent = "暂停本站音乐";
+  }).catch(error => {
+    console.warn("音乐播放失败，可能是文件不存在或格式不支持", error);
+    // 提示用户，但不影响页面显示
+    alert("提示：背景音乐文件无法加载，但不影响浏览页面。");
+    // 即使失败也切换按钮状态? 为了体验，不切换
+  });
+  // 注意：play() 是异步的，不能简单设置 isPlaying = true，但为了按钮文字一致性我们使用then
+  // 如果播放失败，按钮不应变成暂停。当前逻辑在catch里不改变文字。
+  // 但如果第一次播放失败，用户再次点击还是会尝试播放。所以我们优化一下：使用play()返回的promise
+}
+
+// 同时给按钮加一个备用方案：如果点击时音频没加载好，至少不会让页面卡死
+// 另外暂停功能也要对应
+function toggleMusic() {
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    document.querySelector(".music-btn").textContent = "播放本站音乐";
+  } else {
+    audio.play().then(() => {
+      isPlaying = true;
+      document.querySelector(".music-btn").textContent = "暂停本站音乐";
+    }).catch(e => {
+      alert("无法播放音乐，请检查音频文件是否存在。\n(petal_20260227_112134.mp4)");
+    });
+  }
+}
+
+// 附加处理：如果音频播放中途出错，重置按钮状态
+audio.addEventListener('error', () => {
+  isPlaying = false;
+  document.querySelector(".music-btn").textContent = "播放本站音乐";
+});
+
+// 如果音频自然结束（loop不触发ended），但以防万一
+audio.addEventListener('ended', () => {
+  isPlaying = false;
+  document.querySelector(".music-btn").textContent = "播放本站音乐";
+});
+
+// 初始化按钮文字（根据是否暂停，默认暂停）
+document.querySelector(".music-btn").textContent = "播放本站音乐";
+</script>
 
 </body>
 </html>
