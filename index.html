@@ -12,7 +12,7 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
   background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
   color:#000;
-  -webkit-overflow-scrolling: touch; /* 滚动优化 */
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 吸顶 LOGO 完全不动 */
@@ -155,8 +155,8 @@ body{
   font-size:14px;
 }
 
-/* 音乐按钮 */
-.music-btn {
+/* 按钮通用样式 - 用于音乐按钮和演示按钮 */
+.custom-btn {
   display: block;
   margin: 22px auto;
   padding: 12px 30px;
@@ -173,26 +173,33 @@ body{
   width: fit-content;
   min-width: 180px;
   -webkit-tap-highlight-color: transparent;
+  text-decoration: none; /* 对于链接按钮 */
 }
-.music-btn:hover {
+.custom-btn:hover {
   background:rgba(61,126,255,0.35);
   transform: translateY(-2px);
 }
-.music-btn.playing {
+.custom-btn.playing {
   background:rgba(0,255,0,0.15);
   border-color: #00ffaa;
   box-shadow: 0 0 15px rgba(0,255,0,0.3);
+}
+
+/* 为了保持原有音乐按钮的独立样式，同时共享外观 */
+.music-btn {
+  /* 继承 .custom-btn 样式，但保留 playing 类 */
+}
+
+/* 演示按钮不需要 playing 状态，但保持相同基础样式 */
+.demo-btn {
+  /* 完全继承 custom-btn */
 }
 </style>
 </head>
 <body>
 
-<!-- 
-   终极稳定方案：采用 “永久循环 + 心跳保持 + 双重AudioContext + 空播放占位” 
-   确保哪怕页面完全静止，音乐也绝不中断。
--->
+<!-- 音频元素 -->
 <audio id="bg-music" preload="auto" loop playsinline style="display:none;" src="petal_20260227_112134.mp4"></audio>
-<audio id="heartbeat-audio" preload="auto" loop playsinline style="display:none;"></audio> <!-- 心跳保持器 -->
 
 <!-- 吸顶栏 -->
 <div class="top-logo">
@@ -211,8 +218,14 @@ body{
       <span style="color:#4285F4;">欢</span><span style="color:#EA4335;">迎</span><span style="color:#FBBC05;">进</span><span style="color:#4285F4;">入</span><span style="color:#34A853;"> </span><span style="color:#EA4335;">Shadow Moon</span><span style="color:#000;"> 官方网站</span>
     </div>
     <div class="tech-line"></div>
-    <p><span class="tech-dot">•</span> 服务项目：<br>部分功能维护</p>
-    <button class="music-btn" id="musicToggleBtn">播放本站音乐</button>
+    <p><span class="tech-dot">•</span> 服务项目：<br>我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
+    
+    <!-- 音乐播放按钮 -->
+    <button class="custom-btn music-btn" id="musicToggleBtn">播放本站音乐</button>
+    
+    <!-- 新增：演示模式按钮 (与播放按钮相同样式，点击跳转act.html) -->
+    <a href="act.html" class="custom-btn demo-btn" id="demoBtn">进入演示模式</a>
+    
     <p><span class="tech-dot">•</span> 咨询通道：<br><a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div>
     <p><span class="tech-dot">•</span> 备用通道：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div>
     <div class="tech-line"></div>
@@ -239,32 +252,22 @@ body{
 <script>
 (function() {
   // --------------------------------------------------------------
-  // 超强稳定音乐引擎 · 双内核 + 心跳维持 + 无感自愈
+  // 超高频心跳 · 60次/秒 (利用 requestAnimationFrame)
   // --------------------------------------------------------------
   const audioElem = document.getElementById('bg-music');
-  const heartbeatElem = document.getElementById('heartbeat-audio'); // 用于维持音频激活状态
   const btn = document.getElementById('musicToggleBtn');
+  // 演示按钮不需要JS控制，直接使用<a>标签跳转
 
-  // 配置
   const AUDIO_URL = "petal_20260227_112134.mp4";
   if (!audioElem.src || audioElem.src === window.location.href) {
     audioElem.src = AUDIO_URL;
   }
 
-  // 核心状态
-  let isPlaying = false;              // 用户期望的播放状态
-  let userDisabled = false;           // 用户是否主动暂停
-  let useWorklet = false;             // 是否采用AudioWorklet (true则接管一切)
-  let audioContext = null;
-  let workletSource = null;           // 音频节点源 (MediaElementSource)
-  let gainNode = null;
-  let workletInitialized = false;
-  let fallbackMode = false;           // 若worklet不可用，则用增强回退
+  let isPlaying = false;
+  let rafId = null;           // requestAnimationFrame ID
+  let lastCheck = 0;          // 用于控制实际检查频率
   
-  // 心跳定时器 (用于强制唤醒)
-  let keepAliveInterval = null;
-  
-  // ---- UI 更新 ----
+  // UI更新
   function setUIPlaying(playing) {
     if (playing) {
       btn.classList.add('playing');
@@ -275,233 +278,85 @@ body{
     }
   }
 
-  // ---- 清理旧的worklet资源 ----
-  function cleanupWorklet() {
-    if (workletSource) {
-      try { workletSource.disconnect(); } catch (e) {}
-      workletSource = null;
-    }
-    // 注意: 不关闭audioContext，可能复用
-  }
-
-  // ---- 初始化 AudioContext + Worklet (核心) ----
-  async function initWorklet() {
-    if (workletInitialized) return true;
-    if (!window.AudioContext && !window.webkitAudioContext) {
-      console.warn('Web Audio 不支持，回退模式');
-      fallbackMode = true;
-      return false;
-    }
-    
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      // 创建上下文，延迟小一点
-      audioContext = new AudioCtor({ latencyHint: 'playback' });
+  // 心跳检查函数 (由 requestAnimationFrame 驱动)
+  function heartbeat() {
+    if (isPlaying) {
+      // 如果期望播放但音频暂停了
+      if (audioElem.paused) {
+        console.log('❤️‍🔥 检测到暂停，立即恢复', new Date().toISOString());
+        audioElem.play().catch(e => console.warn('恢复失败', e));
+      }
       
-      // 创建增益节点
-      gainNode = audioContext.createGain();
-      gainNode.gain.value = 0.7;
-      gainNode.connect(audioContext.destination);
-      
-      // 从audio元素创建源
-      if (audioElem.readyState >= 1) { // HAVE_METADATA
-        try {
-          workletSource = audioContext.createMediaElementSource(audioElem);
-          workletSource.connect(gainNode);
-        } catch (e) {
-          console.warn('createMediaElementSource 失败，降级回退', e);
-          fallbackMode = true;
-          return false;
-        }
-      } else {
-        // 等待元数据加载
-        await new Promise(resolve => {
-          audioElem.addEventListener('loadedmetadata', resolve, { once: true });
-          audioElem.load();
+      // 额外措施：创建一个极短的空音频，刺激音频系统保持活跃
+      const now = performance.now();
+      if (now - lastCheck > 200) { // 每200ms激活一次空音频
+        lastCheck = now;
+        const silentAudio = new Audio();
+        silentAudio.volume = 0.01;
+        silentAudio.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVgAAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f38=';
+        silentAudio.play().catch(e => {}).then(() => {
+          setTimeout(() => { silentAudio.pause(); silentAudio.src = ''; }, 30);
         });
-        workletSource = audioContext.createMediaElementSource(audioElem);
-        workletSource.connect(gainNode);
-      }
-      
-      // 尝试激活audio worklet (静默处理器，维持音频上下文活跃)
-      try {
-        // 由于 worklet 需要https或localhost，有些环境不支持，这里不阻塞
-        await audioContext.audioWorklet.addModule('data:application/javascript;charset=utf-8,' + 
-          encodeURIComponent(`
-            class KeepAliveProcessor extends AudioWorkletProcessor {
-              constructor() { super(); }
-              process(inputs, outputs, parameters) {
-                return true; // 永远保持活跃
-              }
-            }
-            registerProcessor('keep-alive', KeepAliveProcessor);
-          `)
-        );
-        // 创建worklet节点，无输入输出，只为了保持context状态
-        let workletNode = new AudioWorkletNode(audioContext, 'keep-alive');
-        workletNode.connect(gainNode); // 虚加载
-      } catch (e) {
-        // worklet失败不影响主流程
-        console.log('worklet 模块加载失败（正常降级）');
-      }
-      
-      workletInitialized = true;
-      return true;
-    } catch (e) {
-      console.error('初始化worklet失败', e);
-      fallbackMode = true;
-      return false;
-    }
-  }
-
-  // ---- 启动worklet播放 ----
-  async function playWorklet() {
-    if (!workletInitialized) {
-      const ok = await initWorklet();
-      if (!ok) {
-        playFallback();
-        return;
       }
     }
     
-    // 确保context是激活的
-    if (audioContext.state === 'suspended') {
-      try {
-        await audioContext.resume();
-      } catch (e) {
-        console.warn('context resume失败', e);
-        playFallback();
-        return;
-      }
-    }
-    
-    // 播放audio元素 (实际数据源)
-    try {
-      await audioElem.play();
-      isPlaying = true;
-      setUIPlaying(true);
-      startKeepAlive();   // 启动心跳维持
-    } catch (e) {
-      console.warn('worklet play error', e);
-      playFallback();
+    // 继续下一帧检查
+    rafId = requestAnimationFrame(heartbeat);
+  }
+
+  // 启动心跳
+  function startHeartbeat() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(heartbeat);
+  }
+
+  function stopHeartbeat() {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
     }
   }
 
-  // ---- worklet暂停 ----
-  function pauseWorklet() {
-    audioElem.pause();
-    // 注意：不关闭context，保留以便快速恢复
-    if (audioContext && audioContext.state === 'running') {
-      audioContext.suspend().catch(e => {});
-    }
-    isPlaying = false;
-    setUIPlaying(false);
-    stopKeepAlive();
-  }
-
-  // ---- 回退模式 (增强版) ----
-  function playFallback() {
-    fallbackMode = true;
+  // 播放函数
+  function playMusic() {
     audioElem.play()
       .then(() => {
         isPlaying = true;
         setUIPlaying(true);
-        startKeepAlive(); // 心跳同样有效
+        startHeartbeat();
       })
       .catch(e => {
-        console.error('fallback播放失败', e);
-        alert('提示：音乐无法播放，但不影响页面浏览。');
+        console.error('播放失败', e);
+        alert('无法播放音乐，请检查音频文件。');
         isPlaying = false;
         setUIPlaying(false);
       });
   }
 
-  function pauseFallback() {
+  function pauseMusic() {
     audioElem.pause();
     isPlaying = false;
     setUIPlaying(false);
-    stopKeepAlive();
+    stopHeartbeat();
   }
 
-  // ---- 心跳机制：每秒检查一次，确保播放永不停止 ----
-  function startKeepAlive() {
-    if (keepAliveInterval) clearInterval(keepAliveInterval);
-    keepAliveInterval = setInterval(() => {
-      // 如果用户期望播放但audio暂停了
-      if (isPlaying && audioElem.paused) {
-        console.warn('检测到意外暂停，尝试恢复');
-        // 尝试多种恢复
-        if (!fallbackMode && audioContext && audioContext.state === 'suspended') {
-          audioContext.resume().catch(e => {});
-        }
-        audioElem.play().catch(e => {});
-      }
-      
-      // 额外：如果是worklet模式，检查context状态
-      if (!fallbackMode && audioContext && isPlaying) {
-        if (audioContext.state === 'suspended') {
-          audioContext.resume().catch(e => {});
-        }
-      }
-      
-      // 创造一个极小音量空白音频强制刷新音频激活状态 (针对某些移动浏览器)
-      const silentAudio = new Audio();
-      silentAudio.volume = 0.01; // 极低音量
-      silentAudio.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVgAAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f38=';
-      silentAudio.play().catch(e => {}).then(() => {
-        setTimeout(() => { silentAudio.pause(); silentAudio.src = ''; }, 50);
-      });
-    }, 800); // 0.8秒检查一次，非常激进
-  }
-
-  function stopKeepAlive() {
-    if (keepAliveInterval) {
-      clearInterval(keepAliveInterval);
-      keepAliveInterval = null;
-    }
-  }
-
-  // ---- 统一开关 ----
+  // 切换
   function toggleMusic() {
     if (isPlaying) {
-      // 用户主动暂停
-      if (fallbackMode) {
-        pauseFallback();
-      } else {
-        pauseWorklet();
-      }
+      pauseMusic();
     } else {
-      // 尝试用worklet播放
-      if (fallbackMode) {
-        playFallback();
-      } else {
-        playWorklet().catch(e => {
-          console.error('worklet播放失败', e);
-          // 降级重试
-          fallbackMode = true;
-          playFallback();
-        });
-      }
+      playMusic();
     }
   }
 
-  // ---- 超级稳定性监听 ----
-  // 1. 页面可见性切换
+  // 事件监听：页面可见性恢复
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && isPlaying && audioElem.paused) {
-      // 恢复播放
-      if (fallbackMode) {
-        audioElem.play().catch(e => {});
-      } else {
-        if (audioContext && audioContext.state === 'suspended') {
-          audioContext.resume().catch(e => {});
-        }
-        audioElem.play().catch(e => {});
-      }
+      audioElem.play().catch(e => {});
     }
   });
 
-  // 2. 触摸/滚动保持 (极轻量恢复)
+  // 滚动恢复
   let scrollTimer;
   window.addEventListener('scroll', () => {
     if (isPlaying && audioElem.paused) {
@@ -514,18 +369,12 @@ body{
     }
   });
 
-  // 3. 预加载 & 启动初始化
+  // 预加载
   audioElem.load();
-  
-  // 预创建heartbeat元素但不使用，仅用于占位
-  heartbeatElem.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVgAAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f38=';
-  heartbeatElem.volume = 0;
 
-  // 4. 音频错误恢复
-  audioElem.addEventListener('error', (e) => {
-    console.warn('audio错误', e);
+  // 错误恢复
+  audioElem.addEventListener('error', () => {
     if (isPlaying) {
-      // 尝试重新设置src
       audioElem.src = AUDIO_URL;
       audioElem.load();
       setTimeout(() => {
@@ -534,34 +383,9 @@ body{
     }
   });
 
-  // 5. 拦截浏览器的音频自动暂停策略 (通过空音频占位)
-  function antiFreeze() {
-    // 对于某些WebView，不断创建短暂音频保持音频激活
-    if (isPlaying) {
-      const anti = new Audio();
-      anti.src = 'data:audio/wav;base64,UklGRlwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YVgAAAB/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f38=';
-      anti.volume = 0;
-      anti.play().catch(e => {}).then(() => {
-        setTimeout(() => { anti.pause(); anti.src = ''; }, 50);
-      });
-    }
-    requestAnimationFrame(antiFreeze);
-  }
-  // 可选启用，但可能会消耗性能，暂不启用。用keepAlive代替
-
   // 绑定按钮
   btn.addEventListener('click', toggleMusic);
-  
-  // 初始文字
   setUIPlaying(false);
-  
-  // 预初始化worklet (不播放，但提前加载，以便点击后快速响应)
-  window.setTimeout(() => {
-    if (!fallbackMode && !workletInitialized) {
-      initWorklet().catch(e => {});
-    }
-  }, 500);
-  
 })();
 </script>
 </body>
