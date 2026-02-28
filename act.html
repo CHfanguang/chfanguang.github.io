@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>CH凡光 · 演示</title>
-  
+
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  
+
   <style>
     /* ===== 全局重置 ===== */
     * {
@@ -134,7 +135,7 @@
       top: 0;
       height: 100%;
       width: 70%;
-      background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(0, 102, 255, 0.3));
+      background: linear-gradient(90deg, rgba(0,255,255,0.3), rgba(0,102,255,0.3));
       border-radius: 14px;
     }
 
@@ -144,7 +145,6 @@
       left: 30%;
       top: 40%;
     }
-
     .iphone-2 {
       transform: rotate(-8deg) translate(180px, -70px);
       left: 40%;
@@ -152,7 +152,6 @@
       opacity: 0.6;
       filter: blur(1px);
     }
-
     .iphone-3 {
       transform: rotate(-22deg) translate(-220px, 30px);
       left: 50%;
@@ -160,7 +159,6 @@
       opacity: 0.5;
       filter: blur(1.5px);
     }
-
     .iphone-4 {
       transform: rotate(3deg) translate(80px, 130px);
       left: 25%;
@@ -168,7 +166,6 @@
       opacity: 0.4;
       filter: blur(2px);
     }
-
     .iphone-5 {
       transform: rotate(-10deg) translate(-50px, 200px);
       left: 60%;
@@ -176,7 +173,6 @@
       opacity: 0.35;
       filter: blur(2.5px);
     }
-
     .iphone-6 {
       transform: rotate(8deg) translate(200px, -150px);
       left: 15%;
@@ -196,7 +192,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 30px rgba(0,255,255,0.2);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -206,14 +202,14 @@
 
     .logo-container {
       display: flex;
-      align-items: center;
+      the-items: center;
       gap: 12px;
     }
 
     .tech-logo {
       width: 45px;
       height: 45px;
-      background: rgba(0, 255, 255, 0.1);
+      background: rgba(0,255,255,0.1);
       border-radius: 10px;
       border: 1px solid #00ffff;
       display: flex;
@@ -221,7 +217,7 @@
       justify-content: center;
       font-size: 24px;
       color: #00ffff;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
     }
 
     .logo-text {
@@ -237,7 +233,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(0, 255, 255, 0.1);
+      background: rgba(0,255,255,0.1);
       padding: 6px 16px;
       border-radius: 30px;
       border: 1px solid #00ffff;
@@ -258,7 +254,7 @@
 
     .header-right {
       width: 60px;
-      color: rgba(0, 255, 255, 0.4);
+      color: rgba(0,255,255,0.4);
       font-size: 13px;
       text-align: right;
     }
@@ -312,14 +308,14 @@
       font-size: clamp(20px, 4vw, 28px);
       margin: 15px 0;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      text-shadow: 0 0 10px rgba(0,255,255,0.5);
       font-weight: 500;
     }
 
     .small-text {
       font-size: clamp(16px, 3vw, 20px);
-      color: rgba(255, 255, 255, 0.8);
-      text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+      color: rgba(255,255,255,0.8);
+      text-shadow: 0 0 8px rgba(0,255,255,0.3);
       margin: 8px 0;
     }
 
@@ -343,8 +339,8 @@
     }
 
     @keyframes sloganGlow {
-      0%, 100% { opacity: 1; text-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff; }
-      50% { opacity: 0.9; text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff; }
+      0%,100% { opacity:1; text-shadow:0 0 15px #ff00ff,0 0 30px #00ffff; }
+      50% { opacity:0.9; text-shadow:0 0 30px #ff00ff,0 0 60px #00ffff; }
     }
 
     .tag-line {
@@ -393,8 +389,8 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      0%,100% { transform:translateY(0); }
+      50% { transform:translateY(-10px); }
     }
 
     /* 返回主页按钮 */
@@ -428,10 +424,10 @@
       width: 100%;
       text-align: center;
       z-index: 40;
-      color: rgba(0, 255, 255, 0.5);
+      color: rgba(0,255,255,0.5);
       font-size: clamp(12px, 2vw, 14px);
       line-height: 1.6;
-      text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+      text-shadow: 0 0 10px rgba(0,255,255,0.3);
       pointer-events: none;
     }
 
@@ -439,7 +435,7 @@
     .swiper-pagination-bullet {
       width: 8px;
       height: 8px;
-      background: rgba(0, 255, 255, 0.3);
+      background: rgba(0,255,255,0.3);
       opacity: 1;
       border-radius: 4px;
       transition: all 0.3s ease;
@@ -452,20 +448,12 @@
     }
 
     /* 响应式 */
-    @media (max-width: 768px) {
-      .iphone-device {
-        width: 220px;
-        height: 460px;
-      }
+    @media (max-width:768px) {
+      .iphone-device { width:220px; height:460px; }
     }
-
-    @media (max-width: 600px) {
-      .header-right {
-        display: none;
-      }
-      .iphone-device {
-        opacity: 0.3;
-      }
+    @media (max-width:600px) {
+      .header-right { display:none; }
+      .iphone-device { opacity:0.3; }
     }
   </style>
 </head>
@@ -483,26 +471,26 @@
             <div class="control-icon">📱</div>
             <div class="control-icon">🔔</div>
           </div>
-          <div class="control-slider"><div class="control-slider-fill" style="width: 75%"></div></div>
-          <div class="control-slider"><div class="control-slider-fill" style="width: 45%"></div></div>
+          <div class="control-slider"><div class="control-slider-fill" style="width:75%"></div></div>
+          <div class="control-slider"><div class="control-slider-fill" style="width:45%"></div></div>
         </div>
       </div>
     </div>
-    
+
     <div class="iphone-device iphone-2">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
         <div class="iphone-content">
-          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">⚡</div>
+          <div style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">⚡</div>
         </div>
       </div>
     </div>
-    
+
     <div class="iphone-device iphone-3">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
         <div class="iphone-content">
-          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">SHADOW</div>
+          <div style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">SHADOW</div>
         </div>
       </div>
     </div>
@@ -511,7 +499,7 @@
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
         <div class="iphone-content">
-          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">MOON</div>
+          <div style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">MOON</div>
         </div>
       </div>
     </div>
@@ -520,7 +508,7 @@
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
         <div class="iphone-content">
-          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">CH</div>
+          <div style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">CH</div>
         </div>
       </div>
     </div>
@@ -529,7 +517,7 @@
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
         <div class="iphone-content">
-          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">凡光</div>
+          <div style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">凡光</div>
         </div>
       </div>
     </div>
@@ -552,7 +540,7 @@
   <!-- Swiper 轮播 - 12页带广告词版 -->
   <div class="swiper">
     <div class="swiper-wrapper">
-      
+
       <!-- 第1页：开场 + 广告词 -->
       <div class="swiper-slide">
         <div class="content">
@@ -589,7 +577,7 @@
         <div class="content">
           <div class="emoji-large">💰</div>
           <div class="highlight">¥1</div>
-          <div class="slogan-text">价值不止1元</div>
+          <div class="slogan-text">价格始终1元</div>
           <div class="sub-text">所有服务 统一价格</div>
           <div class="tag-line">
             <span class="tag-item">不讲价</span>
@@ -649,8 +637,8 @@
           <div class="main-title">小成绩</div>
           <div class="slogan-text">数字会说话</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size: 32px;">100+</span>
-            <span class="tag-item" style="font-size: 32px;">1K+</span>
+            <span class="tag-item" style="font-size:32px;">100+</span>
+            <span class="tag-item" style="font-size:32px;">1K+</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">项目经验</span>
@@ -666,8 +654,8 @@
           <div class="main-title">继续努力</div>
           <div class="slogan-text">不止于现状</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size: 32px;">5年</span>
-            <span class="tag-item" style="font-size: 32px;">99%</span>
+            <span class="tag-item" style="font-size:32px;">5年</span>
+            <span class="tag-item" style="font-size:32px;">99%</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">从业经验</span>
@@ -701,7 +689,7 @@
           <div class="emoji-large">📱</div>
           <div class="main-title">我的快手</div>
           <div class="slogan-text">不止于视频</div>
-          <div class="highlight" style="font-size: clamp(28px, 5vw, 40px;">我的世界CH凡光</div>
+          <div class="highlight" style="font-size:clamp(28px,5vw,40px);">我的世界CH凡光</div>
           <div class="tag-line">
             <span class="tag-item">技术干货</span>
             <span class="tag-item">每日更新</span>
@@ -719,7 +707,7 @@
           <div class="list-text">📚 全程指导</div>
           <div class="list-text">🛡️ 专属支持</div>
           <div class="list-text">🚀 轻松上手</div>
-          <div class="contact-btn" style="display: inline-block; padding: 12px 30px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 20px 0; cursor: pointer;">联系客服申请</div>
+          <div class="contact-btn" style="display:inline-block; padding:12px 30px; background:#00ffff; color:#000; border-radius:40px; font-weight:700; margin:20px 0; cursor:pointer;">联系客服申请</div>
         </div>
       </div>
 
@@ -728,10 +716,10 @@
         <div class="content">
           <div class="emoji-large">🏠</div>
           <div class="main-title">CH凡光</div>
-          <div class="highlight" style="font-size: clamp(30px, 5vw, 45px);">SHADOW MOON</div>
+          <div class="highlight" style="font-size:clamp(30px,5vw,45px);">SHADOW MOON</div>
           <div class="slogan-text">不止于此 · 未来可期</div>
           <a href="index.html" class="back-home-btn">返回主页</a>
-          <div class="small-text" style="margin-top: 20px;">下次见 👋</div>
+          <div class="small-text" style="margin-top:20px;">下次见 👋</div>
         </div>
       </div>
 
@@ -743,4 +731,10 @@
 
   <!-- 底部版权信息 -->
   <div class="footer-copyright">
-    <p>Powe
+    <p>Powered by Shadow Moon</p>
+    <p>© CH凡光</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    const swiper = ne
