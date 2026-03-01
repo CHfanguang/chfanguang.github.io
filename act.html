@@ -4,12 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>CH凡光 · 演示</title>
-
+  
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
+  
   <style>
     /* ===== 全局重置 ===== */
     * {
@@ -139,15 +138,15 @@
       border-radius: 14px;
     }
 
-    /* 手机位置 - 不同角度 */
+    /* 手机位置 - 不同角度 - 优化后的导航栏更突出 */
     .iphone-1 {
       transform: rotate(-15deg) translate(-100px, -120px);
-      left: 30%;
+      left: 25%;
       top: 40%;
     }
 
     .iphone-2 {
-      transform: rotate(-8deg) translate(180px, -70px);
+      transform: rotate(-8deg) translate(150px, -70px);
       left: 40%;
       top: 50%;
       opacity: 0.6;
@@ -155,7 +154,7 @@
     }
 
     .iphone-3 {
-      transform: rotate(-22deg) translate(-220px, 30px);
+      transform: rotate(-22deg) translate(-200px, 30px);
       left: 50%;
       top: 35%;
       opacity: 0.5;
@@ -163,140 +162,176 @@
     }
 
     .iphone-4 {
-      transform: rotate(3deg) translate(80px, 130px);
-      left: 25%;
+      transform: rotate(3deg) translate(60px, 130px);
+      left: 30%;
       top: 55%;
       opacity: 0.4;
       filter: blur(2px);
     }
 
     .iphone-5 {
-      transform: rotate(-10deg) translate(-50px, 200px);
-      left: 60%;
+      transform: rotate(-10deg) translate(-80px, 200px);
+      left: 55%;
       top: 30%;
       opacity: 0.35;
       filter: blur(2.5px);
     }
 
     .iphone-6 {
-      transform: rotate(8deg) translate(200px, -150px);
-      left: 15%;
+      transform: rotate(8deg) translate(150px, -150px);
+      left: 20%;
       top: 70%;
       opacity: 0.3;
       filter: blur(3px);
     }
 
-    /* ===== 吸顶栏 ===== */
+    /* ===== 吸顶栏 - 再次优化 ===== */
     .header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 80px;
-      background: rgba(10, 15, 30, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      height: 85px;
+      background: rgba(5, 10, 20, 0.92);
+      backdrop-filter: blur(15px) saturate(200%);
+      -webkit-backdrop-filter: blur(15px) saturate(200%);
+      border-bottom: 2px solid;
+      border-image: linear-gradient(90deg, #00ffff, #ff00ff, #00ffff) 1;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5vw;
+      padding: 0 6vw;
     }
 
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 15px;
     }
 
     .tech-logo {
-      width: 45px;
-      height: 45px;
-      background: rgba(0, 255, 255, 0.1);
-      border-radius: 10px;
-      border: 1px solid #00ffff;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, rgba(0, 255, 255, 0.2), rgba(255, 0, 255, 0.2));
+      border-radius: 12px;
+      border: 2px solid #00ffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 28px;
       color: #00ffff;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+      text-shadow: 0 0 15px #00ffff;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+      animation: logoGlow 2s infinite;
+    }
+
+    @keyframes logoGlow {
+      0%, 100% { border-color: #00ffff; box-shadow: 0 0 30px #00ffff; }
+      50% { border-color: #ff00ff; box-shadow: 0 0 50px #ff00ff; }
     }
 
     .logo-text {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(18px, 3.5vw, 24px);
-      font-weight: 700;
-      color: #fff;
-      text-shadow: 0 0 10px #00ffff;
-      letter-spacing: 1px;
+      font-size: clamp(20px, 4vw, 28px);
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+      letter-spacing: 2px;
     }
 
     .flower-text {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(0, 255, 255, 0.1);
-      padding: 6px 16px;
-      border-radius: 30px;
-      border: 1px solid #00ffff;
+      gap: 10px;
+      background: rgba(0, 255, 255, 0.15);
+      padding: 8px 22px;
+      border-radius: 40px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+      animation: borderFlash 3s infinite;
+    }
+
+    .flower-text::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.3), transparent);
+      animation: scanLight 3s infinite;
+    }
+
+    @keyframes scanLight {
+      0% { transform: translateX(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    @keyframes borderFlash {
+      0%, 100% { border-color: #00ffff; box-shadow: 0 0 30px #00ffff; }
+      50% { border-color: #ff00ff; box-shadow: 0 0 50px #ff00ff; }
     }
 
     .ch-name {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(15px, 2.5vw, 20px);
-      font-weight: 600;
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 700;
       color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
+      text-shadow: 0 0 15px #00ffff, 0 0 30px #ff00ff;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
     }
 
     .ch-decoration {
-      font-size: clamp(16px, 2.5vw, 22px);
-      filter: drop-shadow(0 0 8px #00ffff);
+      font-size: clamp(20px, 3vw, 26px);
+      filter: drop-shadow(0 0 10px #00ffff);
+      animation: spin 3s infinite;
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(15deg); }
+      75% { transform: rotate(-15deg); }
+      100% { transform: rotate(0deg); }
     }
 
     .header-right {
-      width: 60px;
-      color: rgba(0, 255, 255, 0.4);
-      font-size: 13px;
+      width: 70px;
+      color: rgba(0, 255, 255, 0.6);
+      font-size: 14px;
       text-align: right;
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: 0 0 10px #00ffff;
     }
 
-    /* 音乐控制按钮 */
-    .music-control {
+    /* ===== 网易云音乐播放器容器 ===== */
+    .music-player-container {
       position: fixed;
-      top: 100px;
+      top: 105px;
       right: 20px;
       z-index: 2000;
-      width: 50px;
-      height: 50px;
-      background: rgba(0, 255, 255, 0.2);
+      width: 330px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
       border: 2px solid #00ffff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: #00ffff;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      animation: musicPulse 2s infinite;
+      animation: playerGlow 2s infinite;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
     }
 
-    .music-control.playing {
-      background: rgba(255, 0, 255, 0.2);
-      border-color: #ff00ff;
-      color: #ff00ff;
-      box-shadow: 0 0 30px #ff00ff;
-    }
-
-    @keyframes musicPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.1); }
+    @keyframes playerGlow {
+      0%, 100% { box-shadow: 0 0 40px #00ffff; border-color: #00ffff; }
+      50% { box-shadow: 0 0 60px #ff00ff; border-color: #ff00ff; }
     }
 
     /* ===== Swiper 主容器 ===== */
@@ -322,6 +357,7 @@
       position: relative;
       z-index: 30;
       padding: 30px 20px;
+      margin-top: -40px; /* 为播放器留出空间 */
     }
 
     .main-title {
@@ -449,32 +485,30 @@
 
     /* 导航点样式 */
     .swiper-pagination-bullet {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       background: rgba(0, 255, 255, 0.3);
       opacity: 1;
-      border-radius: 4px;
+      border-radius: 5px;
       transition: all 0.3s ease;
     }
 
     .swiper-pagination-bullet-active {
       background: #00ffff;
-      width: 24px;
-      box-shadow: 0 0 15px #00ffff;
+      width: 25px;
+      box-shadow: 0 0 20px #00ffff;
     }
 
     /* 响应式 */
     @media (max-width: 768px) {
       .iphone-device {
-        width: 220px;
-        height: 460px;
+        width: 200px;
+        height: 420px;
       }
-      .music-control {
-        top: 90px;
-        right: 15px;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+      .music-player-container {
+        top: 95px;
+        right: 10px;
+        width: 260px;
       }
     }
 
@@ -483,18 +517,15 @@
         display: none;
       }
       .iphone-device {
-        opacity: 0.3;
+        opacity: 0.25;
+      }
+      .music-player-container {
+        width: 220px;
       }
     }
   </style>
 </head>
 <body>
-
-  <!-- 音频元素 -->
-  <audio id="bg-music" loop preload="auto" style="display: none;">
-    <source src="petal_20260227_112134.mp4" type="audio/mp4">
-    <source src="petal_20260227_112134.mp3" type="audio/mpeg">
-  </audio>
 
   <!-- 斜着摆放的苹果手机背景（6部手机不同角度）-->
   <div class="iphone-background">
@@ -513,7 +544,7 @@
         </div>
       </div>
     </div>
-
+    
     <div class="iphone-device iphone-2">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
@@ -522,7 +553,7 @@
         </div>
       </div>
     </div>
-
+    
     <div class="iphone-device iphone-3">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
@@ -560,7 +591,7 @@
     </div>
   </div>
 
-  <!-- 吸顶栏 -->
+  <!-- 吸顶栏 - 再次优化版 -->
   <header class="header">
     <div class="logo-container">
       <div class="tech-logo">⚡</div>
@@ -571,16 +602,27 @@
       <span class="ch-name">CH凡光</span>
       <span class="ch-decoration">⚡</span>
     </div>
-    <div class="header-right">v3.0</div>
+    <div class="header-right">v3.5</div>
   </header>
 
-  <!-- 音乐控制按钮 -->
-  <div class="music-control" id="musicToggleBtn">🔊</div>
+  <!-- 网易云音乐播放器（自动播放）-->
+  <div class="music-player-container">
+    <iframe 
+      frameborder="no" 
+      border="0" 
+      marginwidth="0" 
+      marginheight="0" 
+      width="100%" 
+      height="90"
+      src="//music.163.com/outchain/player?type=2&id=2608143525&auto=1&height=90"
+      style="border-radius: 12px; display: block;">
+    </iframe>
+  </div>
 
   <!-- Swiper 轮播 - 12页无框版 -->
   <div class="swiper">
     <div class="swiper-wrapper">
-
+      
       <!-- 第1页：开场 -->
       <div class="swiper-slide">
         <div class="content">
@@ -589,7 +631,7 @@
           <div class="highlight">SHADOW MOON</div>
           <div class="sub-text">创始人 · 核心技术</div>
           <div class="tag-line">
-            <span class="tag-item">购买外挂</span>
+            <span class="tag-item">技术鬼才</span>
             <span class="tag-item">代码魔术师</span>
           </div>
         </div>
@@ -602,7 +644,7 @@
           <div class="main-title">我做什么</div>
           <div class="tag-line">
             <span class="tag-item">网站制作</span>
-            <span class="tag-item">售卖外挂</span>
+            <span class="tag-item">技术支持</span>
             <span class="tag-item">美化设计</span>
           </div>
           <div class="tag-line">
@@ -633,7 +675,7 @@
           <div class="emoji-large">💪</div>
           <div class="main-title">服务承诺</div>
           <div class="list-text">✅ 终身免费售后</div>
-          <div class="list-text">✅ 假期12时在线</div>
+          <div class="list-text">✅ 24小时在线</div>
           <div class="list-text">✅ 半小时响应</div>
           <div class="list-text">✅ 永久维护</div>
         </div>
@@ -712,46 +754,4 @@
           <div class="tag-line">
             <span class="tag-item">人品正</span>
             <span class="tag-item">有耐心</span>
-            <span class="tag-item">不摆架子</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 第10页：快手账号 -->
-      <div class="swiper-slide">
-        <div class="content">
-          <div class="emoji-large">📱</div>
-          <div class="main-title">我的快手</div>
-          <div class="highlight" style="font-size: clamp(28px, 5vw, 40px);">我的世界CH凡光</div>
-          <div class="tag-line">
-            <span class="tag-item">技术干货</span>
-            <span class="tag-item">每日更新</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 第11页：品牌代理人 -->
-      <div class="swiper-slide">
-        <div class="content">
-          <div class="emoji-large">🤝</div>
-          <div class="main-title">品牌代理人</div>
-          <div class="list-text">💰 高额返利</div>
-          <div class="list-text">📚 全程指导</div>
-          <div class="list-text">🛡️ 专属支持</div>
-          <div class="list-text">🚀 轻松上手</div>
-          <div class="contact-btn" style="display: inline-block; padding: 12px 30px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 20px 0; cursor: pointer;">联系客服申请</div>
-        </div>
-      </div>
-
-      <!-- 第12页：返回主页 -->
-      <div class="swiper-slide">
-        <div class="content">
-          <div class="emoji-large">🏠</div>
-          <div class="main-title">CH凡光</div>
-          <div class="highlight" style="font-size: clamp(30px, 5vw, 45px);">SHADOW MOON</div>
-          <a href="index.html" class="back-home-btn">返回主页</a>
-          <div class="small-text" style="margin-top: 20px;">下次见 👋</div>
-        </div>
-      </div>
-
-    </div
+            <span class="tag-item">不摆架子</sp
