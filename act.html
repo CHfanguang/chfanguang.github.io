@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>CH凡光 · 演示</title>
-
+  
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
+  
   <style>
+    /* ===== 全局重置 ===== */
     * {
       margin: 0;
       padding: 0;
@@ -20,12 +21,13 @@
       font-family: 'Rajdhani', 'Orbitron', sans-serif;
       background: #0a0f1e;
       color: #fff;
+      overflow: hidden;
       height: 100vh;
       width: 100vw;
       position: relative;
-      overflow: hidden;
     }
 
+    /* ===== 斜着摆放的苹果手机背景 ===== */
     .iphone-background {
       position: fixed;
       top: 0;
@@ -37,6 +39,7 @@
       pointer-events: none;
     }
 
+    /* 手机主体 - 斜着摆放 */
     .iphone-device {
       position: absolute;
       width: 280px;
@@ -54,6 +57,7 @@
       z-index: 1;
     }
 
+    /* 手机屏幕 */
     .iphone-screen {
       position: absolute;
       top: 6px;
@@ -66,6 +70,7 @@
       border: 1px solid rgba(0, 255, 255, 0.1);
     }
 
+    /* 手机顶部刘海 */
     .iphone-notch {
       position: absolute;
       top: 0;
@@ -82,6 +87,7 @@
       border-right: 1px solid rgba(0, 255, 255, 0.2);
     }
 
+    /* 手机屏幕内容 - 控制中心风格 */
     .iphone-content {
       padding: 35px 12px 12px 12px;
       height: 100%;
@@ -90,6 +96,7 @@
       gap: 12px;
     }
 
+    /* 模拟控制中心图标行 */
     .control-icon-row {
       display: flex;
       justify-content: space-around;
@@ -110,6 +117,7 @@
       border: 1px solid rgba(0, 255, 255, 0.2);
     }
 
+    /* 模拟滑动条 */
     .control-slider {
       height: 28px;
       background: rgba(0, 255, 255, 0.05);
@@ -126,17 +134,58 @@
       top: 0;
       height: 100%;
       width: 70%;
-      background: linear-gradient(90deg, rgba(0,255,255,0.3), rgba(0,102,255,0.3));
+      background: linear-gradient(90deg, rgba(0, 255, 255, 0.3), rgba(0, 102, 255, 0.3));
       border-radius: 14px;
     }
 
-    .iphone-1 { transform: rotate(-15deg) translate(-100px, -120px); left: 30%; top: 40%; }
-    .iphone-2 { transform: rotate(-8deg) translate(180px, -70px); left: 40%; top: 50%; opacity: 0.6; filter: blur(1px); }
-    .iphone-3 { transform: rotate(-22deg) translate(-220px, 30px); left: 50%; top: 35%; opacity: 0.5; filter: blur(1.5px); }
-    .iphone-4 { transform: rotate(3deg) translate(80px, 130px); left: 25%; top: 55%; opacity: 0.4; filter: blur(2px); }
-    .iphone-5 { transform: rotate(-10deg) translate(-50px, 200px); left: 60%; top: 30%; opacity: 0.35; filter: blur(2.5px); }
-    .iphone-6 { transform: rotate(8deg) translate(200px, -150px); left: 15%; top: 70%; opacity: 0.3; filter: blur(3px); }
+    /* 手机位置 - 不同角度 */
+    .iphone-1 {
+      transform: rotate(-15deg) translate(-100px, -120px);
+      left: 30%;
+      top: 40%;
+    }
 
+    .iphone-2 {
+      transform: rotate(-8deg) translate(180px, -70px);
+      left: 40%;
+      top: 50%;
+      opacity: 0.6;
+      filter: blur(1px);
+    }
+
+    .iphone-3 {
+      transform: rotate(-22deg) translate(-220px, 30px);
+      left: 50%;
+      top: 35%;
+      opacity: 0.5;
+      filter: blur(1.5px);
+    }
+
+    .iphone-4 {
+      transform: rotate(3deg) translate(80px, 130px);
+      left: 25%;
+      top: 55%;
+      opacity: 0.4;
+      filter: blur(2px);
+    }
+
+    .iphone-5 {
+      transform: rotate(-10deg) translate(-50px, 200px);
+      left: 60%;
+      top: 30%;
+      opacity: 0.35;
+      filter: blur(2.5px);
+    }
+
+    .iphone-6 {
+      transform: rotate(8deg) translate(200px, -150px);
+      left: 15%;
+      top: 70%;
+      opacity: 0.3;
+      filter: blur(3px);
+    }
+
+    /* ===== 吸顶栏 ===== */
     .header {
       position: fixed;
       top: 0;
@@ -147,7 +196,7 @@
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(0, 255, 255, 0.3);
-      box-shadow: 0 0 30px rgba(0,255,255,0.2);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -164,7 +213,7 @@
     .tech-logo {
       width: 45px;
       height: 45px;
-      background: rgba(0,255,255,0.1);
+      background: rgba(0, 255, 255, 0.1);
       border-radius: 10px;
       border: 1px solid #00ffff;
       display: flex;
@@ -172,7 +221,7 @@
       justify-content: center;
       font-size: 24px;
       color: #00ffff;
-      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
     }
 
     .logo-text {
@@ -188,7 +237,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(0,255,255,0.1);
+      background: rgba(0, 255, 255, 0.1);
       padding: 6px 16px;
       border-radius: 30px;
       border: 1px solid #00ffff;
@@ -209,11 +258,47 @@
 
     .header-right {
       width: 60px;
-      color: rgba(0,255,255,0.4);
+      color: rgba(0, 255, 255, 0.4);
       font-size: 13px;
       text-align: right;
     }
 
+    /* 音乐控制按钮 */
+    .music-control {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      z-index: 2000;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 255, 255, 0.2);
+      border: 2px solid #00ffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #00ffff;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      animation: musicPulse 2s infinite;
+    }
+
+    .music-control.playing {
+      background: rgba(255, 0, 255, 0.2);
+      border-color: #ff00ff;
+      color: #ff00ff;
+      box-shadow: 0 0 30px #ff00ff;
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* ===== Swiper 主容器 ===== */
     .swiper {
       width: 100%;
       height: 100vh;
@@ -225,8 +310,10 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
+    /* ===== 无框内容样式 ===== */
     .content {
       max-width: 900px;
       width: 85%;
@@ -260,38 +347,15 @@
       font-size: clamp(20px, 4vw, 28px);
       margin: 15px 0;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0,255,255,0.5);
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
       font-weight: 500;
     }
 
     .small-text {
       font-size: clamp(16px, 3vw, 20px);
-      color: rgba(255,255,255,0.8);
-      text-shadow: 0 0 8px rgba(0,255,255,0.3);
+      color: rgba(255, 255, 255, 0.8);
+      text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
       margin: 8px 0;
-    }
-
-    .slogan-text {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(24px, 5vw, 42px);
-      font-weight: 800;
-      color: #ff00ff;
-      text-shadow: 0 0 15px #ff00ff, 0 0 30px #00ffff;
-      margin: 20px 0;
-      letter-spacing: 3px;
-      animation: sloganGlow 2s infinite;
-    }
-
-    .slogan-small {
-      font-size: clamp(18px, 3.5vw, 28px);
-      color: #00ffff;
-      text-shadow: 0 0 10px #00ffff;
-      margin: 10px 0;
-    }
-
-    @keyframes sloganGlow {
-      0%,100% { opacity:1; text-shadow:0 0 15px #ff00ff,0 0 30px #00ffff; }
-      50% { opacity:0.9; text-shadow:0 0 30px #ff00ff,0 0 60px #00ffff; }
     }
 
     .tag-line {
@@ -340,10 +404,11 @@
     }
 
     @keyframes float {
-      0%,100% { transform:translateY(0); }
-      50% { transform:translateY(-10px); }
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
+    /* 返回主页按钮 */
     .back-home-btn {
       display: inline-block;
       padding: 16px 45px;
@@ -366,6 +431,7 @@
       box-shadow: 0 0 60px #ff00ff;
     }
 
+    /* 底部版权信息 */
     .footer-copyright {
       position: fixed;
       bottom: 20px;
@@ -373,45 +439,64 @@
       width: 100%;
       text-align: center;
       z-index: 40;
-      color: rgba(0,255,255,0.5);
+      color: rgba(0, 255, 255, 0.5);
       font-size: clamp(12px, 2vw, 14px);
       line-height: 1.6;
-      text-shadow: 0 0 10px rgba(0,255,255,0.3);
+      text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
       pointer-events: none;
     }
 
-    .swiper-pagination {
-      position: absolute !important;
-      bottom: 70px !important;
-      z-index: 9999 !important;
-    }
-
+    /* 导航点样式 */
     .swiper-pagination-bullet {
       width: 8px;
       height: 8px;
-      background: rgba(0,255,255,0.3) !important;
-      opacity: 1 !important;
+      background: rgba(0, 255, 255, 0.3);
+      opacity: 1;
       border-radius: 4px;
       transition: all 0.3s ease;
     }
 
     .swiper-pagination-bullet-active {
-      background: #00ffff !important;
+      background: #00ffff;
       width: 24px;
       box-shadow: 0 0 15px #00ffff;
     }
 
-    @media (max-width:768px) {
-      .iphone-device { width:220px; height:460px; }
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .iphone-device {
+        width: 220px;
+        height: 460px;
+      }
+      .music-control {
+        top: 90px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
     }
-    @media (max-width:600px) {
-      .header-right { display:none; }
-      .iphone-device { opacity:0.3; }
+
+    @media (max-width: 600px) {
+      .header-right {
+        display: none;
+      }
+      .iphone-device {
+        opacity: 0.3;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- 音频元素 - 加回MP4 -->
+  <audio id="bg-music" loop preload="auto" style="display: none;">
+    <source src="petal_20260227_112134.mp4" type="audio/mp4">
+    <!-- 兼容性备选 -->
+    <source src="petal_20260227_112134.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- 斜着摆放的苹果手机背景（6部手机不同角度）-->
   <div class="iphone-background">
     <div class="iphone-device iphone-1">
       <div class="iphone-notch"></div>
@@ -423,43 +508,59 @@
             <div class="control-icon">📱</div>
             <div class="control-icon">🔔</div>
           </div>
-          <div class="control-slider"><div class="control-slider-fill" style="width:75%"></div></div>
-          <div class="control-slider"><div class="control-slider-fill" style="width:45%"></div></div>
+          <div class="control-slider"><div class="control-slider-fill" style="width: 75%"></div></div>
+          <div class="control-slider"><div class="control-slider-fill" style="width: 45%"></div></div>
         </div>
       </div>
     </div>
+    
     <div class="iphone-device iphone-2">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
-        <div class="iphone-content" style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">⚡</div>
+        <div class="iphone-content">
+          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">⚡</div>
+        </div>
       </div>
     </div>
+    
     <div class="iphone-device iphone-3">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
-        <div class="iphone-content" style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">SHADOW</div>
+        <div class="iphone-content">
+          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">SHADOW</div>
+        </div>
       </div>
     </div>
+
     <div class="iphone-device iphone-4">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
-        <div class="iphone-content" style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">MOON</div>
+        <div class="iphone-content">
+          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">MOON</div>
+        </div>
       </div>
     </div>
+
     <div class="iphone-device iphone-5">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
-        <div class="iphone-content" style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">CH</div>
+        <div class="iphone-content">
+          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">CH</div>
+        </div>
       </div>
     </div>
+
     <div class="iphone-device iphone-6">
       <div class="iphone-notch"></div>
       <div class="iphone-screen">
-        <div class="iphone-content" style="color:rgba(0,255,255,0.3); text-align:center; margin-top:100px;">凡光</div>
+        <div class="iphone-content">
+          <div style="color: rgba(0,255,255,0.3); text-align: center; margin-top: 100px;">凡光</div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- 吸顶栏 -->
   <header class="header">
     <div class="logo-container">
       <div class="tech-logo">⚡</div>
@@ -473,27 +574,35 @@
     <div class="header-right">v3.0</div>
   </header>
 
+  <!-- 音乐控制按钮 -->
+  <div class="music-control" id="musicToggleBtn" onclick="toggleMusic()">🔊</div>
+
+  <!-- Swiper 轮播 - 12页无框版 -->
   <div class="swiper">
     <div class="swiper-wrapper">
+      
+      <!-- 第1页：开场 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">⚡</div>
           <div class="main-title">CH凡光</div>
           <div class="highlight">SHADOW MOON</div>
-          <div class="slogan-text">不止于外挂</div>
-          <div class="slogan-small">更不止于技术</div>
           <div class="sub-text">创始人 · 核心技术</div>
+          <div class="tag-line">
+            <span class="tag-item">购买外挂</span>
+            <span class="tag-item">代码魔术师</span>
+          </div>
         </div>
       </div>
 
+      <!-- 第2页：做什么 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">💻</div>
           <div class="main-title">我做什么</div>
-          <div class="slogan-text">技术无边界</div>
           <div class="tag-line">
             <span class="tag-item">网站制作</span>
-            <span class="tag-item">技术支持</span>
+            <span class="tag-item">售卖外挂</span>
             <span class="tag-item">美化设计</span>
           </div>
           <div class="tag-line">
@@ -504,11 +613,11 @@
         </div>
       </div>
 
+      <!-- 第3页：价格 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">💰</div>
           <div class="highlight">¥1</div>
-          <div class="slogan-text">价格始终1元</div>
           <div class="sub-text">所有服务 统一价格</div>
           <div class="tag-line">
             <span class="tag-item">不讲价</span>
@@ -518,23 +627,23 @@
         </div>
       </div>
 
+      <!-- 第4页：服务承诺 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">💪</div>
           <div class="main-title">服务承诺</div>
-          <div class="slogan-text">售后不止终身</div>
           <div class="list-text">✅ 终身免费售后</div>
-          <div class="list-text">✅ 24小时在线</div>
+          <div class="list-text">✅ 假期12时在线</div>
           <div class="list-text">✅ 半小时响应</div>
           <div class="list-text">✅ 永久维护</div>
         </div>
       </div>
 
+      <!-- 第5页：特点1 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">⚙️</div>
           <div class="main-title">我的特点</div>
-          <div class="slogan-text">快 · 稳 · 准 · 狠</div>
           <div class="tag-line">
             <span class="tag-item">⚡极速响应</span>
             <span class="tag-item">🛡️稳定可靠</span>
@@ -546,11 +655,11 @@
         </div>
       </div>
 
+      <!-- 第6页：特点2 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">📡</div>
           <div class="main-title">更多特点</div>
-          <div class="slogan-text">人品即技术</div>
           <div class="list-text">✅ 诚信第一</div>
           <div class="list-text">✅ 价格透明</div>
           <div class="list-text">✅ 从不跑路</div>
@@ -558,14 +667,14 @@
         </div>
       </div>
 
+      <!-- 第7页：成绩1 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">📊</div>
           <div class="main-title">小成绩</div>
-          <div class="slogan-text">数字会说话</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size:32px;">100+</span>
-            <span class="tag-item" style="font-size:32px;">1K+</span>
+            <span class="tag-item" style="font-size: 32px;">100+</span>
+            <span class="tag-item" style="font-size: 32px;">1K+</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">项目经验</span>
@@ -574,14 +683,14 @@
         </div>
       </div>
 
+      <!-- 第8页：成绩2 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">🏆</div>
           <div class="main-title">继续努力</div>
-          <div class="slogan-text">不止于现状</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size:32px;">5年</span>
-            <span class="tag-item" style="font-size:32px;">99%</span>
+            <span class="tag-item" style="font-size: 32px;">5年</span>
+            <span class="tag-item" style="font-size: 32px;">99%</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">从业经验</span>
@@ -590,11 +699,11 @@
         </div>
       </div>
 
+      <!-- 第9页：为什么选我 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">❓</div>
           <div class="main-title">为什么选我</div>
-          <div class="slogan-text">因为不止这些</div>
           <div class="tag-line">
             <span class="tag-item">价格低</span>
             <span class="tag-item">服务好</span>
@@ -608,12 +717,12 @@
         </div>
       </div>
 
+      <!-- 第10页：快手账号 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">📱</div>
           <div class="main-title">我的快手</div>
-          <div class="slogan-text">不止于视频</div>
-          <div class="highlight" style="font-size:clamp(28px,5vw,40px);">我的世界CH凡光</div>
+          <div class="highlight" style="font-size: clamp(28px, 5vw, 40px);">我的世界CH凡光</div>
           <div class="tag-line">
             <span class="tag-item">技术干货</span>
             <span class="tag-item">每日更新</span>
@@ -621,59 +730,30 @@
         </div>
       </div>
 
+      <!-- 第11页：品牌代理人 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">🤝</div>
           <div class="main-title">品牌代理人</div>
-          <div class="slogan-text">不止是代理</div>
           <div class="list-text">💰 高额返利</div>
           <div class="list-text">📚 全程指导</div>
           <div class="list-text">🛡️ 专属支持</div>
           <div class="list-text">🚀 轻松上手</div>
-          <div class="contact-btn" style="display:inline-block; padding:12px 30px; background:#00ffff; color:#000; border-radius:40px; font-weight:700; margin:20px 0; cursor:pointer;">联系客服申请</div>
+          <div class="contact-btn" style="display: inline-block; padding: 12px 30px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 20px 0; cursor: pointer;">联系客服申请</div>
         </div>
       </div>
 
+      <!-- 第12页：返回主页 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">🏠</div>
           <div class="main-title">CH凡光</div>
-          <div class="highlight" style="font-size:clamp(30px,5vw,45px);">SHADOW MOON</div>
-          <div class="slogan-text">不止于此 · 未来可期</div>
+          <div class="highlight" style="font-size: clamp(30px, 5vw, 45px);">SHADOW MOON</div>
           <a href="index.html" class="back-home-btn">返回主页</a>
-          <div class="small-text" style="margin-top:20px;">下次见 👋</div>
+          <div class="small-text" style="margin-top: 20px;">下次见 👋</div>
         </div>
       </div>
+
     </div>
 
-    <div class="swiper-pagination"></div>
-  </div>
-
-  <div class="footer-copyright">
-    <p>Powered by Shadow Moon</p>
-    <p>© CH凡光</p>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    window.onload = function() {
-      const swiper = new Swiper('.swiper', {
-        direction: 'horizontal',
-        loop: true,
-        speed: 600,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-        },
-        allowTouchMove: true,
-        touchRatio: 1,
-        touchAngle: 45
-      });
-    }
-  </script>
-</body>
-</html>
+    <!-- 
