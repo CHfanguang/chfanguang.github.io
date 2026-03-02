@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CH凡光 · 演示（贝塔）</title>
+  <title>CH凡光 · 手机优化版</title>
   
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -25,46 +25,6 @@
       height: 100vh;
       width: 100vw;
       position: relative;
-    }
-
-    /* 整个页面作为点击区域 */
-    .music-trigger-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 500;
-      background: transparent;
-      pointer-events: none; /* 默认不拦截，让内容可交互 */
-    }
-    
-    .music-trigger-overlay.active {
-      pointer-events: auto; /* 仅在需要引导时激活，但我们现在去掉弹窗，所以这个可以简化 */
-      cursor: pointer;
-    }
-
-    /* 极简音乐提示 - 几乎看不见，只留个影子 */
-    .music-mini-hint {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      z-index: 1000;
-      color: rgba(0, 255, 255, 0.15);
-      font-size: 12px;
-      background: rgba(0, 0, 0, 0.1);
-      padding: 4px 10px;
-      border-radius: 20px;
-      backdrop-filter: blur(2px);
-      border: 1px solid rgba(0, 255, 255, 0.05);
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-
-    /* 音乐激活时的微弱提示 */
-    .music-mini-hint.playing {
-      color: rgba(255, 0, 255, 0.3);
-      border-color: rgba(255, 0, 255, 0.1);
     }
 
     /* ===== 斜着摆放的苹果手机背景 ===== */
@@ -574,10 +534,7 @@
     }
   </style>
 </head>
-<body id="mainBody">
-  <!-- 极简音乐提示 - 几乎看不见 -->
-  <div class="music-mini-hint" id="musicMiniHint">♫ 碰一下试试</div>
-
+<body>
   <!-- 斜着摆放的苹果手机背景 -->
   <div class="iphone-background">
     <div class="iphone-device iphone-1">
@@ -761,8 +718,8 @@
           </div>
         </div>
       </div>
-      
-<!-- 第10页：快手账号 -->
+
+      <!-- 第10页：快手账号 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">📱</div>
@@ -813,200 +770,92 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
     (function() {
-      // 初始化 Swiper
+      // 初始化 Swiper - 修复翻页功能
       const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
-        loop: true,
+        loop: true, // 开启循环模式，确保可以无限翻页
         speed: 600,
         parallax: true,
-        mousewheel: true,
-        keyboard: true,
+        mousewheel: true, // 允许鼠标滚轮翻页
+        keyboard: true, // 允许键盘翻页
         grabCursor: true,
         pagination: {
           el: '.swiper-pagination',
-          clickable: true,
+          clickable: true, // 允许点击导航点翻页
+        },
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false, // 用户交互后不停止自动播放
+          pauseOnMouseEnter: true, // 鼠标悬停时暂停
         },
         on: {
+          init: function() {
+            console.log('Swiper初始化成功 - 翻页功能已修复');
+          },
           slideChange: function() {
-            resetAutoSlide();
+            // 可以在这里添加滑动变化时的回调
           }
         }
       });
 
-      // Next 按钮功能
+      // Next 按钮功能 - 确保点击后翻页
       window.nextSlide = function() {
-        swiper.slideNext();
+        if (swiper) {
+          swiper.slideNext();
+          console.log('点击NEXT，翻到下一页');
+        }
       };
 
       // 获取元素
       const nextBtn = document.getElementById('nextBtn');
       const autoSlideHint = document.getElementById('autoSlideHint');
-      const musicMiniHint = document.getElementById('musicMiniHint');
-      const mainBody = document.getElementById('mainBody');
       
-      // 音频对象
-      let audio = null;
-      let isMusicPlaying = false;
-      
-      // 创建音频
-      function initAudio() {
-        if (audio) return;
-        
-        audio = new Audio();
-        // 使用一个免费的背景音乐
-        audio.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-        audio.loop = true;
-        audio.volume = 0.3;
-        
-        audio.addEventListener('play', function() {
-          console.log('音乐开始播放');
-          isMusicPlaying = true;
-          musicMiniHint.textContent = '♫ 音乐中';
-          musicMiniHint.classList.add('playing');
-        });
-        
-        audio.addEventListener('pause', function() {
-          console.log('音乐暂停');
-          isMusicPlaying = false;
-          musicMiniHint.textContent = '♫ 碰一下试试';
-          musicMiniHint.classList.remove('playing');
-        });
-        
-        audio.addEventListener('ended', function() {
-          isMusicPlaying = false;
-          musicMiniHint.textContent = '♫ 碰一下试试';
-          musicMiniHint.classList.remove('playing');
-        });
-        
-        audio.addEventListener('error', function(e) {
-          console.log('音乐加载失败，但没关系');
-          // 失败了也不影响体验，啥也不做
-        });
-      }
-
-      // 播放音乐
-      function playMusic() {
-        initAudio();
-        
-        if (audio) {
-          audio.play()
-            .then(() => {
-              console.log('音乐播放成功');
-            })
-            .catch(error => {
-              console.log('音乐播放失败，可能需要再次点击');
-              // 失败了就保持提示不变
-            });
-        }
-      }
-
-      // 整个页面点击事件 - 碰一下唤起音乐
-      document.body.addEventListener('click', function() {
-        // 如果音乐没在播放，就尝试播放
-        if (!isMusicPlaying) {
-          playMusic();
-        }
-        // 如果已经在播放，就什么也不做（不暂停）
-      });
-
-      // 3秒后显示NEXT按钮
+      // 1.5秒后显示NEXT按钮
       setTimeout(() => {
-        nextBtn.classList.add('visible');
+        if (nextBtn) {
+          nextBtn.classList.add('visible');
+        }
       }, 1500);
 
-      // 自动翻页相关
-      let autoSlideInterval;
-      let autoSlideTimeout;
-      let isUserInteracting = false;
+      // 显示自动翻页提示
+      setTimeout(() => {
+        if (autoSlideHint) {
+          autoSlideHint.classList.add('visible');
+        }
+      }, 3000);
+
+      // 手动控制自动翻页提示（与Swiper的autoplay同步）
+      swiper.autoplay.start(); // 确保自动播放启动
       
-      const AUTO_SLIDE_DELAY = 4000;
-      const AUTO_SLIDE_INTERVAL = 4000;
-
-      function startAutoSlide() {
-        if (autoSlideInterval) {
-          clearInterval(autoSlideInterval);
-        }
-        
-        autoSlideHint.classList.add('visible');
-        autoSlideHint.textContent = '⚡ 自动播放中';
-        
-        autoSlideInterval = setInterval(() => {
-          if (swiper.params.loop) {
-            swiper.slideNext();
-          } else {
-            if (swiper.activeIndex === swiper.slides.length - 1) {
-              swiper.slideTo(0);
-            } else {
-              swiper.slideNext();
-            }
-          }
-        }, AUTO_SLIDE_INTERVAL);
-      }
-
-      function resetAutoSlide() {
-        if (isUserInteracting) return;
-        
-        if (autoSlideTimeout) {
-          clearTimeout(autoSlideTimeout);
-        }
-        if (autoSlideInterval) {
-          clearInterval(autoSlideInterval);
-          autoSlideInterval = null;
-          autoSlideHint.classList.remove('visible');
-          autoSlideHint.textContent = '⚡ 自动播放';
-        }
-        
-        autoSlideTimeout = setTimeout(() => {
-          startAutoSlide();
-        }, AUTO_SLIDE_DELAY);
-      }
-
-      function userInteractionStart() {
-        isUserInteracting = true;
-        resetAutoSlide();
-      }
-
-      function userInteractionEnd() {
-        isUserInteracting = false;
-        resetAutoSlide();
-      }
-
-      swiper.on('touchStart', userInteractionStart);
-      swiper.on('touchEnd', userInteractionEnd);
-
-      document.querySelector('.swiper').addEventListener('mouseenter', userInteractionStart);
-      document.querySelector('.swiper').addEventListener('mouseleave', userInteractionEnd);
-
-      nextBtn.addEventListener('click', function() {
-        userInteractionEnd();
-      });
-
-      document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-          if (autoSlideTimeout) clearTimeout(autoSlideTimeout);
-          if (autoSlideInterval) {
-            clearInterval(autoSlideInterval);
-            autoSlideInterval = null;
-            autoSlideHint.classList.remove('visible');
-            autoSlideHint.textContent = '⚡ 自动播放';
-          }
-        } else {
-          isUserInteracting = false;
-          resetAutoSlide();
+      // 监听自动播放状态
+      swiper.on('autoplayStart', function() {
+        if (autoSlideHint) {
+          autoSlideHint.textContent = '⚡ 自动播放中';
         }
       });
-
-      // 启动自动翻页
-      resetAutoSlide();
+      
+      swiper.on('autoplayStop', function() {
+        if (autoSlideHint) {
+          autoSlideHint.textContent = '⚡ 暂停';
+        }
+      });
+      
+      swiper.on('autoplay', function() {
+        // 每次自动翻页时触发
+        console.log('自动翻页到: ' + (swiper.realIndex + 1));
+      });
 
       // 页面加载完成
       window.addEventListener('load', function() {
-        console.log('页面加载完成 - 碰一下就能播放音乐，不碰也没关系');
+        console.log('页面加载完成 - 翻页功能正常工作');
+      });
+
+      // 触摸事件调试（如果需要）
+      document.querySelector('.swiper').addEventListener('touchstart', function() {
+        console.log('触摸开始');
       });
       
     })();
   </script>
 </body>
 </html>
-
-      
