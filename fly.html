@@ -7,41 +7,44 @@
 <style>
 body{
     margin:0;
+    background:radial-gradient(circle at 50% 30%, #1e3c72, #0a1f44);
     font-family:-apple-system,BlinkMacSystemFont;
-    background:#0a1f44;
     color:white;
     overflow:hidden;
-}
-
-/* 背景地图（假） */
-.map{
-    position:fixed;
-    width:100%;
-    height:100%;
-    background:linear-gradient(#0a1f44,#1e3c72);
 }
 
 /* LOGO */
 .logo{
     position:absolute;
-    top:60px;
+    top:50px;
     width:100%;
     text-align:center;
-    font-size:40px;
-    font-weight:900;
+    font-size:34px;
+    font-weight:800;
 }
 
-/* 液态玻璃 */
+/* 地图点 */
+.map-dot{
+    position:absolute;
+    width:6px;
+    height:6px;
+    background:white;
+    border-radius:50%;
+    opacity:0.4;
+}
+
+/* 液态玻璃（增强版） */
 .glass{
-    backdrop-filter: blur(20px);
-    background: rgba(255,255,255,0.1);
-    border-radius:20px;
+    backdrop-filter: blur(30px);
+    background: rgba(255,255,255,0.15);
+    border-radius:25px;
     padding:20px;
-    margin:20px auto;
-    width:80%;
+    width:85%;
+    margin:auto;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
 }
 
-/* 起始卡片 */
+/* 起始 */
 .start{
     position:absolute;
     top:50%;
@@ -53,51 +56,64 @@ body{
 /* 按钮 */
 .btn{
     margin-top:20px;
-    padding:15px 30px;
-    border-radius:12px;
+    padding:14px;
+    border-radius:14px;
     background:rgba(255,255,255,0.2);
+}
+
+/* SVG航线 */
+svg{
+    position:absolute;
+    width:100%;
+    height:100%;
 }
 
 /* 飞机 */
 .plane{
     position:absolute;
-    top:60%;
-    left:10%;
-    font-size:30px;
-    transition: all 1s linear;
+    font-size:26px;
+    transform-origin:center;
 }
 
-/* 路线 */
-.route{
+/* 机场 */
+.airport{
     position:absolute;
-    top:70%;
-    width:100%;
-    height:2px;
-    background:rgba(255,255,255,0.3);
+    font-size:14px;
+    opacity:0.8;
 }
 
-/* 终点 */
-.end{
+/* 底部卡片 */
+.card{
     position:absolute;
-    right:10%;
-    top:60%;
-    font-size:20px;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+    text-align:center;
 }
 
 /* 时间 */
 .timer{
-    font-size:50px;
+    font-size:48px;
 }
 </style>
-
 </head>
 
 <body>
 
-<div class="map"></div>
-
 <div class="logo">Shadow Moon</div>
 
+<!-- 假地图点 -->
+<script>
+for(let i=0;i<40;i++){
+    let dot=document.createElement("div");
+    dot.className="map-dot";
+    dot.style.left=Math.random()*100+"%";
+    dot.style.top=Math.random()*100+"%";
+    document.body.appendChild(dot);
+}
+</script>
+
+<!-- 起始 -->
 <div class="start glass" id="startBox">
 欢迎来到CH凡光：专注飞行<br><br>
 完全免费，告别没钱烦恼<br>
@@ -107,49 +123,56 @@ body{
 <div class="btn" onclick="startFlight()">开启飞行 ✈️</div>
 </div>
 
-<!-- 飞行UI -->
-<div id="flightUI" style="display:none;">
+<!-- 航线 -->
+<svg id="routeSVG">
+<path id="routePath" d="M50 500 Q200 200 350 400" stroke="white" stroke-width="2" fill="none" opacity="0.5"/>
+</svg>
 
-<div class="route"></div>
-
+<!-- 飞机 -->
 <div class="plane" id="plane">✈️</div>
 
-<div class="end">
-城郊机场
-</div>
+<!-- 机场 -->
+<div class="airport" style="left:40px;bottom:180px;">城中机场</div>
+<div class="airport" style="right:40px;bottom:220px;">城郊机场</div>
 
-<div class="glass" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);text-align:center;">
+<!-- 卡片 -->
+<div class="card glass" id="card" style="display:none;">
 <div>凡光城（城中机场） → 凡光城（城郊机场）</div>
 <div class="timer" id="timer">25:00</div>
-<div id="status">准备起飞...</div>
-</div>
-
+<div id="status">飞行中</div>
 </div>
 
 <script>
-let total = 1500;
-let time = total;
+let total=1500;
+let time=total;
 let timer;
+
+let path=document.getElementById("routePath");
+let plane=document.getElementById("plane");
+let length=path.getTotalLength();
 
 function startFlight(){
     document.getElementById("startBox").style.display="none";
-    document.getElementById("flightUI").style.display="block";
+    document.getElementById("card").style.display="block";
 
-    document.getElementById("status").innerText="✈️ 飞行中";
-
-    timer = setInterval(()=>{
+    timer=setInterval(()=>{
         time--;
 
-        let m = Math.floor(time/60);
-        let s = time%60;
+        let m=Math.floor(time/60);
+        let s=time%60;
 
-        document.getElementById("timer").innerText =
+        document.getElementById("timer").innerText=
         (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
 
-        // 飞机移动
-        let progress = (total-time)/total;
-        let plane = document.getElementById("plane");
-        plane.style.left = (10 + progress*70) + "%";
+        let progress=(total-time)/total;
+        let point=path.getPointAtLength(progress*length);
+        let next=path.getPointAtLength(progress*length+1);
+
+        plane.style.left=point.x+"px";
+        plane.style.top=point.y+"px";
+
+        let angle=Math.atan2(next.y-point.y,next.x-point.x)*180/Math.PI;
+        plane.style.transform="rotate("+angle+"deg)";
 
         if(time<=0){
             clearInterval(timer);
@@ -160,17 +183,12 @@ function startFlight(){
 }
 
 /* 切后台失败 */
-document.addEventListener("visibilitychange", ()=>{
+document.addEventListener("visibilitychange",()=>{
     if(document.hidden){
-        alert("❌ 飞行失败（离开页面）");
+        alert("❌ 飞行失败");
         location.reload();
     }
 });
-
-/* 防退出 */
-window.onbeforeunload = function(){
-    return "飞行中，确定离开？";
-}
 </script>
 
 </body>
