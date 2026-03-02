@@ -1,572 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>专注飞行 · 凡光双城 · 暗黑地图</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'PingFang SC', Roboto, 'Helvetica Neue', sans-serif;
-        }
+<meta charset="UTF-8">
+<title>专注飞行 - Shadow Moon</title>
 
-        body {
-            min-height: 100vh;
-            background: #0a0f17;  /* 深色基底 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
+<style>
+body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont;
+    background:#0a1f44;
+    color:white;
+    overflow:hidden;
+}
 
-        /* 主应用窗口 — 毛玻璃圆角 + 暗黑图层 */
-        .map-glass {
-            width: 1100px;
-            max-width: 100%;
-            background: rgba(10, 18, 28, 0.4);
-            backdrop-filter: blur(22px) saturate(200%);
-            -webkit-backdrop-filter: blur(22px) saturate(200%);
-            border-radius: 56px;
-            border: 1px solid rgba(90, 140, 200, 0.25);
-            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(120, 180, 255, 0.1) inset;
-            padding: 22px;
-        }
+/* 背景地图（假） */
+.map{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:linear-gradient(#0a1f44,#1e3c72);
+}
 
-        /* 画布像高德地图的暗夜版 */
-        .canvas-case {
-            border-radius: 42px;
-            overflow: hidden;
-            box-shadow: 0 0 0 2px rgba(70, 130, 200, 0.3), 0 20px 30px -5px black;
-            background: #0b1a28; /* 地图底色 */
-        }
+/* LOGO */
+.logo{
+    position:absolute;
+    top:60px;
+    width:100%;
+    text-align:center;
+    font-size:40px;
+    font-weight:900;
+}
 
-        canvas {
-            display: block;
-            width: 100%;
-            height: auto;
-            background: transparent;
-            cursor: none;
-        }
+/* 液态玻璃 */
+.glass{
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.1);
+    border-radius:20px;
+    padding:20px;
+    margin:20px auto;
+    width:80%;
+}
 
-        /* 控制条 — 深色毛玻璃 */
-        .nav-dashboard {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px 25px;
-            background: rgba(5, 15, 25, 0.6);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 60px;
-            padding: 16px 30px;
-            border: 1px solid rgba(100, 160, 230, 0.3);
-            box-shadow: 0 12px 25px -8px black;
-        }
+/* 起始卡片 */
+.start{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    text-align:center;
+}
 
-        /* 双城切换 — 类似地图图层控件 */
-        .city-toggles {
-            display: flex;
-            gap: 12px;
-            background: rgba(0, 5, 12, 0.7);
-            padding: 6px;
-            border-radius: 48px;
-            border: 1px solid #2a4b6e;
-            backdrop-filter: blur(10px);
-        }
+/* 按钮 */
+.btn{
+    margin-top:20px;
+    padding:15px 30px;
+    border-radius:12px;
+    background:rgba(255,255,255,0.2);
+}
 
-        .city-btn {
-            padding: 12px 32px;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 1.2rem;
-            background: transparent;
-            color: #a0c4e5;
-            border: none;
-            transition: 0.2s;
-            cursor: pointer;
-            backdrop-filter: blur(5px);
-            letter-spacing: 0.5px;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-        }
+/* 飞机 */
+.plane{
+    position:absolute;
+    top:60%;
+    left:10%;
+    font-size:30px;
+    transition: all 1s linear;
+}
 
-        .city-btn.active {
-            background: rgba(30, 80, 130, 0.6);
-            color: white;
-            text-shadow: 0 2px 5px #00000080;
-            box-shadow: 0 0 12px #3f9eff, inset 0 1px 4px white;
-            border: 1px solid #90c8ff;
-        }
+/* 路线 */
+.route{
+    position:absolute;
+    top:70%;
+    width:100%;
+    height:2px;
+    background:rgba(255,255,255,0.3);
+}
 
-        /* 计时器 — 2分钟专注暗黑风格 */
-        .time-block {
-            display: flex;
-            align-items: baseline;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 5px 25px 5px 32px;
-            border-radius: 60px;
-            backdrop-filter: blur(15px);
-            border: 1px solid #2b5f8a;
-            box-shadow: inset 0 2px 5px #00000070;
-        }
+/* 终点 */
+.end{
+    position:absolute;
+    right:10%;
+    top:60%;
+    font-size:20px;
+}
 
-        .clock {
-            font-size: 3rem;
-            font-weight: 300;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: 6px;
-            color: #d2ecff;
-            text-shadow: 0 0 15px #1e90ff, 0 2px 2px black;
-        }
+/* 时间 */
+.timer{
+    font-size:50px;
+}
+</style>
 
-        .unit {
-            font-size: 1rem;
-            margin-left: 6px;
-            color: #90b8d1;
-        }
-
-        /* 按钮组 — 毛玻璃凸起 */
-        .action-group {
-            display: flex;
-            gap: 16px;
-        }
-
-        .glass-action {
-            background: rgba(20, 45, 70, 0.5);
-            border: 1px solid #3c6e9c;
-            padding: 14px 32px;
-            border-radius: 40px;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #edf7ff;
-            backdrop-filter: blur(18px);
-            box-shadow: 0 9px 0 #0a1a28, 0 4px 18px black;
-            transition: 0.07s linear;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .glass-action:active {
-            transform: translateY(6px);
-            box-shadow: 0 3px 0 #0a1a28, 0 6px 16px black;
-        }
-
-        .glass-action:disabled {
-            opacity: 0.4;
-            transform: translateY(5px);
-            box-shadow: 0 4px 0 #0a1a28;
-            pointer-events: none;
-        }
-
-        /* 底部状态栏 — 地图风格小标签 */
-        .map-footer {
-            margin-top: 20px;
-            padding: 12px 28px;
-            background: rgba(0, 10, 20, 0.6);
-            backdrop-filter: blur(25px);
-            border-radius: 60px;
-            border: 1px solid #2f5577;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            color: #b0d0f0;
-            font-size: 1rem;
-        }
-
-        .map-tag {
-            background: #1e3b4f;
-            padding: 6px 20px;
-            border-radius: 32px;
-            border-left: 4px solid #5f9eff;
-            box-shadow: inset 0 1px 4px #00000055;
-        }
-    </style>
 </head>
+
 <body>
-<div class="map-glass">
-    <!-- 画布区：暗黑地图 + 纸飞机 -->
-    <div class="canvas-case">
-        <canvas id="flightCanvas" width="1100" height="520"></canvas>
-    </div>
 
-    <!-- 毛玻璃导航栏 -->
-    <div class="nav-dashboard">
-        <!-- 凡光城双场地切换 (高德风格) -->
-        <div class="city-toggles">
-            <button class="city-btn active" id="btnDowntown">🌆 凡光城·城中</button>
-            <button class="city-btn" id="btnSouth">🌳 凡光城·南</button>
-        </div>
+<div class="map"></div>
 
-        <!-- 2分钟计时器 (暗黑显眼) -->
-        <div class="time-block">
-            <span class="clock" id="timerDisplay">02:00</span>
-            <span class="unit">飞行</span>
-        </div>
+<div class="logo">Shadow Moon</div>
 
-        <!-- 飞行控制 -->
-        <div class="action-group">
-            <button class="glass-action" id="startBtn">▶ 起飞</button>
-            <button class="glass-action" id="pauseBtn">⏸️ 悬停</button>
-            <button class="glass-action" id="resetBtn">↺ 重置</button>
-        </div>
-    </div>
+<div class="start glass" id="startBox">
+欢迎来到CH凡光：专注飞行<br><br>
+完全免费，告别没钱烦恼<br>
+最新测试版，全球首发<br>
+无需登录等复杂操作<br><br>
 
-    <!-- 底部地图信息 / 公益说明 纯毛玻璃 -->
-    <div class="map-footer">
-        <span>🗺️ 专注飞行 · 公益免费 | 凡光城 2min 巡航</span>
-        <span class="map-tag">✨ 无图片 · 全矢量绘制</span>
-    </div>
+<div class="btn" onclick="startFlight()">开启飞行 ✈️</div>
+</div>
+
+<!-- 飞行UI -->
+<div id="flightUI" style="display:none;">
+
+<div class="route"></div>
+
+<div class="plane" id="plane">✈️</div>
+
+<div class="end">
+城郊机场
+</div>
+
+<div class="glass" style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);text-align:center;">
+<div>凡光城（城中机场） → 凡光城（城郊机场）</div>
+<div class="timer" id="timer">25:00</div>
+<div id="status">准备起飞...</div>
+</div>
+
 </div>
 
 <script>
-    (function() {
-        // 画布设置
-        const canvas = document.getElementById('flightCanvas');
-        const ctx = canvas.getContext('2d');
-        const width = 1100;
-        const height = 520;
-        canvas.width = width;
-        canvas.height = height;
+let total = 1500;
+let time = total;
+let timer;
 
-        // 场地状态: 'downtown' 或 'south'
-        let currentCity = 'downtown';
+function startFlight(){
+    document.getElementById("startBox").style.display="none";
+    document.getElementById("flightUI").style.display="block";
 
-        // ---------- 纸飞机参数 ----------
-        let plane = {
-            x: 200,
-            y: 280,
-            vx: 1.7,
-            vy: 0.15,
-            angle: 0,
-            size: 22,
-            wave: 0
-        };
+    document.getElementById("status").innerText="✈️ 飞行中";
 
-        // ---------- 专注时长 2分钟 = 120秒 ----------
-        const FLIGHT_SECONDS = 120;    // 2分钟
-        let remainingSeconds = FLIGHT_SECONDS;
-        let timerRunning = false;
-        let paused = false;
-        let timerInterval = null;
+    timer = setInterval(()=>{
+        time--;
 
-        // UI 元素
-        const timerDisplay = document.getElementById('timerDisplay');
-        const startBtn = document.getElementById('startBtn');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const btnDowntown = document.getElementById('btnDowntown');
-        const btnSouth = document.getElementById('btnSouth');
+        let m = Math.floor(time/60);
+        let s = time%60;
 
-        // 格式化 mm:ss (始终两位数)
-        function formatTime(sec) {
-            let mins = Math.floor(sec / 60);
-            let seconds = sec % 60;
-            return `${mins.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        document.getElementById("timer").innerText =
+        (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+
+        // 飞机移动
+        let progress = (total-time)/total;
+        let plane = document.getElementById("plane");
+        plane.style.left = (10 + progress*70) + "%";
+
+        if(time<=0){
+            clearInterval(timer);
+            document.getElementById("status").innerText="🛬 已降落";
         }
 
-        function updateTimerUI() {
-            timerDisplay.textContent = formatTime(remainingSeconds);
-        }
+    },1000);
+}
 
-        // 计时器核心
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timerRunning = true;
-            paused = false;
-            timerInterval = setInterval(() => {
-                if (!paused && remainingSeconds > 0) {
-                    remainingSeconds--;
-                    updateTimerUI();
-                } else if (remainingSeconds === 0) {
-                    // 时间到，停止倒计时，但纸飞机继续飘（象征专注完成）
-                    clearInterval(timerInterval);
-                    timerRunning = false;
-                }
-            }, 1000);
-        }
+/* 切后台失败 */
+document.addEventListener("visibilitychange", ()=>{
+    if(document.hidden){
+        alert("❌ 飞行失败（离开页面）");
+        location.reload();
+    }
+});
 
-        function pauseFlight() {
-            if (timerRunning) paused = true;
-        }
-
-        function resumeFlight() {
-            if (timerRunning) paused = false;
-        }
-
-        function resetFlight() {
-            // 重置秒数到2分钟
-            remainingSeconds = FLIGHT_SECONDS;
-            updateTimerUI();
-            // 重置飞机位置到左方起始点
-            plane.x = 200;
-            plane.y = 280;
-            plane.vx = 1.7;
-            plane.vy = 0.15;
-            // 如果计时器正在运行，不停止但重置秒数 (暂停状态不受影响)
-            if (!timerRunning) {
-                // 若停止状态，不必做额外动作
-            } else {
-                // 保持运行，但秒数重置了; 如果暂停了也保留暂停
-            }
-        }
-
-        // 切换城市时重置飞机位置，保留计时状态 (但为了友好，也可让飞机继续飞)
-        function setCity(city) {
-            currentCity = city;
-            // 激活样式切换
-            if (city === 'downtown') {
-                btnDowntown.classList.add('active');
-                btnSouth.classList.remove('active');
-            } else {
-                btnSouth.classList.add('active');
-                btnDowntown.classList.remove('active');
-            }
-            // 飞机位置稍微挪一下，避免出画 (保留当前，但为真实感微调Y)
-            // 不动也可，但适应不同地图视觉
-        }
-
-        // ----- 绘制暗黑模式地图 (仿高德地图配色) -----
-        function drawMapBackground() {
-            // 深色基底 (道路/陆地)
-            let grad = ctx.createLinearGradient(0, 0, 0, height);
-            grad.addColorStop(0, '#1a2b3c');
-            grad.addColorStop(0.7, '#0f1f2d');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, width, height);
-
-            // 网格线 / 路网 (暗光)
-            ctx.strokeStyle = 'rgba(80, 140, 210, 0.2)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < width; i += 45) {
-                ctx.beginPath();
-                ctx.moveTo(i, 0);
-                ctx.lineTo(i, height);
-                ctx.strokeStyle = 'rgba(60, 130, 200, 0.15)';
-                ctx.stroke();
-            }
-            for (let i = 0; i < height; i += 45) {
-                ctx.beginPath();
-                ctx.moveTo(0, i);
-                ctx.lineTo(width, i);
-                ctx.stroke();
-            }
-
-            // 河流 / 湖泊暗纹
-            ctx.fillStyle = 'rgba(0, 60, 100, 0.25)';
-            ctx.beginPath();
-            ctx.ellipse(800, 350, 180, 70, 0, 0, Math.PI*2);
-            ctx.fill();
-        }
-
-        // 绘制凡光城·城中 (高密度建筑, 暗黑地图配色)
-        function drawDowntownMap() {
-            // 地面/道路区域
-            ctx.fillStyle = '#1f3543';
-            ctx.fillRect(0, height-90, width, 90);
-
-            // 深色街区
-            for (let i=0; i<12; i++) {
-                let x = 40 + i*95;
-                let w = 65;
-                let h = 180 + Math.sin(i)*30;
-                ctx.fillStyle = '#172f40';
-                ctx.shadowColor = '#00000080';
-                ctx.shadowBlur = 12;
-                ctx.fillRect(x, height-90-h, w, h);
-                // 窗户 (亮但暗调)
-                ctx.shadowBlur = 0;
-                ctx.fillStyle = 'rgba(255, 210, 100, 0.4)';
-                for (let r=0; r<6; r++) {
-                    ctx.fillRect(x+10, height-90-h + 15 + r*22, 10, 8);
-                    ctx.fillRect(x+35, height-90-h + 15 + r*22, 10, 8);
-                }
-            }
-            // 地标高亮 (模拟地图兴趣点)
-            ctx.fillStyle = 'rgba(200, 180, 70, 0.3)';
-            ctx.beginPath();
-            ctx.arc(540, height-130, 40, 0, 2*Math.PI);
-            ctx.fill();
-            ctx.fillStyle = '#e0b060';
-            ctx.font = 'bold 16px "Segoe UI"';
-            ctx.shadowColor = '#000';
-            ctx.shadowBlur = 6;
-            ctx.fillText('⛲ 中心广场', 500, height-160);
-            ctx.shadowBlur = 0;
-        }
-
-        // 绘制凡光城·南 (更多绿地/水系, 暗黑模式)
-        function drawSouthMap() {
-            // 田地色块
-            ctx.fillStyle = '#1e3d32';
-            ctx.fillRect(0, height-120, width, 120);
-
-            // 不规则地块 (暗绿色)
-            ctx.fillStyle = '#255a44';
-            for (let f=0; f<8; f++) {
-                let x = f*130 + 15;
-                ctx.beginPath();
-                ctx.rect(x, height-150, 100, 60);
-                ctx.fillStyle = '#1f6045';
-                ctx.fill();
-            }
-
-            // 小湖泊 (半透明)
-            ctx.fillStyle = 'rgba(0, 70, 110, 0.5)';
-            ctx.beginPath();
-            ctx.ellipse(760, height-190, 120, 45, 0, 0, Math.PI*2);
-            ctx.fill();
-
-            // 树木图标 (高德风格小绿点)
-            for (let t=0; t<20; t++) {
-                let x = 40 + t*55;
-                let y = height-200 + (t%4)*14;
-                ctx.fillStyle = '#2f8a5e';
-                ctx.beginPath();
-                ctx.arc(x, y, 8, 0, 2*Math.PI);
-                ctx.fill();
-                ctx.fillStyle = '#907545';
-                ctx.beginPath();
-                ctx.arc(x-3, y-5, 4, 0, 2*Math.PI);
-                ctx.fill();
-            }
-
-            // 标注文字
-            ctx.font = 'bold 16px "Segoe UI"';
-            ctx.fillStyle = '#acd0b0';
-            ctx.shadowColor = '#000';
-            ctx.shadowBlur = 5;
-            ctx.fillText('🌾 南郊湿地', 800, height-200);
-            ctx.shadowBlur = 0;
-        }
-
-        // 绘制纸飞机 (全矢量, 暗夜中发光)
-        function drawPaperPlane() {
-            let px = plane.x;
-            let py = plane.y;
-            let angle = plane.angle;
-
-            ctx.save();
-            ctx.translate(px, py);
-            ctx.rotate(angle);
-            ctx.shadowColor = '#a0d0ff';
-            ctx.shadowBlur = 22;
-            ctx.lineWidth = 2.2;
-            // 主体 (白色半透明)
-            ctx.fillStyle = 'rgba(255, 255, 245, 0.95)';
-            ctx.strokeStyle = '#c0e2ff';
-            ctx.beginPath();
-            ctx.moveTo(20, 0);
-            ctx.lineTo(-12, -10);
-            ctx.lineTo(-4, 0);
-            ctx.lineTo(-12, 10);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-
-            // 尾焰/光晕 (专注感)
-            ctx.shadowBlur = 25;
-            ctx.fillStyle = 'rgba(255, 220, 100, 0.7)';
-            ctx.beginPath();
-            ctx.moveTo(-18, -4);
-            ctx.lineTo(-32, -8);
-            ctx.lineTo(-28, 0);
-            ctx.lineTo(-32, 8);
-            ctx.lineTo(-18, 4);
-            ctx.fill();
-            ctx.restore();
-
-            // 拖尾小点
-            ctx.fillStyle = 'rgba(200, 230, 255, 0.5)';
-            ctx.shadowBlur = 15;
-            for (let i=1; i<=3; i++) {
-                let tailX = plane.x - 18*i - 5;
-                let tailY = plane.y - 2*i + Math.sin(Date.now()*0.01 + i)*3;
-                ctx.beginPath();
-                ctx.arc(tailX, tailY, 5-i, 0, 2*Math.PI);
-                ctx.fill();
-            }
-            ctx.shadowBlur = 0;
-        }
-
-        // 更新飞机位置 (模拟气流)
-        function updatePlane() {
-            if (!paused) {
-                // 小幅波动
-                plane.wave += 0.02;
-                plane.vy += Math.sin(plane.wave) * 0.008;
-                // 边界柔滑反弹 (绝不掉出视线)
-                if (plane.y > height - 80) { plane.y = height - 85; plane.vy *= -0.7; }
-                if (plane.y < 70) { plane.y = 75; plane.vy *= -0.6; }
-
-                plane.x += plane.vx;
-                plane.y += plane.vy;
-
-                // 水平无限循环 (像高德地图漫游)
-                if (plane.x > width + 40) plane.x = -40;
-                if (plane.x < -50) plane.x = width + 30;
-
-                // 飞机仰角随速度微调
-                plane.angle = plane.vy * 0.6 + 0.1;
-            }
-        }
-
-        // 主渲染循环
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
-            drawMapBackground();
-
-            // 根据当前城市绘制不同地图
-            if (currentCity === 'downtown') {
-                drawDowntownMap();
-            } else {
-                drawSouthMap();
-            }
-
-            // 额外暗色覆盖层 (毛玻璃地图氛围)
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
-            ctx.fillRect(0, 0, width, height);
-
-            // 更新飞机位置并绘制
-            updatePlane();
-            drawPaperPlane();
-
-            requestAnimationFrame(animate);
-        }
-
-        // ---- 事件绑定 ----
-        startBtn.addEventListener('click', () => {
-            startTimer();
-        });
-
-        pauseBtn.addEventListener('click', () => {
-            pauseFlight();
-        });
-
-        resetBtn.addEventListener('click', () => {
-            resetFlight();
-        });
-
-        btnDowntown.addEventListener('click', () => {
-            setCity('downtown');
-        });
-
-        btnSouth.addEventListener('click', () => {
-            setCity('south');
-        });
-
-        // 初始化
-        updateTimerUI();
-        setCity('downtown');
-        animate();
-
-        // 可选: 暂停时不再更新倒计时，但飞机不移动由 pause 控制
-        // 飞机移动依赖 paused 标志
-    })();
+/* 防退出 */
+window.onbeforeunload = function(){
+    return "飞行中，确定离开？";
+}
 </script>
+
 </body>
 </html>
