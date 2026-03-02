@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CH凡光 · 手机优化版</title>
+  <title>CH凡光 · 音乐互动版</title>
   
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -25,6 +25,127 @@
       height: 100vh;
       width: 100vw;
       position: relative;
+      cursor: pointer; /* 鼠标变成手型，提示可点击 */
+    }
+
+    /* 整个页面作为一个大的点击区域 */
+    .music-trigger-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 20000; /* 最高层，但只拦截点击事件，不阻挡视觉 */
+      background: transparent;
+      cursor: pointer;
+      pointer-events: none; /* 默认不拦截事件，让下方内容可交互 */
+    }
+    
+    .music-trigger-area.active {
+      pointer-events: auto; /* 当需要唤起音乐时，激活拦截 */
+    }
+
+    /* 音乐提示浮层 */
+    .music-hint {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 3px solid #00ffff;
+      border-radius: 60px;
+      padding: 30px 60px;
+      z-index: 25000;
+      box-shadow: 0 0 100px rgba(0, 255, 255, 0.5);
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .music-hint.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .music-hint-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      animation: pulse 1.5s infinite;
+    }
+
+    .music-hint-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #00ffff;
+      text-shadow: 0 0 30px #00ffff;
+      letter-spacing: 4px;
+    }
+
+    .music-hint-sub {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: 15px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    /* 音乐状态指示器 - 吸顶栏右侧 */
+    .music-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(0, 255, 255, 0.15);
+      padding: 5px 15px;
+      border-radius: 30px;
+      border: 1px solid #00ffff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      margin-left: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto; /* 确保可以点击 */
+    }
+
+    .music-status:hover {
+      background: rgba(0, 255, 255, 0.3);
+      transform: scale(1.05);
+    }
+
+    .music-status.playing {
+      border-color: #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
+    }
+
+    .music-status-icon {
+      font-size: 20px;
+      animation: none;
+    }
+
+    .music-status.playing .music-status-icon {
+      animation: spin 3s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .music-status-text {
+      font-size: 14px;
+      color: #00ffff;
+      font-weight: 600;
+    }
+
+    .music-status.playing .music-status-text {
+      color: #ff00ff;
     }
 
     /* ===== 斜着摆放的苹果手机背景 ===== */
@@ -185,13 +306,13 @@
       filter: blur(3px);
     }
 
-    /* ===== 吸顶栏 - 修复版 ===== */
+    /* ===== 吸顶栏 ===== */
     .header {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 80px;
+      height: 70px;
       background: rgba(5, 10, 20, 0.95);
       backdrop-filter: blur(15px) saturate(200%);
       -webkit-backdrop-filter: blur(15px) saturate(200%);
@@ -201,33 +322,33 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 5vw;
+      padding: 0 4vw;
       pointer-events: auto;
     }
 
     .logo-container {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .tech-logo {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       background: rgba(0, 255, 255, 0.15);
       border-radius: 10px;
       border: 2px solid #00ffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 20px;
       color: #00ffff;
       box-shadow: 0 0 20px #00ffff;
     }
 
     .logo-text {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(18px, 3.5vw, 24px);
+      font-size: clamp(16px, 3vw, 22px);
       font-weight: 700;
       color: #fff;
       text-shadow: 0 0 10px #00ffff;
@@ -236,9 +357,9 @@
     .flower-text {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: rgba(0, 255, 255, 0.15);
-      padding: 6px 16px;
+      padding: 4px 12px;
       border-radius: 30px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 20px #00ffff;
@@ -246,21 +367,21 @@
 
     .ch-name {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(16px, 2.5vw, 20px);
+      font-size: clamp(14px, 2vw, 18px);
       font-weight: 700;
       color: #00ffff;
       text-shadow: 0 0 10px #00ffff;
     }
 
     .ch-decoration {
-      font-size: clamp(18px, 2.5vw, 22px);
+      font-size: clamp(16px, 2vw, 20px);
       filter: drop-shadow(0 0 8px #00ffff);
     }
 
     .header-right {
-      width: 50px;
-      color: rgba(0, 255, 255, 0.5);
-      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     /* ===== Swiper 主容器 ===== */
@@ -277,7 +398,8 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      padding-top: 80px;
+      padding-top: 70px;
+      padding-bottom: 60px;
     }
 
     /* ===== 无框内容样式 ===== */
@@ -287,31 +409,31 @@
       text-align: center;
       position: relative;
       z-index: 30;
-      padding: 20px;
-      margin-top: -40px;
+      padding: 15px;
+      margin-top: -20px;
     }
 
     .main-title {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(32px, 6vw, 52px);
+      font-size: clamp(28px, 5vw, 48px);
       font-weight: 800;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       color: #fff;
       text-shadow: 0 0 15px #00ffff;
     }
 
     .highlight {
       font-family: 'Orbitron', sans-serif;
-      font-size: clamp(40px, 8vw, 70px);
+      font-size: clamp(36px, 7vw, 65px);
       font-weight: 900;
       color: #00ffff;
       text-shadow: 0 0 20px #00ffff, 0 0 40px #ff00ff;
-      margin: 10px 0;
+      margin: 8px 0;
     }
 
     .sub-text {
-      font-size: clamp(18px, 3.5vw, 24px);
-      margin: 15px 0;
+      font-size: clamp(16px, 3vw, 22px);
+      margin: 12px 0;
       color: #fff;
       text-shadow: 0 0 10px #00ffff;
     }
@@ -320,12 +442,12 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-      margin: 20px 0;
+      gap: 12px;
+      margin: 15px 0;
     }
 
     .tag-item {
-      font-size: clamp(16px, 3vw, 20px);
+      font-size: clamp(15px, 2.8vw, 19px);
       color: #00ffff;
       text-shadow: 0 0 10px #00ffff;
       position: relative;
@@ -344,29 +466,29 @@
     }
 
     .list-text {
-      font-size: clamp(18px, 3vw, 22px);
-      margin: 10px 0;
+      font-size: clamp(16px, 2.8vw, 20px);
+      margin: 8px 0;
       color: #fff;
       text-shadow: 0 0 8px #00ffff;
     }
 
     .emoji-large {
-      font-size: clamp(50px, 9vw, 80px);
-      margin: 10px 0;
+      font-size: clamp(45px, 8vw, 70px);
+      margin: 8px 0;
       filter: drop-shadow(0 0 20px #00ffff);
       animation: float 3s infinite;
     }
 
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-8px); }
     }
 
     /* 返回主页按钮 */
     .back-home-btn {
       display: inline-block;
-      padding: 14px 40px;
-      font-size: clamp(20px, 4vw, 28px);
+      padding: 12px 35px;
+      font-size: clamp(18px, 3.5vw, 24px);
       font-weight: 700;
       color: #fff;
       background: linear-gradient(135deg, #00ffff, #0066ff);
@@ -375,34 +497,35 @@
       cursor: pointer;
       text-decoration: none;
       box-shadow: 0 0 40px #00ffff;
-      margin: 25px 0 15px;
+      margin: 20px 0 12px;
       font-family: 'Orbitron', sans-serif;
     }
 
-    /* Next按钮样式 */
+    /* NEXT按钮 */
     .next-btn {
       position: fixed;
-      bottom: 100px;
-      right: 20px;
+      bottom: 70px;
+      right: 12px;
       z-index: 10000 !important;
-      padding: 15px 30px;
-      background: rgba(0, 255, 255, 0.2);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 2px solid #00ffff;
-      border-radius: 40px;
+      padding: 8px 18px;
+      background: rgba(0, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid #00ffff;
+      border-radius: 30px;
       color: #00ffff;
       font-family: 'Orbitron', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      letter-spacing: 2px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
       cursor: pointer;
-      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
       transition: all 0.3s ease;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(20px);
+      transform: translateY(10px);
       pointer-events: auto;
+      line-height: 1;
     }
 
     .next-btn.visible {
@@ -414,7 +537,7 @@
     .next-btn:hover {
       background: #00ffff;
       color: #000;
-      box-shadow: 0 0 50px #00ffff;
+      box-shadow: 0 0 30px #00ffff;
     }
 
     .next-btn:active {
@@ -424,19 +547,20 @@
     /* 自动翻页提示 */
     .auto-slide-hint {
       position: fixed;
-      bottom: 160px;
-      right: 20px;
-      z-index: 10000;
-      color: rgba(0, 255, 255, 0.5);
-      font-size: 14px;
+      bottom: 110px;
+      right: 12px;
+      z-index: 9999;
+      color: rgba(0, 255, 255, 0.6);
+      font-size: 11px;
       background: rgba(0, 0, 0, 0.3);
-      padding: 5px 15px;
+      padding: 4px 12px;
       border-radius: 20px;
       border: 1px solid rgba(0, 255, 255, 0.2);
       backdrop-filter: blur(5px);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.3s;
+      letter-spacing: 0.5px;
     }
 
     .auto-slide-hint.visible {
@@ -446,14 +570,14 @@
     /* 底部版权信息 */
     .footer-copyright {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 0;
       width: 100%;
       text-align: center;
       z-index: 5000 !important;
-      color: rgba(0, 255, 255, 0.4);
-      font-size: clamp(11px, 2vw, 13px);
-      line-height: 1.5;
+      color: rgba(0, 255, 255, 0.3);
+      font-size: clamp(10px, 1.8vw, 12px);
+      line-height: 1.4;
       text-shadow: 0 0 8px rgba(0, 255, 255, 0.2);
       pointer-events: none;
     }
@@ -461,22 +585,37 @@
     /* 导航点样式 */
     .swiper-pagination {
       z-index: 2000 !important;
-      bottom: 60px !important;
+      bottom: 40px !important;
     }
 
     .swiper-pagination-bullet {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: rgba(0, 255, 255, 0.3);
       opacity: 1;
-      border-radius: 4px;
+      border-radius: 3px;
       transition: all 0.3s ease;
     }
 
     .swiper-pagination-bullet-active {
       background: #00ffff;
-      width: 20px;
+      width: 16px;
       box-shadow: 0 0 15px #00ffff;
+    }
+
+    /* 联系按钮 */
+    .contact-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      background: #00ffff;
+      color: #000;
+      border-radius: 30px;
+      font-weight: 600;
+      margin: 12px 0;
+      cursor: pointer;
+      font-size: 16px;
+      box-shadow: 0 0 20px #00ffff;
+      border: none;
     }
 
     /* 响应式 */
@@ -486,33 +625,100 @@
         height: 420px;
       }
       .next-btn {
-        bottom: 90px;
-        right: 15px;
-        padding: 12px 25px;
-        font-size: 18px;
+        bottom: 65px;
+        right: 10px;
+        padding: 6px 15px;
+        font-size: 12px;
       }
       .auto-slide-hint {
-        bottom: 150px;
-        right: 15px;
-        font-size: 12px;
+        bottom: 100px;
+        right: 10px;
+        font-size: 10px;
+        padding: 3px 10px;
+      }
+      .header {
+        height: 65px;
+      }
+      .music-hint {
+        padding: 20px 40px;
+      }
+      .music-hint-icon {
+        font-size: 60px;
+      }
+      .music-hint-text {
+        font-size: 28px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .next-btn {
+        bottom: 60px;
+        padding: 5px 12px;
+        font-size: 11px;
+        border-width: 1px;
+      }
+      .auto-slide-hint {
+        bottom: 95px;
+        font-size: 9px;
+      }
+      .music-hint {
+        padding: 15px 25px;
+        white-space: normal;
+        width: 80%;
+      }
+      .music-hint-icon {
+        font-size: 50px;
+      }
+      .music-hint-text {
+        font-size: 24px;
+      }
+      .music-hint-sub {
+        font-size: 16px;
       }
     }
 
     @media (max-width: 600px) {
-      .header-right {
-        display: none;
-      }
       .iphone-device {
-        opacity: 0.25;
+        opacity: 0.2;
       }
     }
 
     .swiper-slide {
       pointer-events: auto;
     }
+
+    /* 音乐激活时的特效 */
+    .music-active .header {
+      border-bottom-color: #ff00ff;
+      box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+    }
+    
+    .music-active .tech-logo {
+      border-color: #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
+    }
+    
+    .music-active .flower-text {
+      border-color: #ff00ff;
+      box-shadow: 0 0 20px #ff00ff;
+    }
+    
+    .music-active .ch-name {
+      color: #ff00ff;
+      text-shadow: 0 0 10px #ff00ff;
+    }
   </style>
 </head>
-<body>
+<body id="mainBody">
+  <!-- 音乐提示浮层 - 初始显示，引导点击 -->
+  <div class="music-hint show" id="musicHint">
+    <div class="music-hint-icon">🎵</div>
+    <div class="music-hint-text">碰一下这里</div>
+    <div class="music-hint-sub">唤醒音乐 · 开启氛围</div>
+  </div>
+
+  <!-- 整个页面作为点击区域（仅在需要时激活） -->
+  <div class="music-trigger-area" id="musicTrigger"></div>
 
   <!-- 斜着摆放的苹果手机背景 -->
   <div class="iphone-background">
@@ -539,7 +745,7 @@
   </div>
 
   <!-- 吸顶栏 -->
-  <header class="header">
+  <header class="header" id="header">
     <div class="logo-container">
       <div class="tech-logo">⚡</div>
       <span class="logo-text">SHADOW MOON</span>
@@ -549,14 +755,19 @@
       <span class="ch-name">CH凡光</span>
       <span class="ch-decoration">⚡</span>
     </div>
-    <div class="header-right">v4.0</div>
+    <div class="header-right">
+      <div class="music-status" id="musicStatus" onclick="toggleMusic(event)">
+        <span class="music-status-icon" id="musicIcon">🔇</span>
+        <span class="music-status-text" id="musicText">音乐</span>
+      </div>
+    </div>
   </header>
 
-  <!-- Next按钮（3秒后显示） -->
+  <!-- Next按钮 -->
   <div class="next-btn" id="nextBtn" onclick="nextSlide()">NEXT →</div>
   
   <!-- 自动翻页提示 -->
-  <div class="auto-slide-hint" id="autoSlideHint">自动翻页: 开启</div>
+  <div class="auto-slide-hint" id="autoSlideHint">⚡ 自动播放</div>
 
   <!-- Swiper 轮播 - 12页 -->
   <div class="swiper">
@@ -596,7 +807,7 @@
 
       <!-- 第3页：价格 -->
       <div class="swiper-slide">
-        <div class="content">
+   <div class="content">
           <div class="emoji-large">💰</div>
           <div class="highlight">¥1</div>
           <div class="sub-text">所有服务 统一价格</div>
@@ -654,8 +865,8 @@
           <div class="emoji-large">📊</div>
           <div class="main-title">小成绩</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size: 32px;">100+</span>
-            <span class="tag-item" style="font-size: 32px;">1K+</span>
+            <span class="tag-item" style="font-size: 28px;">100+</span>
+            <span class="tag-item" style="font-size: 28px;">1K+</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">项目经验</span>
@@ -670,8 +881,8 @@
           <div class="emoji-large">🏆</div>
           <div class="main-title">继续努力</div>
           <div class="tag-line">
-            <span class="tag-item" style="font-size: 32px;">5年</span>
-            <span class="tag-item" style="font-size: 32px;">99%</span>
+            <span class="tag-item" style="font-size: 28px;">5年</span>
+            <span class="tag-item" style="font-size: 28px;">99%</span>
           </div>
           <div class="tag-line">
             <span class="tag-item">从业经验</span>
@@ -703,7 +914,7 @@
         <div class="content">
           <div class="emoji-large">📱</div>
           <div class="main-title">我的快手</div>
-          <div class="highlight" style="font-size: clamp(24px, 4vw, 36px);">我的世界CH凡光</div>
+          <div class="highlight" style="font-size: clamp(22px, 3.8vw, 32px);">我的世界CH凡光</div>
           <div class="tag-line">
             <span class="tag-item">技术干货</span>
             <span class="tag-item">每日更新</span>
@@ -720,7 +931,7 @@
           <div class="list-text">📚 全程指导</div>
           <div class="list-text">🛡️ 专属支持</div>
           <div class="list-text">🚀 轻松上手</div>
-          <div class="contact-btn" style="display: inline-block; padding: 10px 25px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 15px 0; cursor: pointer;" onclick="alert('请联系客服微信: CHfanguang')">联系客服申请</div>
+          <button class="contact-btn" onclick="alert('📱 联系微信: CHfanguang\n⏰ 24小时在线')">联系客服申请</button>
         </div>
       </div>
 
@@ -729,9 +940,9 @@
         <div class="content">
           <div class="emoji-large">🏠</div>
           <div class="main-title">CH凡光</div>
-          <div class="highlight" style="font-size: clamp(26px, 4.5vw, 40px);">SHADOW MOON</div>
-          <a href="#" class="back-home-btn" onclick="window.location.reload()">返回首页</a>
-          <div class="small-text" style="margin-top: 15px;">下次见 👋</div>
+          <div class="highlight" style="font-size: clamp(24px, 4vw, 36px);">SHADOW MOON</div>
+          <button class="back-home-btn" onclick="window.location.reload()">返回首页</button>
+          <div class="small-text" style="margin-top: 12px; font-size: 14px; color: rgba(0,255,255,0.5);">下次见 👋</div>
         </div>
       </div>
 
@@ -742,8 +953,7 @@
 
   <!-- 底部版权信息 -->
   <div class="footer-copyright">
-    <p>Powerd by Shadow Moon</p>
-    <p>© CH凡光</p>
+    <p>Powered by Shadow Moon | © CH凡光</p>
   </div>
 
   <!-- 脚本 -->
@@ -753,7 +963,7 @@
       // 初始化 Swiper
       const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
-        loop: false,
+        loop: true,
         speed: 600,
         parallax: true,
         mousewheel: true,
@@ -765,7 +975,6 @@
         },
         on: {
           slideChange: function() {
-            // 当幻灯片改变时，重置自动翻页计时器
             resetAutoSlide();
           }
         }
@@ -779,41 +988,180 @@
       // 获取元素
       const nextBtn = document.getElementById('nextBtn');
       const autoSlideHint = document.getElementById('autoSlideHint');
+      const musicHint = document.getElementById('musicHint');
+      const musicTrigger = document.getElementById('musicTrigger');
+      const musicStatus = document.getElementById('musicStatus');
+      const musicIcon = document.getElementById('musicIcon');
+      const musicText = document.getElementById('musicText');
+      const mainBody = document.getElementById('mainBody');
       
-      // 3秒后显示 NEXT 按钮
+      // 音频对象
+      let audio = null;
+      let isMusicPlaying = false;
+      
+      // 创建音频（使用在线音乐，避免跨域问题）
+      function initAudio() {
+        if (audio) return;
+        
+        audio = new Audio();
+        // 使用一个免费的背景音乐（来自Freesound，需替换为实际可用的音乐）
+        // 这里使用一个在线测试音频（注意：实际使用时需要替换为有效的音乐URL）
+        audio.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+        audio.loop = true;
+        audio.volume = 0.4;
+        
+        // 音频事件监听
+        audio.addEventListener('play', function() {
+          console.log('音乐开始播放');
+          isMusicPlaying = true;
+          updateMusicUI();
+        });
+        
+        audio.addEventListener('pause', function() {
+          console.log('音乐暂停');
+          isMusicPlaying = false;
+          updateMusicUI();
+        });
+        
+        audio.addEventListener('ended', function() {
+          console.log('音乐结束');
+          isMusicPlaying = false;
+          updateMusicUI();
+        });
+        
+        audio.addEventListener('error', function(e) {
+          console.error('音频加载失败:', e);
+          // 如果加载失败，提示用户
+          alert('音乐加载失败，但您可以继续浏览页面');
+          hideMusicHint();
+        });
+      }
+
+      // 更新音乐UI
+      function updateMusicUI() {
+        if (isMusicPlaying) {
+          musicIcon.textContent = '🎵';
+          musicText.textContent = '音乐中';
+          musicStatus.classList.add('playing');
+          mainBody.classList.add('music-active');
+          
+          // 隐藏提示浮层
+          hideMusicHint();
+        } else {
+          musicIcon.textContent = '🔇';
+          musicText.textContent = '音乐';
+          musicStatus.classList.remove('playing');
+          mainBody.classList.remove('music-active');
+        }
+      }
+
+      // 隐藏音乐提示
+      function hideMusicHint() {
+        musicHint.classList.remove('show');
+        musicTrigger.classList.remove('active');
+      }
+
+      // 显示音乐提示
+      function showMusicHint() {
+        if (!isMusicPlaying) {
+          musicHint.classList.add('show');
+          musicTrigger.classList.add('active');
+        }
+      }
+
+      // 播放音乐
+      function playMusic() {
+        initAudio();
+        
+        if (audio) {
+          audio.play()
+            .then(() => {
+              console.log('音乐播放成功');
+              hideMusicHint();
+            })
+            .catch(error => {
+              console.log('音乐播放失败:', error);
+              // 如果失败，再次显示提示
+              showMusicHint();
+            });
+        }
+      }
+
+      // 暂停音乐
+      function pauseMusic() {
+        if (audio) {
+          audio.pause();
+        }
+      }
+
+      // 切换音乐
+      window.toggleMusic = function(event) {
+        if (event) {
+          event.stopPropagation();
+        }
+        
+        initAudio();
+        
+        if (isMusicPlaying) {
+          pauseMusic();
+        } else {
+          playMusic();
+        }
+      };
+
+      // 整个页面点击事件
+      musicTrigger.addEventListener('click', function() {
+        playMusic();
+      });
+
+      // 3秒后显示NEXT按钮
       setTimeout(() => {
         nextBtn.classList.add('visible');
+      }, 1500);
+
+      // 如果用户10秒内没点击音乐，强化提示
+      setTimeout(() => {
+        if (!isMusicPlaying) {
+          musicHint.classList.add('show');
+          musicTrigger.classList.add('active');
+          
+          // 添加一点动画强调
+          musicHint.style.animation = 'pulse 1s infinite';
+        }
       }, 3000);
 
       // 自动翻页相关
       let autoSlideInterval;
       let autoSlideTimeout;
-      const AUTO_SLIDE_DELAY = 5000; // 5秒后开始自动翻页
-      const AUTO_SLIDE_INTERVAL = 4000; // 每4秒翻一页
+      let isUserInteracting = false;
+      
+      const AUTO_SLIDE_DELAY = 4000;
+      const AUTO_SLIDE_INTERVAL = 4000;
 
-      // 开始自动翻页
       function startAutoSlide() {
         if (autoSlideInterval) {
           clearInterval(autoSlideInterval);
         }
         
-        // 显示提示
         autoSlideHint.classList.add('visible');
+        autoSlideHint.textContent = '⚡ 自动播放中';
         
-        // 设置自动翻页
         autoSlideInterval = setInterval(() => {
-          // 如果不是最后一页，就下一页；如果是最后一页，回到第一页
-          if (swiper.activeIndex === swiper.slides.length - 1) {
-            swiper.slideTo(0);
-          } else {
+          if (swiper.params.loop) {
             swiper.slideNext();
+          } else {
+            if (swiper.activeIndex === swiper.slides.length - 1) {
+              swiper.slideTo(0);
+            } else {
+              swiper.slideNext();
+            }
           }
         }, AUTO_SLIDE_INTERVAL);
       }
 
-      // 重置自动翻页
       function resetAutoSlide() {
-        // 清除现有的定时器
+        if (isUserInteracting) return;
+        
         if (autoSlideTimeout) {
           clearTimeout(autoSlideTimeout);
         }
@@ -821,50 +1169,56 @@
           clearInterval(autoSlideInterval);
           autoSlideInterval = null;
           autoSlideHint.classList.remove('visible');
+          autoSlideHint.textContent = '⚡ 自动播放';
         }
         
-        // 设置新的定时器
         autoSlideTimeout = setTimeout(() => {
           startAutoSlide();
         }, AUTO_SLIDE_DELAY);
       }
 
-      // 启动自动翻页计时
-      resetAutoSlide();
-
-      // 用户交互时重置自动翻页
-      swiper.on('touchStart', function() {
+      function userInteractionStart() {
+        isUserInteracting = true;
         resetAutoSlide();
-      });
+      }
 
-      // 鼠标进入幻灯片区域也重置（桌面端）
-      document.querySelector('.swiper').addEventListener('mouseenter', function() {
+      function userInteractionEnd() {
+        isUserInteracting = false;
         resetAutoSlide();
-      });
+      }
 
-      // 点击 NEXT 按钮时重置
+      swiper.on('touchStart', userInteractionStart);
+      swiper.on('touchEnd', userInteractionEnd);
+
+      document.querySelector('.swiper').addEventListener('mouseenter', userInteractionStart);
+      document.querySelector('.swiper').addEventListener('mouseleave', userInteractionEnd);
+
       nextBtn.addEventListener('click', function() {
-        resetAutoSlide();
+        userInteractionEnd();
       });
 
-      // 页面可见性变化时处理
       document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-          // 页面隐藏时清除所有定时器
           if (autoSlideTimeout) clearTimeout(autoSlideTimeout);
           if (autoSlideInterval) {
             clearInterval(autoSlideInterval);
             autoSlideInterval = null;
             autoSlideHint.classList.remove('visible');
+            autoSlideHint.textContent = '⚡ 自动播放';
           }
         } else {
-          // 页面重新可见时重置
+          isUserInteracting = false;
           resetAutoSlide();
         }
       });
 
-      // 音频播放（可选）- 由于浏览器限制，需要用户交互
-      console.log('页面加载完成 - 自动翻页功能已开启');
+      // 启动自动翻页
+      resetAutoSlide();
+
+      // 页面加载完成
+      window.addEventListener('load', function() {
+        console.log('页面加载完成 - 碰一下即可播放音乐');
+      });
       
     })();
   </script>
