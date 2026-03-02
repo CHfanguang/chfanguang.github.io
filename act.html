@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CH凡光 · 演示测试版</title>
+  <title>CH凡光 · 演示（贝塔）</title>
   
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -25,127 +25,46 @@
       height: 100vh;
       width: 100vw;
       position: relative;
-      cursor: pointer; /* 鼠标变成手型，提示可点击 */
     }
 
-    /* 整个页面作为一个大的点击区域 */
-    .music-trigger-area {
+    /* 整个页面作为点击区域 */
+    .music-trigger-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 20000; /* 最高层，但只拦截点击事件，不阻挡视觉 */
+      z-index: 500;
       background: transparent;
-      cursor: pointer;
-      pointer-events: none; /* 默认不拦截事件，让下方内容可交互 */
+      pointer-events: none; /* 默认不拦截，让内容可交互 */
     }
     
-    .music-trigger-area.active {
-      pointer-events: auto; /* 当需要唤起音乐时，激活拦截 */
-    }
-
-    /* 音乐提示浮层 */
-    .music-hint {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0, 255, 255, 0.2);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 3px solid #00ffff;
-      border-radius: 60px;
-      padding: 30px 60px;
-      z-index: 25000;
-      box-shadow: 0 0 100px rgba(0, 255, 255, 0.5);
-      text-align: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.5s ease;
-      pointer-events: none;
-      white-space: nowrap;
-    }
-
-    .music-hint.show {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .music-hint-icon {
-      font-size: 80px;
-      margin-bottom: 20px;
-      animation: pulse 1.5s infinite;
-    }
-
-    .music-hint-text {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 36px;
-      font-weight: 800;
-      color: #00ffff;
-      text-shadow: 0 0 30px #00ffff;
-      letter-spacing: 4px;
-    }
-
-    .music-hint-sub {
-      font-size: 20px;
-      color: rgba(255, 255, 255, 0.8);
-      margin-top: 15px;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.2); opacity: 0.8; }
-    }
-
-    /* 音乐状态指示器 - 吸顶栏右侧 */
-    .music-status {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      background: rgba(0, 255, 255, 0.15);
-      padding: 5px 15px;
-      border-radius: 30px;
-      border: 1px solid #00ffff;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-      margin-left: 10px;
+    .music-trigger-overlay.active {
+      pointer-events: auto; /* 仅在需要引导时激活，但我们现在去掉弹窗，所以这个可以简化 */
       cursor: pointer;
+    }
+
+    /* 极简音乐提示 - 几乎看不见，只留个影子 */
+    .music-mini-hint {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
+      color: rgba(0, 255, 255, 0.15);
+      font-size: 12px;
+      background: rgba(0, 0, 0, 0.1);
+      padding: 4px 10px;
+      border-radius: 20px;
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(0, 255, 255, 0.05);
+      pointer-events: none;
       transition: all 0.3s ease;
-      pointer-events: auto; /* 确保可以点击 */
     }
 
-    .music-status:hover {
-      background: rgba(0, 255, 255, 0.3);
-      transform: scale(1.05);
-    }
-
-    .music-status.playing {
-      border-color: #ff00ff;
-      box-shadow: 0 0 20px #ff00ff;
-    }
-
-    .music-status-icon {
-      font-size: 20px;
-      animation: none;
-    }
-
-    .music-status.playing .music-status-icon {
-      animation: spin 3s linear infinite;
-    }
-
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .music-status-text {
-      font-size: 14px;
-      color: #00ffff;
-      font-weight: 600;
-    }
-
-    .music-status.playing .music-status-text {
-      color: #ff00ff;
+    /* 音乐激活时的微弱提示 */
+    .music-mini-hint.playing {
+      color: rgba(255, 0, 255, 0.3);
+      border-color: rgba(255, 0, 255, 0.1);
     }
 
     /* ===== 斜着摆放的苹果手机背景 ===== */
@@ -379,9 +298,9 @@
     }
 
     .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      width: 40px;
+      color: rgba(0, 255, 255, 0.5);
+      font-size: 11px;
     }
 
     /* ===== Swiper 主容器 ===== */
@@ -639,45 +558,12 @@
       .header {
         height: 65px;
       }
-      .music-hint {
-        padding: 20px 40px;
-      }
-      .music-hint-icon {
-        font-size: 60px;
-      }
-      .music-hint-text {
-        font-size: 28px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .next-btn {
-        bottom: 60px;
-        padding: 5px 12px;
-        font-size: 11px;
-        border-width: 1px;
-      }
-      .auto-slide-hint {
-        bottom: 95px;
-        font-size: 9px;
-      }
-      .music-hint {
-        padding: 15px 25px;
-        white-space: normal;
-        width: 80%;
-      }
-      .music-hint-icon {
-        font-size: 50px;
-      }
-      .music-hint-text {
-        font-size: 24px;
-      }
-      .music-hint-sub {
-        font-size: 16px;
-      }
     }
 
     @media (max-width: 600px) {
+      .header-right {
+        display: none;
+      }
       .iphone-device {
         opacity: 0.2;
       }
@@ -686,39 +572,11 @@
     .swiper-slide {
       pointer-events: auto;
     }
-
-    /* 音乐激活时的特效 */
-    .music-active .header {
-      border-bottom-color: #ff00ff;
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
-    }
-    
-    .music-active .tech-logo {
-      border-color: #ff00ff;
-      box-shadow: 0 0 20px #ff00ff;
-    }
-    
-    .music-active .flower-text {
-      border-color: #ff00ff;
-      box-shadow: 0 0 20px #ff00ff;
-    }
-    
-    .music-active .ch-name {
-      color: #ff00ff;
-      text-shadow: 0 0 10px #ff00ff;
-    }
   </style>
 </head>
 <body id="mainBody">
-  <!-- 音乐提示浮层 - 初始显示，引导点击 -->
-  <div class="music-hint show" id="musicHint">
-    <div class="music-hint-icon">🎵</div>
-    <div class="music-hint-text">碰一下这里</div>
-    <div class="music-hint-sub">唤醒音乐 · 开启氛围</div>
-  </div>
-
-  <!-- 整个页面作为点击区域（仅在需要时激活） -->
-  <div class="music-trigger-area" id="musicTrigger"></div>
+  <!-- 极简音乐提示 - 几乎看不见 -->
+  <div class="music-mini-hint" id="musicMiniHint">♫ 碰一下试试</div>
 
   <!-- 斜着摆放的苹果手机背景 -->
   <div class="iphone-background">
@@ -745,7 +603,7 @@
   </div>
 
   <!-- 吸顶栏 -->
-  <header class="header" id="header">
+  <header class="header">
     <div class="logo-container">
       <div class="tech-logo">⚡</div>
       <span class="logo-text">SHADOW MOON</span>
@@ -755,12 +613,7 @@
       <span class="ch-name">CH凡光</span>
       <span class="ch-decoration">⚡</span>
     </div>
-    <div class="header-right">
-      <div class="music-status" id="musicStatus" onclick="toggleMusic(event)">
-        <span class="music-status-icon" id="musicIcon">🔇</span>
-        <span class="music-status-text" id="musicText">音乐</span>
-      </div>
-    </div>
+    <div class="header-right">v4.0</div>
   </header>
 
   <!-- Next按钮 -->
@@ -807,7 +660,7 @@
 
       <!-- 第3页：价格 -->
       <div class="swiper-slide">
-   <div class="content">
+        <div class="content">
           <div class="emoji-large">💰</div>
           <div class="highlight">¥1</div>
           <div class="sub-text">所有服务 统一价格</div>
@@ -908,8 +761,8 @@
           </div>
         </div>
       </div>
-
-      <!-- 第10页：快手账号 -->
+      
+<!-- 第10页：快手账号 -->
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">📱</div>
@@ -988,85 +841,47 @@
       // 获取元素
       const nextBtn = document.getElementById('nextBtn');
       const autoSlideHint = document.getElementById('autoSlideHint');
-      const musicHint = document.getElementById('musicHint');
-      const musicTrigger = document.getElementById('musicTrigger');
-      const musicStatus = document.getElementById('musicStatus');
-      const musicIcon = document.getElementById('musicIcon');
-      const musicText = document.getElementById('musicText');
+      const musicMiniHint = document.getElementById('musicMiniHint');
       const mainBody = document.getElementById('mainBody');
       
       // 音频对象
       let audio = null;
       let isMusicPlaying = false;
       
-      // 创建音频（使用在线音乐，避免跨域问题）
+      // 创建音频
       function initAudio() {
         if (audio) return;
         
         audio = new Audio();
-        // 使用一个免费的背景音乐（来自Freesound，需替换为实际可用的音乐）
-        // 这里使用一个在线测试音频（注意：实际使用时需要替换为有效的音乐URL）
+        // 使用一个免费的背景音乐
         audio.src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
         audio.loop = true;
-        audio.volume = 0.4;
+        audio.volume = 0.3;
         
-        // 音频事件监听
         audio.addEventListener('play', function() {
           console.log('音乐开始播放');
           isMusicPlaying = true;
-          updateMusicUI();
+          musicMiniHint.textContent = '♫ 音乐中';
+          musicMiniHint.classList.add('playing');
         });
         
         audio.addEventListener('pause', function() {
           console.log('音乐暂停');
           isMusicPlaying = false;
-          updateMusicUI();
+          musicMiniHint.textContent = '♫ 碰一下试试';
+          musicMiniHint.classList.remove('playing');
         });
         
         audio.addEventListener('ended', function() {
-          console.log('音乐结束');
           isMusicPlaying = false;
-          updateMusicUI();
+          musicMiniHint.textContent = '♫ 碰一下试试';
+          musicMiniHint.classList.remove('playing');
         });
         
         audio.addEventListener('error', function(e) {
-          console.error('音频加载失败:', e);
-          // 如果加载失败，提示用户
-          alert('音乐加载失败，但您可以继续浏览页面');
-          hideMusicHint();
+          console.log('音乐加载失败，但没关系');
+          // 失败了也不影响体验，啥也不做
         });
-      }
-
-      // 更新音乐UI
-      function updateMusicUI() {
-        if (isMusicPlaying) {
-          musicIcon.textContent = '🎵';
-          musicText.textContent = '音乐中';
-          musicStatus.classList.add('playing');
-          mainBody.classList.add('music-active');
-          
-          // 隐藏提示浮层
-          hideMusicHint();
-        } else {
-          musicIcon.textContent = '🔇';
-          musicText.textContent = '音乐';
-          musicStatus.classList.remove('playing');
-          mainBody.classList.remove('music-active');
-        }
-      }
-
-      // 隐藏音乐提示
-      function hideMusicHint() {
-        musicHint.classList.remove('show');
-        musicTrigger.classList.remove('active');
-      }
-
-      // 显示音乐提示
-      function showMusicHint() {
-        if (!isMusicPlaying) {
-          musicHint.classList.add('show');
-          musicTrigger.classList.add('active');
-        }
       }
 
       // 播放音乐
@@ -1077,58 +892,27 @@
           audio.play()
             .then(() => {
               console.log('音乐播放成功');
-              hideMusicHint();
             })
             .catch(error => {
-              console.log('音乐播放失败:', error);
-              // 如果失败，再次显示提示
-              showMusicHint();
+              console.log('音乐播放失败，可能需要再次点击');
+              // 失败了就保持提示不变
             });
         }
       }
 
-      // 暂停音乐
-      function pauseMusic() {
-        if (audio) {
-          audio.pause();
-        }
-      }
-
-      // 切换音乐
-      window.toggleMusic = function(event) {
-        if (event) {
-          event.stopPropagation();
-        }
-        
-        initAudio();
-        
-        if (isMusicPlaying) {
-          pauseMusic();
-        } else {
+      // 整个页面点击事件 - 碰一下唤起音乐
+      document.body.addEventListener('click', function() {
+        // 如果音乐没在播放，就尝试播放
+        if (!isMusicPlaying) {
           playMusic();
         }
-      };
-
-      // 整个页面点击事件
-      musicTrigger.addEventListener('click', function() {
-        playMusic();
+        // 如果已经在播放，就什么也不做（不暂停）
       });
 
       // 3秒后显示NEXT按钮
       setTimeout(() => {
         nextBtn.classList.add('visible');
       }, 1500);
-
-      // 如果用户10秒内没点击音乐，强化提示
-      setTimeout(() => {
-        if (!isMusicPlaying) {
-          musicHint.classList.add('show');
-          musicTrigger.classList.add('active');
-          
-          // 添加一点动画强调
-          musicHint.style.animation = 'pulse 1s infinite';
-        }
-      }, 3000);
 
       // 自动翻页相关
       let autoSlideInterval;
@@ -1217,10 +1001,12 @@
 
       // 页面加载完成
       window.addEventListener('load', function() {
-        console.log('页面加载完成 - 碰一下即可播放音乐');
+        console.log('页面加载完成 - 碰一下就能播放音乐，不碰也没关系');
       });
       
     })();
   </script>
 </body>
 </html>
+
+      
