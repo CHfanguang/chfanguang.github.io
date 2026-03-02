@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>CH凡光 · 演示bate</title>
+  <title>CH凡光 · 手机优化版</title>
   
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -185,7 +185,7 @@
       filter: blur(3px);
     }
 
-    /* ===== 吸顶栏 - 优化版 ===== */
+    /* ===== 吸顶栏 - 修复版 ===== */
     .header {
       position: fixed;
       top: 0;
@@ -197,11 +197,12 @@
       -webkit-backdrop-filter: blur(15px) saturate(200%);
       border-bottom: 2px solid #00ffff;
       box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-      z-index: 1000;
+      z-index: 9999 !important;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 5vw;
+      pointer-events: auto;
     }
 
     .logo-container {
@@ -267,7 +268,8 @@
       width: 100%;
       height: 100vh;
       position: relative;
-      z-index: 20;
+      z-index: 100;
+      margin-top: 0;
     }
 
     .swiper-slide {
@@ -275,6 +277,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      padding-top: 80px;
     }
 
     /* ===== 无框内容样式 ===== */
@@ -376,12 +379,12 @@
       font-family: 'Orbitron', sans-serif;
     }
 
-    /* ===== Next按钮样式 ===== */
+    /* Next按钮样式 */
     .next-btn {
       position: fixed;
       bottom: 100px;
       right: 20px;
-      z-index: 2000;
+      z-index: 10000 !important;
       padding: 15px 30px;
       background: rgba(0, 255, 255, 0.2);
       backdrop-filter: blur(15px);
@@ -399,6 +402,7 @@
       opacity: 0;
       visibility: hidden;
       transform: translateY(20px);
+      pointer-events: auto;
     }
 
     .next-btn.visible {
@@ -417,6 +421,28 @@
       transform: scale(0.95);
     }
 
+    /* 自动翻页提示 */
+    .auto-slide-hint {
+      position: fixed;
+      bottom: 160px;
+      right: 20px;
+      z-index: 10000;
+      color: rgba(0, 255, 255, 0.5);
+      font-size: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 5px 15px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .auto-slide-hint.visible {
+      opacity: 1;
+    }
+
     /* 底部版权信息 */
     .footer-copyright {
       position: fixed;
@@ -424,7 +450,7 @@
       left: 0;
       width: 100%;
       text-align: center;
-      z-index: 40;
+      z-index: 5000 !important;
       color: rgba(0, 255, 255, 0.4);
       font-size: clamp(11px, 2vw, 13px);
       line-height: 1.5;
@@ -433,6 +459,11 @@
     }
 
     /* 导航点样式 */
+    .swiper-pagination {
+      z-index: 2000 !important;
+      bottom: 60px !important;
+    }
+
     .swiper-pagination-bullet {
       width: 8px;
       height: 8px;
@@ -460,6 +491,11 @@
         padding: 12px 25px;
         font-size: 18px;
       }
+      .auto-slide-hint {
+        bottom: 150px;
+        right: 15px;
+        font-size: 12px;
+      }
     }
 
     @media (max-width: 600px) {
@@ -469,6 +505,10 @@
       .iphone-device {
         opacity: 0.25;
       }
+    }
+
+    .swiper-slide {
+      pointer-events: auto;
     }
   </style>
 </head>
@@ -514,6 +554,9 @@
 
   <!-- Next按钮（3秒后显示） -->
   <div class="next-btn" id="nextBtn" onclick="nextSlide()">NEXT →</div>
+  
+  <!-- 自动翻页提示 -->
+  <div class="auto-slide-hint" id="autoSlideHint">自动翻页: 开启</div>
 
   <!-- Swiper 轮播 - 12页 -->
   <div class="swiper">
@@ -677,7 +720,7 @@
           <div class="list-text">📚 全程指导</div>
           <div class="list-text">🛡️ 专属支持</div>
           <div class="list-text">🚀 轻松上手</div>
-          <div class="contact-btn" style="display: inline-block; padding: 10px 25px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 15px 0; cursor: pointer;">联系客服申请</div>
+          <div class="contact-btn" style="display: inline-block; padding: 10px 25px; background: #00ffff; color: #000; border-radius: 40px; font-weight: 700; margin: 15px 0; cursor: pointer;" onclick="alert('请联系客服微信: CHfanguang')">联系客服申请</div>
         </div>
       </div>
 
@@ -687,7 +730,7 @@
           <div class="emoji-large">🏠</div>
           <div class="main-title">CH凡光</div>
           <div class="highlight" style="font-size: clamp(26px, 4.5vw, 40px);">SHADOW MOON</div>
-          <a href="index.html" class="back-home-btn">返回主页</a>
+          <a href="#" class="back-home-btn" onclick="window.location.reload()">返回首页</a>
           <div class="small-text" style="margin-top: 15px;">下次见 👋</div>
         </div>
       </div>
@@ -707,25 +750,123 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
     (function() {
-      // 音频元素 - 进站自动播放
-      const audio = new Audio();
-      audio.src = 'https://music.163.com/song/media/outer/url?id=2608143525.mp3'; // 网易云外链
-      audio.loop = true;
-      audio.volume = 0.5;
+      // 初始化 Swiper
+      const swiper = new Swiper('.swiper', {
+        direction: 'horizontal',
+        loop: false,
+        speed: 600,
+        parallax: true,
+        mousewheel: true,
+        keyboard: true,
+        grabCursor: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        on: {
+          slideChange: function() {
+            // 当幻灯片改变时，重置自动翻页计时器
+            resetAutoSlide();
+          }
+        }
+      });
+
+      // Next 按钮功能
+      window.nextSlide = function() {
+        swiper.slideNext();
+      };
+
+      // 获取元素
+      const nextBtn = document.getElementById('nextBtn');
+      const autoSlideHint = document.getElementById('autoSlideHint');
       
-      // 尝试自动播放（大部分浏览器会阻止，需要用户交互，但我们会触发）
-      document.addEventListener('touchstart', function() {
-        audio.play().catch(e => console.log('等待用户交互'));
-      }, { once: true });
-      
-      // 额外尝试自动播放
+      // 3秒后显示 NEXT 按钮
       setTimeout(() => {
-        audio.play().catch(e => console.log('自动播放被阻止'));
-      }, 1000);
+        nextBtn.classList.add('visible');
+      }, 3000);
 
-      // ===== Swiper =====
-      if (window.mySwiper) window.mySwiper.destroy(true, true);
+      // 自动翻页相关
+      let autoSlideInterval;
+      let autoSlideTimeout;
+      const AUTO_SLIDE_DELAY = 5000; // 5秒后开始自动翻页
+      const AUTO_SLIDE_INTERVAL = 4000; // 每4秒翻一页
 
-      window.mySwiper = new Swiper('.swiper', {
-        autoplay: {
- 
+      // 开始自动翻页
+      function startAutoSlide() {
+        if (autoSlideInterval) {
+          clearInterval(autoSlideInterval);
+        }
+        
+        // 显示提示
+        autoSlideHint.classList.add('visible');
+        
+        // 设置自动翻页
+        autoSlideInterval = setInterval(() => {
+          // 如果不是最后一页，就下一页；如果是最后一页，回到第一页
+          if (swiper.activeIndex === swiper.slides.length - 1) {
+            swiper.slideTo(0);
+          } else {
+            swiper.slideNext();
+          }
+        }, AUTO_SLIDE_INTERVAL);
+      }
+
+      // 重置自动翻页
+      function resetAutoSlide() {
+        // 清除现有的定时器
+        if (autoSlideTimeout) {
+          clearTimeout(autoSlideTimeout);
+        }
+        if (autoSlideInterval) {
+          clearInterval(autoSlideInterval);
+          autoSlideInterval = null;
+          autoSlideHint.classList.remove('visible');
+        }
+        
+        // 设置新的定时器
+        autoSlideTimeout = setTimeout(() => {
+          startAutoSlide();
+        }, AUTO_SLIDE_DELAY);
+      }
+
+      // 启动自动翻页计时
+      resetAutoSlide();
+
+      // 用户交互时重置自动翻页
+      swiper.on('touchStart', function() {
+        resetAutoSlide();
+      });
+
+      // 鼠标进入幻灯片区域也重置（桌面端）
+      document.querySelector('.swiper').addEventListener('mouseenter', function() {
+        resetAutoSlide();
+      });
+
+      // 点击 NEXT 按钮时重置
+      nextBtn.addEventListener('click', function() {
+        resetAutoSlide();
+      });
+
+      // 页面可见性变化时处理
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+          // 页面隐藏时清除所有定时器
+          if (autoSlideTimeout) clearTimeout(autoSlideTimeout);
+          if (autoSlideInterval) {
+            clearInterval(autoSlideInterval);
+            autoSlideInterval = null;
+            autoSlideHint.classList.remove('visible');
+          }
+        } else {
+          // 页面重新可见时重置
+          resetAutoSlide();
+        }
+      });
+
+      // 音频播放（可选）- 由于浏览器限制，需要用户交互
+      console.log('页面加载完成 - 自动翻页功能已开启');
+      
+    })();
+  </script>
+</body>
+</html>
