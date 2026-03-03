@@ -380,30 +380,7 @@
       font-family: 'Orbitron', sans-serif;
     }
 
-    /* --- NEXT按钮已被完全移除 (原样式和HTML结构都已删除) --- */
-
-    /* 自动翻页提示 (保留，但位置略微调整因为没有了next按钮) */
-    .auto-slide-hint {
-      position: fixed;
-      bottom: 110px;
-      right: 12px;
-      z-index: 9999;
-      color: rgba(0, 255, 255, 0.6);
-      font-size: 11px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 4px 12px;
-      border-radius: 20px;
-      border: 1px solid rgba(0, 255, 255, 0.2);
-      backdrop-filter: blur(5px);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-      letter-spacing: 0.5px;
-    }
-
-    .auto-slide-hint.visible {
-      opacity: 1;
-    }
+    /* --- NEXT按钮和自动播放提示已被完全移除 (相关HTML和样式已删除) --- */
 
     /* 底部版权信息 */
     .footer-copyright {
@@ -461,13 +438,6 @@
       .iphone-device {
         width: 200px;
         height: 420px;
-      }
-      /* 移除了next按钮相关样式 */
-      .auto-slide-hint {
-        bottom: 100px;
-        right: 10px;
-        font-size: 10px;
-        padding: 3px 10px;
       }
       .header {
         height: 65px;
@@ -527,10 +497,7 @@
     <div class="header-right">v4.0</div>
   </header>
 
-  <!-- Next按钮已被完全移除，不再有对应的HTML元素 -->
-
-  <!-- 自动翻页提示 (保留) -->
-  <div class="auto-slide-hint" id="autoSlideHint">⚡ 自动播放</div>
+  <!-- 所有额外按钮（NEXT/自动播放提示）均已删除，只保留轮播和底部版权 -->
 
   <!-- Swiper 轮播 - 12页 -->
   <div class="swiper">
@@ -723,9 +690,8 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
     (function() {
-      // 初始化 Swiper - 保留自动翻页，移除所有与next按钮相关的代码
-const swiper = new 
-Swiper('.swiper', {
+      // 初始化 Swiper - 保留自动翻页，移除所有提示元素相关代码
+      const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
         loop: true,
         speed: 600,
@@ -744,7 +710,7 @@ Swiper('.swiper', {
         },
         on: {
           init: function() {
-            console.log('Swiper初始化成功 - 自动翻页已启用，NEXT按钮已移除');
+            console.log('Swiper初始化成功 - 自动翻页已启用 (所有文字提示已移除)');
           },
           slideChange: function() {
             // 可以在这里添加滑动变化时的回调
@@ -752,40 +718,12 @@ Swiper('.swiper', {
         }
       });
 
-      // 获取自动翻页提示元素
-      const autoSlideHint = document.getElementById('autoSlideHint');
-
-      // 显示自动翻页提示 (延迟出现)
-      setTimeout(() => {
-        if (autoSlideHint) {
-          autoSlideHint.classList.add('visible');
-        }
-      }, 3000);
-
       // 确保自动播放启动
       swiper.autoplay.start();
 
-      // 监听自动播放状态，更新提示文字
-      swiper.on('autoplayStart', function() {
-        if (autoSlideHint) {
-          autoSlideHint.textContent = '⚡ 自动播放中';
-        }
-      });
-
-      swiper.on('autoplayStop', function() {
-        if (autoSlideHint) {
-          autoSlideHint.textContent = '⚡ 暂停';
-        }
-      });
-
-      swiper.on('autoplay', function() {
-        // 每次自动翻页时触发
-        console.log('自动翻页到: ' + (swiper.realIndex + 1));
-      });
-
       // 页面加载完成
       window.addEventListener('load', function() {
-        console.log('页面加载完成 - 自动翻页正常工作');
+        console.log('页面加载完成 - 自动翻页正常工作，无任何额外提示');
       });
 
       // 触摸事件调试（可选）
