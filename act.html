@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CH凡光 · 演示</title>
-  
+
   <!-- 字体 & 框架 -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-  
+
   <style>
     /* ===== 全局重置 ===== */
     * {
@@ -380,50 +380,9 @@
       font-family: 'Orbitron', sans-serif;
     }
 
-    /* NEXT按钮 */
-    .next-btn {
-      position: fixed;
-      bottom: 70px;
-      right: 12px;
-      z-index: 10000 !important;
-      padding: 8px 18px;
-      background: rgba(0, 255, 255, 0.15);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1.5px solid #00ffff;
-      border-radius: 30px;
-      color: #00ffff;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      letter-spacing: 1px;
-      cursor: pointer;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-      transition: all 0.3s ease;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(10px);
-      pointer-events: auto;
-      line-height: 1;
-    }
+    /* --- NEXT按钮已被完全移除 (原样式和HTML结构都已删除) --- */
 
-    .next-btn.visible {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    .next-btn:hover {
-      background: #00ffff;
-      color: #000;
-      box-shadow: 0 0 30px #00ffff;
-    }
-
-    .next-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* 自动翻页提示 */
+    /* 自动翻页提示 (保留，但位置略微调整因为没有了next按钮) */
     .auto-slide-hint {
       position: fixed;
       bottom: 110px;
@@ -503,12 +462,7 @@
         width: 200px;
         height: 420px;
       }
-      .next-btn {
-        bottom: 65px;
-        right: 10px;
-        padding: 6px 15px;
-        font-size: 12px;
-      }
+      /* 移除了next按钮相关样式 */
       .auto-slide-hint {
         bottom: 100px;
         right: 10px;
@@ -573,16 +527,15 @@
     <div class="header-right">v4.0</div>
   </header>
 
-  <!-- Next按钮 -->
-  <div class="next-btn" id="nextBtn" onclick="nextSlide()">NEXT →</div>
-  
-  <!-- 自动翻页提示 -->
+  <!-- Next按钮已被完全移除，不再有对应的HTML元素 -->
+
+  <!-- 自动翻页提示 (保留) -->
   <div class="auto-slide-hint" id="autoSlideHint">⚡ 自动播放</div>
 
   <!-- Swiper 轮播 - 12页 -->
   <div class="swiper">
     <div class="swiper-wrapper">
-      
+
       <!-- 第1页：开场 -->
       <div class="swiper-slide">
         <div class="content">
@@ -749,7 +702,7 @@
       <div class="swiper-slide">
         <div class="content">
           <div class="emoji-large">🏠</div>
-          <div class="main-title">CH凡光</div>
+                  <div class="main-title">CH凡光</div>
           <div class="highlight" style="font-size: clamp(24px, 4vw, 36px);">SHADOW MOON</div>
           <button class="back-home-btn" onclick="window.location.reload()">返回首页</button>
           <div class="small-text" style="margin-top: 12px; font-size: 14px; color: rgba(0,255,255,0.5);">下次见 👋</div>
@@ -770,92 +723,17 @@
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
     (function() {
-      // 初始化 Swiper - 修复翻页功能
+      // 初始化 Swiper - 保留自动翻页，移除所有与next按钮相关的代码
       const swiper = new Swiper('.swiper', {
         direction: 'horizontal',
-        loop: true, // 开启循环模式，确保可以无限翻页
+        loop: true,
         speed: 600,
         parallax: true,
-        mousewheel: true, // 允许鼠标滚轮翻页
-        keyboard: true, // 允许键盘翻页
+        mousewheel: true,
+        keyboard: true,
         grabCursor: true,
         pagination: {
           el: '.swiper-pagination',
-          clickable: true, // 允许点击导航点翻页
+          clickable: true,
         },
         autoplay: {
-          delay: 4000,
-          disableOnInteraction: false, // 用户交互后不停止自动播放
-          pauseOnMouseEnter: true, // 鼠标悬停时暂停
-        },
-        on: {
-          init: function() {
-            console.log('Swiper初始化成功 - 翻页功能已修复');
-          },
-          slideChange: function() {
-            // 可以在这里添加滑动变化时的回调
-          }
-        }
-      });
-
-      // Next 按钮功能 - 确保点击后翻页
-      window.nextSlide = function() {
-        if (swiper) {
-          swiper.slideNext();
-          console.log('点击NEXT，翻到下一页');
-        }
-      };
-
-      // 获取元素
-      const nextBtn = document.getElementById('nextBtn');
-      const autoSlideHint = document.getElementById('autoSlideHint');
-      
-      // 1.5秒后显示NEXT按钮
-      setTimeout(() => {
-        if (nextBtn) {
-          nextBtn.classList.add('visible');
-        }
-      }, 1500);
-
-      // 显示自动翻页提示
-      setTimeout(() => {
-        if (autoSlideHint) {
-          autoSlideHint.classList.add('visible');
-        }
-      }, 3000);
-
-      // 手动控制自动翻页提示（与Swiper的autoplay同步）
-      swiper.autoplay.start(); // 确保自动播放启动
-      
-      // 监听自动播放状态
-      swiper.on('autoplayStart', function() {
-        if (autoSlideHint) {
-          autoSlideHint.textContent = '⚡ 自动播放中';
-        }
-      });
-      
-      swiper.on('autoplayStop', function() {
-        if (autoSlideHint) {
-          autoSlideHint.textContent = '⚡ 暂停';
-        }
-      });
-      
-      swiper.on('autoplay', function() {
-        // 每次自动翻页时触发
-        console.log('自动翻页到: ' + (swiper.realIndex + 1));
-      });
-
-      // 页面加载完成
-      window.addEventListener('load', function() {
-        console.log('页面加载完成 - 翻页功能正常工作');
-      });
-
-      // 触摸事件调试（如果需要）
-      document.querySelector('.swiper').addEventListener('touchstart', function() {
-        console.log('触摸开始');
-      });
-      
-    })();
-  </script>
-</body>
-</html>
