@@ -724,7 +724,8 @@
   <script>
     (function() {
       // 初始化 Swiper - 保留自动翻页，移除所有与next按钮相关的代码
-      const swiper = new Swiper('.swiper', {
+const swiper = new 
+Swiper('.swiper', {
         direction: 'horizontal',
         loop: true,
         speed: 600,
@@ -737,3 +738,62 @@
           clickable: true,
         },
         autoplay: {
+          delay: 4000,
+          disableOnInteraction: false, // 用户交互后不停止自动播放
+          pauseOnMouseEnter: true,
+        },
+        on: {
+          init: function() {
+            console.log('Swiper初始化成功 - 自动翻页已启用，NEXT按钮已移除');
+          },
+          slideChange: function() {
+            // 可以在这里添加滑动变化时的回调
+          }
+        }
+      });
+
+      // 获取自动翻页提示元素
+      const autoSlideHint = document.getElementById('autoSlideHint');
+
+      // 显示自动翻页提示 (延迟出现)
+      setTimeout(() => {
+        if (autoSlideHint) {
+          autoSlideHint.classList.add('visible');
+        }
+      }, 3000);
+
+      // 确保自动播放启动
+      swiper.autoplay.start();
+
+      // 监听自动播放状态，更新提示文字
+      swiper.on('autoplayStart', function() {
+        if (autoSlideHint) {
+          autoSlideHint.textContent = '⚡ 自动播放中';
+        }
+      });
+
+      swiper.on('autoplayStop', function() {
+        if (autoSlideHint) {
+          autoSlideHint.textContent = '⚡ 暂停';
+        }
+      });
+
+      swiper.on('autoplay', function() {
+        // 每次自动翻页时触发
+        console.log('自动翻页到: ' + (swiper.realIndex + 1));
+      });
+
+      // 页面加载完成
+      window.addEventListener('load', function() {
+        console.log('页面加载完成 - 自动翻页正常工作');
+      });
+
+      // 触摸事件调试（可选）
+      document.querySelector('.swiper').addEventListener('touchstart', function() {
+        console.log('触摸开始');
+      });
+
+    })();
+  </script>
+</body>
+</html>
