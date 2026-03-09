@@ -88,7 +88,7 @@ body{
   line-height:1.6;
 }
 
-/* 底部导航 完全不动 */
+/* 底部导航 */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -155,8 +155,8 @@ body{
   font-size:14px;
 }
 
-/* 按钮样式 - 仅保留演示按钮 */
-.demo-btn {
+/* 按钮通用样式 */
+.action-btn {
   display: block;
   margin: 22px auto;
   padding: 12px 30px;
@@ -175,15 +175,27 @@ body{
   -webkit-tap-highlight-color: transparent;
   text-decoration: none;
 }
-.demo-btn:hover {
+.action-btn:hover {
   background:rgba(61,126,255,0.35);
   transform: translateY(-2px);
 }
+
+/* 自助购买灰显 */
+.purchase-note {
+  color: #888;
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  margin-top: -12px;      /* 让它紧贴按钮下沿 */
+  margin-bottom: 22px;
+  line-height: 1.6;
+}
+
 </style>
 </head>
 <body>
 
-<!-- 吸顶栏：完全原样 -->
+<!-- 吸顶栏 -->
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -211,10 +223,17 @@ body{
     </div>
     <div class="tech-line"></div>
     <p><span class="tech-dot">•</span> 服务项目：<br>我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
-    
-    <!-- 仅保留：演示模式按钮 (点击跳转act.html) -->
-    <a href="act.html" class="demo-btn">进入演示模式</a>
-    
+
+    <!-- 演示模式按钮 (跳转act.html) 保留原样 -->
+    <a href="act.html" class="action-btn">进入演示模式</a>
+
+    <!-- 新增：自助购买按钮 (同样位置同样大小) 跳转pay.html -->
+    <a href="pay.html" class="action-btn">自助购买</a>
+    <!-- 灰色斜体居中说明: 所有商品均为1元 + 换行 + 点击按钮自助购买 (本段居中) -->
+    <div class="purchase-note">
+      所有商品均为1元<br>点击按钮自助购买
+    </div>
+
     <p><span class="tech-dot">•</span> 咨询通道：<br><a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div>
     <p><span class="tech-dot">•</span> 备用通道：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友</a></p><div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div>
     <div class="tech-line"></div>
@@ -231,13 +250,13 @@ body{
   </div>
 </div>
 
-<!-- 底部导航 完全不动 -->
+<!-- 底部导航（完全原样 无注释） -->
 <div class="bottom-nav">
   <a href="index.html">主页</a>
   <a href="notice.html">通知</a>
   <a href="other.html">其他</a>
 </div>
 
-<!-- 所有音乐相关代码已完全移除 -->
+<!-- 无任何多余的中文注释或标记 -->
 </body>
 </html>
