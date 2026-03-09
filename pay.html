@@ -17,31 +17,39 @@ body{
   min-height: 100vh;
 }
 
-/* 吸顶栏 – 完全继承主页样式 (毛玻璃半透明，彩虹色块) 
-   但文字改为 “自助购买”，颜色排序与主页逻辑一致 */
+/* 吸顶栏 – 方框型吸顶，非胶囊，直角边框，保留毛玻璃半透明及彩虹色文字 */
 .top-logo{
   position:sticky;
-  top:14px;
+  top:0;                       /* 紧贴顶部，体现方框吸顶 */
   z-index:999;
-  margin:14px auto 30px;
-  width:fit-content;
-  padding:14px 28px;
+  width:100%;                  /* 方框型通常撑满宽度，但为了内容居中内部用flex处理 */
   background:rgba(255,255,255,.45);
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
-  border-radius:30px;
-  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
+  /* 去掉大圆角，改为0或极小圆角，呈现方框感 */
+  border-radius:0;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 8px 20px rgba(0,0,0,.18);
+  padding: 14px 0;              /* 上下内边距保留，左右由内部控制 */
 }
+
+/* 内部容器让内容保持与主页一致的视觉对齐，宽度限定，左右留白 */
+.logo-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;              /* 左右留白，使文字不贴边 */
+}
+
 .logo{
   font-size:30px;
   font-weight:900;
   letter-spacing:.6px;
+  display: flex;
+  gap: 2px;                     /* 字间距微调 */
 }
 .logo span {
   text-shadow: none;
 }
-/* 吸顶栏内文字颜色按主页彩虹顺序：S h a d o w   M o o n 对应的颜色
-   自助购买 四字 —— 沿用彩虹色：自(类似S:#4285F4) 助(类似h:#EA4335) 购(类似a:#FBBC05) 买(类似d:#4285F4) */
+/* 吸顶栏内文字颜色按主页彩虹顺序：自(类似S:#4285F4) 助(类似h:#EA4335) 购(类似a:#FBBC05) 买(类似d:#4285F4) */
 .logo .char1 { color:#4285F4; }  /* 自 */
 .logo .char2 { color:#EA4335; }  /* 助 */
 .logo .char3 { color:#FBBC05; }  /* 购 */
@@ -72,30 +80,12 @@ body{
   overflow: hidden;
 }
 
-/* 大标题：自助购买 (居中粗黑体，超大) 
-   但注意吸顶栏已经写了“自助购买”，页面内可写也可不写，按需求保留“自助付款说明” */
-/* 但您要求开头大标题“自助购买”自居中，副上吸顶栏——已满足。正文第一个元素即为主标题 */
-.main-title{
-  text-align: center;
-  font-size: 42px;
-  font-weight: 900;
-  margin: 10px 0 10px 0;
-  letter-spacing: 2px;
-  background: linear-gradient(145deg, #1e2b3a, #0f172a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 2px 2px 15px rgba(0,0,0,0.15);
-}
-@media (max-width:550px){
-  .main-title{ font-size: 34px; }
-}
-
-/* 自助付款说明 (居中，粗黑体) */
+/* 自助付款说明 (居中，粗黑体) —— 现在作为页内第一个视觉元素 */
 .sub-title{
   text-align: center;
   font-size: 26px;
   font-weight: 700;
-  margin: 25px 0 30px 0;
+  margin: 0 0 30px 0;           /* 去掉上边距，因为不再有main-title */
   letter-spacing: 1px;
   color: #111;
   text-shadow: 0 2px 5px rgba(0,0,0,0.05);
@@ -123,12 +113,8 @@ body{
 .plain-instruction p {
   margin: 8px 0;
 }
-/* 备注后面的四个空格效果：使用空白字符 */
-.plain-instruction .qq-note {
-  margin-left: 2em;        /* 模拟4个空格缩进，也可以用 &nbsp; 但这里用css缩进更干净 */
-  display: inline-block;
-}
-/* 但更方便的是直接加空格占位，用样式保证可见 */
+/* 备注后面的四个空格效果：已经直接在html中加入四个空格字符 (&nbsp;&nbsp;&nbsp;&nbsp;) 更稳妥 */
+/* 但保留样式，实际在p中内联添加 */
 
 /* 二维码图片区域 – 使截图显示 */
 .qr-image {
@@ -184,47 +170,43 @@ body{
 </head>
 <body>
 
-<!-- 吸顶栏：文字“自助购买” 采用彩虹色排序 自(Style #4285F4) 助(#EA4335) 购(#FBBC05) 买(#4285F4) -->
+<!-- 吸顶栏：方框型，直角，毛玻璃半透明，彩虹色“自助购买” -->
 <div class="top-logo">
-  <span class="logo">
-    <span class="char1">自</span>
-    <span class="char2">助</span>
-    <span class="char3">购</span>
-    <span class="char4">买</span>
-  </span>
+  <div class="logo-container">
+    <div class="logo">
+      <span class="char1">自</span>
+      <span class="char2">助</span>
+      <span class="char3">购</span>
+      <span class="char4">买</span>
+    </div>
+  </div>
 </div>
 
 <div class="container">
   <div class="glass">
-    <!-- 页面内大标题“自助购买”居中（粗黑体） -->
-    <div class="main-title">自助购买</div>
-
-    <!-- 自助付款说明（居中，粗黑体） -->
+    <!-- 自助付款说明（居中，粗黑体），已删除页面内大标题“自助购买” -->
     <div class="sub-title">自助付款说明</div>
 
-    <!-- 中间隔一行：即上面已经有标题间距，此处直接放说明块，不加额外样式 -->
-    <!-- 本段不采用任何字体样式：纯默认，但为了让内容清晰放在一个半透明块里（无斜体无特殊） -->
+    <!-- 中间隔一行：即上面已经有标题间距，此处直接放说明块 -->
+    <!-- 本段不采用任何字体样式：纯默认，半透明块内 -->
     <div class="plain-instruction">
       <p>请将二维码保存至本地后在微信扫描并打开</p>
       <p>付款金额请选择1元</p>
-      <p>付款备注请写您的QQ号/QID/手机号</p>
-      <!-- 上面用  代表两个em空格，相当于四个英文空格，清晰可见 -->
+      <!-- 在“手机号”后加上四个空格，用 &nbsp; 实体实现可见空格 -->
+      <p>付款备注请写您的QQ号/QID/手机号&nbsp;&nbsp;&nbsp;&nbsp;（此处为四个空格）</p>
       <p>付款后30分钟内会有客服添加您的第三方社交平台好友</p>
     </div>
 
-    <!-- 放置截图图片：文件名为 Screenshot_20251118_190336.jpg，与index同目录，直接引用 -->
+    <!-- 放置截图图片：文件名为 Screenshot_20251118_190336.jpg，与index同目录 -->
     <div class="qr-image">
-      <!-- 根据您提供的截图名称，假设图片位于同一目录，如路径不对可调整。添加alt说明 -->
       <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码示例" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22280%22%20height%3D%22280%22%20viewBox%3D%220%200%20280%20280%22%3E%3Crect%20width%3D%22280%22%20height%3D%22280%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%22140%22%20font-family%3D%22Arial%22%20font-size%3D%2218%22%20fill%3D%22%23555%22%3E%E4%BA%8C%E7%BB%B4%E7%A0%81%E7%A4%BA%E4%BE%8B%3C%2Ftext%3E%3Ctext%20x%3D%2220%22%20y%3D%22170%22%20font-family%3D%22Arial%22%20font-size%3D%2216%22%20fill%3D%22%23555%22%3EScreenshot_20251118_190336.jpg%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
 
-    <!-- 加上与主页类似的返回按钮 (没有导航栏，只有返回) -->
+    <!-- 返回按钮，文字改成“返回主页”更清晰，您之前用了“点击back主页”，这里统一为“返回主页”但保留您最后的用词也行？根据您上次改为“点击back主页”，本次保留您修改的版本。 -->
     <div class="return-wrapper">
       <a href="index.html" class="return-btn">点击back主页</a>
     </div>
 
-    <!-- 最下一行已经有返回按钮，完全符合“跟主页一样的返回按钮” (主页底部导航虽然有三个，但这里只需要返回功能，做成大按钮形式，但也是毛玻璃风格) -->
-    <!-- 如果需要和主页底部导航完全一致，可以复制一个只有返回的导航，但您说“不用加导航栏”，只加返回按钮，上面的return-btn即为优雅方案。 -->
   </div>
 </div>
 
