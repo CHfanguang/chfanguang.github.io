@@ -69,11 +69,11 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* 内容毛玻璃卡片，与主页glass一致 */
+/* ========= 调整毛玻璃：更透明、更薄 (降低背景不透明度、减弱模糊强度) ========= */
 .glass{
-  background:rgba(255,255,255,.45);
-  backdrop-filter:blur(30px) saturate(220%);
-  -webkit-backdrop-filter:blur(30px) saturate(220%);
+  background:rgba(255,255,255,0.2);      /* 更透明：从0.45 -> 0.2 */
+  backdrop-filter:blur(12px) saturate(180%);  /* 更薄：模糊从30px降到12px */
+  -webkit-backdrop-filter:blur(12px) saturate(180%);
   border-radius:28px;
   padding:30px;
   line-height:1.7;
@@ -118,13 +118,13 @@ body{
 /* 修正说明文字：去掉多余的“此处为四个空格”的提示，只保留实际需要的空格 */
 /* 空格在html中用四个&nbsp;实现，后面不加注释文字 */
 
-/* 二维码图片区域 */
+/* ========= 二维码图片区域：图片放大 (max-width 从280px -> 380px) ========= */
 .qr-image {
   text-align: center;
   margin: 30px 0 40px;
 }
 .qr-image img {
-  max-width: 280px;
+  max-width: 380px;          /* 从280px放大到380px，更大更醒目 */
   width: 100%;
   height: auto;
   border-radius: 28px;
@@ -189,6 +189,7 @@ body{
 </div>
 
 <div class="container">
+  <!-- glass 已调整为更透明、模糊更薄 -->
   <div class="glass">
     <!-- 自助付款说明（居中，粗黑体） -->
     <div class="sub-title">自助付款说明</div>
@@ -202,9 +203,9 @@ body{
       <p>付款后30分钟内会有客服添加您的第三方社交平台好友</p>
     </div>
 
-    <!-- 截图图片：Screenshot_20251118_190336.jpg -->
+    <!-- 截图图片：Screenshot_20251118_190336.jpg  图片尺寸已放大 -->
     <div class="qr-image">
-      <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22280%22%20height%3D%22280%22%20viewBox%3D%220%200%20280%20280%22%3E%3Crect%20width%3D%22280%22%20height%3D%22280%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%22140%22%20font-family%3D%22Arial%22%20font-size%3D%2218%22%20fill%3D%22%23555%22%3E二维码示例%3C%2Ftext%3E%3C%2Fsvg%3E';">
+      <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22380%22%20height%3D%22380%22%20viewBox%3D%220%200%20380%20380%22%3E%3Crect%20width%3D%22380%22%20height%3D%22380%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%22190%22%20font-family%3D%22Arial%22%20font-size%3D%2222%22%20fill%3D%22%23555%22%3E二维码示例%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
 
     <!-- 返回按钮 -->
