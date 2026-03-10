@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHFG社区 · 登录</title>
+    <title>CHFG社区 · 开始</title>
     <style>
         * {
             margin: 0;
@@ -65,6 +65,29 @@
             border-radius: 20px;
             padding: 40px 30px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        /* 欢迎文字 */
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .welcome-subtitle span {
+            color: #28a745;
+            font-weight: 600;
         }
         
         h2 {
@@ -190,10 +213,43 @@
         .admin-link a {
             color: #667eea;
             text-decoration: none;
+            cursor: pointer;
         }
         
         .admin-link a:hover {
             text-decoration: underline;
+        }
+
+        /* IP检测提示 */
+        .ip-check {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f0f9ff;
+            border-radius: 10px;
+            color: #0369a1;
+            font-size: 14px;
+        }
+        
+        .ip-check.loading {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .ip-check.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* 管理员密码提示 */
+        .admin-note {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -205,6 +261,15 @@
 
     <div class="container">
         <div class="card">
+            <!-- 欢迎文字 -->
+            <div class="welcome-text">
+                <div class="welcome-title">点击进入CHFG社区</div>
+                <div class="welcome-subtitle">现在开始您的探索之旅吧 <span>√</span></div>
+            </div>
+            
+            <!-- IP检测提示区 -->
+            <div id="ipCheckMessage" class="ip-check loading">正在检测登录状态...</div>
+            
             <!-- 标签切换 -->
             <div class="tab-bar">
                 <div class="tab active" onclick="switchTab('login')">登录</div>
@@ -236,11 +301,14 @@
             
             <!-- 管理员注册链接 -->
             <div class="admin-link">
-                <a href="#" onclick="showAdminRegister()">管理员/社区长注册入口</a>
+                <a onclick="showAdminRegister()">管理员/社区长注册入口</a>
             </div>
             
             <!-- 管理员注册表单 -->
             <div id="adminRegisterForm" class="hidden" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+                <div class="admin-note">
+                    管理员密码请联系社区长获取，社区长初始密码请联系系统管理员
+                </div>
                 <div class="form-group">
                     <label>管理员用户名</label>
                     <input type="text" id="adminUsername" placeholder="请输入用户名">
@@ -253,11 +321,7 @@
                     <label>管理员密码</label>
                     <input type="password" id="adminPassword" placeholder="请输入管理员密码">
                 </div>
-                <div class="email-hint">
-                    社区长密码：chfanguang081205<br>
-                    管理员密码：chfanguangfs, chfanguangglz, chfanguangglchan, chfanguangcnmwcnm, chfanguangvwws
-                </div>
-                <button class="btn" onclick="registerAdmin()" style="margin-top: 10px;">管理员注册</button>
+                <button class="btn" onclick="registerAdmin()" style="margin-top: 10px;">提交申请</button>
             </div>
             
             <!-- 提示消息 -->
@@ -268,7 +332,44 @@
         // ============ 数据存储 ============
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         let pendingRegistrations = JSON.parse(localStorage.getItem('pendingRegistrations') || '[]');
-        let currentUser = null;
+        let adminApplications = JSON.parse(localStorage.getItem('adminApplications') || '[]');
+        
+        // 获取客户端IP（模拟）
+        function getClientIp() {
+            let ip = localStorage.getItem('clientIp');
+            if (!ip) {
+                ip = '127.0.0.' + Math.floor(Math.random() * 255);
+                localStorage.setItem('clientIp', ip);
+            }
+            return ip;
+        }
+
+        // 检测IP是否已登录
+        function checkIpLogin() {
+            const ip = getClientIp();
+            const ipCheckDiv = document.getElementById('ipCheckMessage');
+            
+            // 查找该IP对应的已登录用户
+            const loggedUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            if (loggedUser) {
+                // 检查这个用户是否真的是这个IP注册的
+                const user = users.find(u => u.username === loggedUser.username);
+                if (user && user.ip === ip) {
+                    ipCheckDiv.className = 'ip-check success';
+                    ipCheckDiv.innerHTML = '检测到您已登录，正在跳转...';
+                    
+                    // 2秒后自动跳转
+                    setTimeout(() => {
+                        window.location.href = 'community-main.html';
+                    }, 2000);
+                    return;
+                }
+            }
+            
+            ipCheckDiv.className = 'ip-check';
+            ipCheckDiv.innerHTML = '未检测到登录状态，请登录或注册';
+        }
 
         // 验证邮箱后缀
         function validateEmail(email) {
@@ -306,6 +407,7 @@
         // 登录
         function login() {
             const email = document.getElementById('loginEmail').value.trim();
+            const ip = getClientIp();
             
             if (!email) {
                 showMessage('请输入邮箱', 'error');
@@ -323,15 +425,24 @@
                 return;
             }
             
+            // 更新IP（如果换了设备）
+            user.ip = ip;
+            localStorage.setItem('users', JSON.stringify(users));
+            
             // 登录成功，保存状态并跳转
             localStorage.setItem('currentUser', JSON.stringify(user));
-            window.location.href = 'community-main.html';
+            showMessage('登录成功，正在跳转...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'community-main.html';
+            }, 1500);
         }
 
         // 普通用户注册
         function register() {
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
+            const ip = getClientIp();
             
             if (!username || !email) {
                 showMessage('请填写完整信息', 'error');
@@ -355,11 +466,18 @@
                 return;
             }
             
+            // 检查IP是否已注册
+            if (users.some(u => u.ip === ip)) {
+                showMessage('该IP已注册过账号', 'error');
+                return;
+            }
+            
             // 添加到待审核列表
             pendingRegistrations.push({
                 id: Date.now(),
                 username,
                 email,
+                ip,
                 type: 'user',
                 status: 'pending',
                 created_at: new Date().toISOString()
@@ -374,11 +492,12 @@
             document.getElementById('regEmail').value = '';
         }
 
-        // 管理员注册
+        // 管理员注册申请
         function registerAdmin() {
             const username = document.getElementById('adminUsername').value.trim();
             const email = document.getElementById('adminEmail').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
+            const ip = getClientIp();
             
             if (!username || !email || !password) {
                 showMessage('请填写完整信息', 'error');
@@ -387,19 +506,6 @@
             
             if (!validateEmail(email)) {
                 showMessage('仅支持QQ邮箱(@qq.com)和Outlook邮箱(@outlook.com)', 'error');
-                return;
-            }
-            
-            // 验证管理员密码
-            let role = null;
-            if (password === 'chfanguang081205') {
-                role = 'community_leader';
-            } else if (['chfanguangfs', 'chfanguangglz', 'chfanguangglchan', 'chfanguangcnmwcnm', 'chfanguangvwws'].includes(password)) {
-                role = 'admin';
-            }
-            
-            if (!role) {
-                showMessage('管理员密码错误', 'error');
                 return;
             }
             
@@ -415,18 +521,26 @@
                 return;
             }
             
-            // 创建管理员用户
-            const newUser = {
+            // 检查IP是否已注册
+            if (users.some(u => u.ip === ip)) {
+                showMessage('该IP已注册过账号', 'error');
+                return;
+            }
+            
+            // 添加到管理员申请列表（等待审核）
+            adminApplications.push({
+                id: Date.now(),
                 username,
                 email,
-                role,
-                banned: 0,
+                ip,
+                password, // 密码会传给后端验证，这里只是临时存储
+                status: 'pending',
                 created_at: new Date().toISOString()
-            };
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
+            });
             
-            showMessage('管理员注册成功，请登录', 'success');
+            localStorage.setItem('adminApplications', JSON.stringify(adminApplications));
+            
+            showMessage('管理员申请已提交，请等待社区长审核', 'success');
             
             // 清空表单
             document.getElementById('adminUsername').value = '';
@@ -448,11 +562,12 @@
         function checkLogin() {
             const user = localStorage.getItem('currentUser');
             if (user) {
-                window.location.href = 'community-main.html';
+                // 不立即跳转，让IP检测来处理
             }
         }
 
         // 初始化
+        checkIpLogin();
         checkLogin();
     </script>
 </body>
