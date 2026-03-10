@@ -365,3 +365,164 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+    <script>
+        // ============ 数据存储 ============
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // 社区长专属邮箱
+        const LEADER_EMAIL = 'chfanguang@outlook.com';
+        
+        // 获取客户端IP（模拟）
+        function getClientIp() {
+            let ip = localStorage.getItem('clientIp');
+            if (!ip) {
+                ip = '127.0.0.' + Math.floor(Math.random() * 255);
+                localStorage.setItem('clientIp', ip);
+            }
+            return ip;
+        }
+
+        // 检测IP是否已登录
+        function checkIpLogin() {
+            const ip = getClientIp();
+            const ipCheckDiv = document.getElementById('ipCheckMessage');
+            
+            if (currentUser) {
+                const user = users.find(u => u.username === currentUser.username);
+                if (user && user.ip === ip) {
+                    ipCheckDiv.className = 'ip-check success';
+                    ipCheckDiv.innerHTML = '检测到您已登录，正在跳转...';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'chfg.html';
+                    }, 2000);
+                    return;
+                }
+            }
+            
+            ipCheckDiv.className = 'ip-check';
+            ipCheckDiv.innerHTML = '未检测到登录状态，请登录或注册';
+        }
+
+        // 切换标签
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+            } else {
+                document.getElementById('registerForm').classList.remove('hidden');
+            }
+            
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // 登录
+        function login() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const ip = getClientIp();
+            
+            if (!email) {
+                showMessage('请输入邮箱', 'error');
+                return;
+            }
+            
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                showMessage('用户不存在', 'error');
+                return;
+            }
+            
+            if (user.banned) {
+                showMessage('账号已被封禁', 'error');
+                return;
+            }
+            
+            // 更新IP
+            user.ip = ip;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 保存登录状态
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            showMessage('登录成功，正在跳转...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'chfg.html';
+            }, 1500);
+        }
+
+        // 注册
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const ip = getClientIp();
+            
+            if (!username || !email) {
+                showMessage('请填写完整信息', 'error');
+                return;
+            }
+            
+            // 检查邮箱是否已注册
+            if (users.some(u => u.email === email)) {
+                showMessage('该邮箱已注册', 'error');
+                return;
+            }
+            
+            // 检查用户名是否已存在
+            if (users.some(u => u.username === username)) {
+                showMessage('用户名已存在', 'error');
+                return;
+            }
+            
+            // 检查IP是否已注册
+            if (users.some(u => u.ip === ip)) {
+                showMessage('该IP已注册过账号', 'error');
+                return;
+            }
+            
+            // 判断是否为社区长
+            const role = (email === LEADER_EMAIL) ? 'community_leader' : 'user';
+            
+            // 创建新用户
+            const newUser = {
+                username,
+                email,
+                ip,
+                role,
+                banned: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 自动登录
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            showMessage('注册成功，正在跳转...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'chfg.html';
+            }, 1500);
+        }
+
+        // 显示消息
+        function showMessage(text, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = text;
+            msgDiv.className = `message ${type}`;
+            msgDiv.style.display = 'block';
+        }
+
+        // 初始化
+        checkIpLogin();
+    </script>
+</body>
+</html>
