@@ -118,21 +118,26 @@ body{
 /* 修正说明文字：去掉多余的“此处为四个空格”的提示，只保留实际需要的空格 */
 /* 空格在html中用四个&nbsp;实现，后面不加注释文字 */
 
-/* ========= 二维码图片区域：图片放大 (max-width 从280px -> 380px) ========= */
+/* ========= 二维码图片区域：图片进一步扩大，并添加青色边框 ========= */
 .qr-image {
   text-align: center;
   margin: 30px 0 40px;
 }
 .qr-image img {
-  max-width: 380px;          /* 从280px放大到380px，更大更醒目 */
+  max-width: 450px;          /* 从380px进一步扩大到450px，更大更醒目 */
   width: 100%;
   height: auto;
   border-radius: 28px;
   box-shadow: 0 20px 35px rgba(0,0,0,0.25), inset 0 1px 4px rgba(255,255,255,0.6);
   background: white;
   padding: 12px;
-  border: 1px solid rgba(255,255,255,0.5);
+  /* 青色边框：亮青色 #00e5ff，稍粗一些 4px 更明显 */
+  border: 4px solid #00e5ff;  
   backdrop-filter: blur(2px);
+  transition: transform 0.2s ease; /* 加个微动效 */
+}
+.qr-image img:hover {
+  transform: scale(1.02);      /* 悬停轻微放大，增加互动 */
 }
 
 /* 返回按钮 – 完全模仿主页底部导航中的单个按钮风格 */
@@ -162,16 +167,21 @@ body{
   background: rgba(255,255,255,0.6);
 }
 
-/* 底部 powerd by 区域 (完全模仿主页的footer) */
+/* ========= 底部 powerd by 区域 - 完全匹配主页颜色 (#888 更淡灰色，符合主页风格) ========= */
 .footer {
   text-align: center;
-  margin: 60px 0 20px;          /* 与卡片拉开距离，但还在glass内部？根据设计，footer通常放在glass内最下 */
-  color: #555;
+  margin: 60px 0 20px;
+  color: #888;                /* 从 #555 修正为 #888，与主页完全一致 */
   font-size: 14px;
   line-height: 1.6;
+  font-weight: 400;           /* 确保字重正常，不粗不细 */
+  opacity: 0.9;               /* 微微透一点，和主页footer感觉一样 */
 }
 
-/* 但主页的footer是在glass内部最下方，我们在glass内添加即可 */
+/* 可选的微调，让footer在玻璃内更和谐 */
+.glass .footer {
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
 </style>
 </head>
 <body>
@@ -203,9 +213,9 @@ body{
       <p>付款后30分钟内会有客服添加您的第三方社交平台好友</p>
     </div>
 
-    <!-- 截图图片：Screenshot_20251118_190336.jpg  图片尺寸已放大 -->
+    <!-- 截图图片：Screenshot_20251118_190336.jpg 图片尺寸进一步扩大，并添加青色边框 -->
     <div class="qr-image">
-      <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22380%22%20height%3D%22380%22%20viewBox%3D%220%200%20380%20380%22%3E%3Crect%20width%3D%22380%22%20height%3D%22380%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%22190%22%20font-family%3D%22Arial%22%20font-size%3D%2222%22%20fill%3D%22%23555%22%3E二维码示例%3C%2Ftext%3E%3C%2Fsvg%3E';">
+      <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22450%22%20height%3D%22450%22%20viewBox%3D%220%200%20450%20450%22%3E%3Crect%20width%3D%22450%22%20height%3D%22450%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%22225%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%20fill%3D%22%23555%22%3E二维码示例%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
 
     <!-- 返回按钮 -->
@@ -213,7 +223,7 @@ body{
       <a href="index.html" class="return-btn">点击back主页</a>
     </div>
 
-    <!-- 最下面加powerd by (像主页一样) 放置于glass内部底端 -->
+    <!-- 最下面加powerd by - 颜色已修正为 #888，完全匹配主页 -->
     <div class="footer">
       Powerd by Shadow Moon<br>© CH凡光
     </div>
