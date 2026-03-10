@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CHFG社区 · 主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* 星空黑色主题 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            padding-bottom: 70px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* 星空背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(2px 2px at 15px 60px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 72px 150px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 145px 280px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 220px 90px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 350px 190px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 410px 310px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 520px 130px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 680px 250px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 750px 380px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 820px 90px, #fff, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            background-repeat: repeat;
+            opacity: 0.6;
+            animation: stars 180s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes stars {
+            from { transform: translateY(0) translateX(0); }
+            to { transform: translateY(-1000px) translateX(200px); }
+        }
+        
+        /* 吸顶栏 */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+            z-index: 1000;
+        }
+        
+        .char-blue {
+            color: #4285F4;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
+        }
+        
+        .char-purple {
+            color: #9B51E0;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(155, 81, 224, 0.5);
+        }
+        
+        .char-green {
+            color: #34A853;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(52, 168, 83, 0.5);
+        }
+        
+        .char-red {
+            color: #EA4335;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(234, 67, 53, 0.5);
+        }
+        
+        .char-yellow {
+            color: #FBBC05;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(251, 188, 5, 0.5);
+        }
+        
+        .char-orange {
+            color: #FF6B35;
+            font-size: 24px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+        
+        /* 主要内容区域 */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 80px 16px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 用户卡片 */
+        .user-card {
+            background: rgba(30, 30, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .user-details h3 {
+            font-size: 18px;
+            color: white;
+            margin-bottom: 4px;
+        }
+        
+        .user-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            font-size: 12px;
+            color: #a0a0b0;
+        }
+        
+        .user-badge.admin {
+            background: rgba(234, 67, 53, 0.2);
+            border-color: #EA4335;
+            color: #EA4335;
+        }
+        
+        .user-badge.leader {
+            background: rgba(251, 188, 5, 0.2);
+            border-color: #FBBC05;
+            color: #FBBC05;
+        }
+        
+        /* 发帖卡片 */
+        .post-card {
+            background: rgba(30, 30, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .post-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            font-size: 15px;
+            color: white;
+            resize: vertical;
+            margin-bottom: 12px;
+        }
+        
+        .post-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.2);
+        }
+        
+        .post-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .post-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
+        }
+        
+        /* 帖子列表 */
+        .feed {
+            background: rgba(30, 30, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .feed-title {
+            font-size: 16px;
+            color: #a0a0b0;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .post-item {
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .post-author {
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .post-author-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: #a0a0b0;
+        }
+        
+        .post-time {
+            font-size: 12px;
+            color: #6a6a7a;
+        }
+        
+        .post-content {
+            font-size: 15px;
+            color: #d0d0e0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 16px;
+            color: #a0a0b0;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #a0a0b0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .action-btn.liked {
+            background: #EA4335;
+            border-color: #EA4335;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6a6a7a;
+            padding: 40px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 吸顶栏 -->
+    <div class="top-bar">
+        <span class="char-blue">C</span>
+        <span class="char-purple">H</span>
+        <span class="char-green">F</span>
+        <span class="char-red">G</span>
+        <span class="char-yellow">社</span>
+        <span class="char-orange">区</span>
+    </div>
+
+    <div class="container">
+        <!-- 用户卡片 -->
+        <div class="user-card" id="userCard">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div class="user-details">
+                    <h3 id="userName"></h3>
+                    <span class="user-badge" id="userRole"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 发帖卡片 -->
+        <div class="post-card" id="postCard">
+            <textarea class="post-input" id="postContent" placeholder="分享你的想法...（7天后自动消失）" rows="3"></textarea>
+            <button class="post-btn" onclick="createPost()">发 布</button>
+        </div>
+
+        <!-- 帖子列表 -->
+        <div class="feed">
+            <div class="feed-title">✨ 最新动态</div>
+            <div id="postsList"></div>
+        </div>
+    </div>
+<!-- 底部导航栏 -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchTab('home')">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-text">主页</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('notifications')">
+        <div class="nav-icon">🔔</div>
+        <div class="nav-text">通知</div>
+        <span class="nav-badge hidden" id="notifBadge">0</span>
+    </div>
+    <div class="nav-item" onclick="showPostModal()">
+        <div class="nav-icon">✏️</div>
+        <div class="nav-text">发布</div>
+    </div>
+    <div class="nav-item" onclick="switchTab('profile')">
+        <div class="nav-icon">👤</div>
+        <div class="nav-text">我的</div>
+    </div>
+    <div class="nav-item hidden" id="adminNavItem" onclick="switchTab('admin')">
+        <div class="nav-icon">⚡</div>
+        <div class="nav-text">管理</div>
+    </div>
+</div>
+
+<!-- 发布弹窗 -->
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: white; margin-bottom: 15px;">发布新帖子</h3>
+        <textarea class="modal-input" id="modalPostContent" placeholder="分享你的想法..." rows="4"></textarea>
+        <div class="modal-buttons">
+            <button class="modal-btn cancel" onclick="closePostModal()">取消</button>
+            <button class="modal-btn confirm" onclick="submitPost()">发布</button>
+        </div>
+    </div>
+</div>
+
+<!-- 通知面板 -->
+<div id="notificationsPanel" class="panel hidden">
+    <div class="panel-header">
+        <h3>通知中心</h3>
+        <button class="close-btn" onclick="switchTab('home')">✕</button>
+    </div>
+    <div class="panel-content" id="notificationsList">
+        <div class="empty-state">暂无通知</div>
+    </div>
+</div>
+
+<!-- 个人主页面板 -->
+<div id="profilePanel" class="panel hidden">
+    <div class="panel-header">
+        <h3>个人主页</h3>
+        <button class="close-btn" onclick="switchTab('home')">✕</button>
+    </div>
+    <div class="panel-content">
+        <div class="profile-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="postCount">0</div>
+                <div class="stat-label">帖子</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="followerCount">0</div>
+                <div class="stat-label">粉丝</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="followingCount">0</div>
+                <div class="stat-label">关注</div>
+            </div>
+        </div>
+        
+        <div class="profile-section">
+            <h4>我的帖子</h4>
+            <div id="myPostsList"></div>
+        </div>
+        
+        <div class="profile-section">
+            <h4>我的关注</h4>
+            <div id="myFollowingList"></div>
+        </div>
+        
+        <button class="danger-btn" onclick="logout()">退出登录</button>
+    </div>
+</div>
+
+<!-- 管理面板（仅社区长可见） -->
+<div id="adminPanel" class="panel hidden">
+    <div class="panel-header">
+        <h3>管理面板</h3>
+        <button class="close-btn" onclick="switchTab('home')">✕</button>
+    </div>
+    <div class="panel-content">
+        <div class="admin-section">
+            <h4>用户管理</h4>
+            <input type="text" class="search-input" id="userSearch" placeholder="搜索用户名或邮箱...">
+            <div id="userList" class="user-list"></div>
+        </div>
+        
+        <div class="admin-section">
+            <h4>拉取成员成为管理员</h4>
+            <div class="form-group" style="display: flex; gap: 10px;">
+                <input type="text" id="promoteUsername" placeholder="输入用户名" style="flex: 1;">
+                <button class="action-btn" onclick="promoteToAdmin()">提升</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 底部导航栏 */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: rgba(20, 20, 30, 0.8);
+        backdrop-filter: blur(15px);
+        border-top: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .nav-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .nav-item.active {
+        background: rgba(102, 126, 234, 0.2);
+    }
+    
+    .nav-item.active .nav-icon,
+    .nav-item.active .nav-text {
+        color: #667eea;
+    }
+    
+    .nav-icon {
+        font-size: 22px;
+        color: #a0a0b0;
+        transition: color 0.3s;
+    }
+    
+    .nav-text {
+        font-size: 12px;
+        color: #a0a0b0;
+        transition: color 0.3s;
+    }
+    
+    .nav-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 18px;
+        height: 18px;
+        background: #EA4335;
+        border-radius: 9px;
+        color: white;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+    
+    /* 弹窗 */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(5px);
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    
+    .modal-content {
+        width: 90%;
+        max-width: 400px;
+        background: rgba(30, 30, 40, 0.9);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 25px;
+    }
+    
+    .modal-input {
+        width: 100%;
+        padding: 12px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        color: white;
+        font-size: 15px;
+        margin: 15px 0;
+        resize: vertical;
+    }
+    
+    .modal-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    
+    .modal-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .modal-btn.cancel {
+        background: rgba(255,255,255,0.1);
+        color: #a0a0b0;
+    }
+    
+    .modal-btn.cancel:hover {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    .modal-btn.confirm {
+        background: #667eea;
+        color: white;
+    }
+    
+    .modal-btn.confirm:hover {
+        background: #5a6fd1;
+    }
+    
+    /* 面板 */
+    .panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(10, 10, 15, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 1500;
+        overflow-y: auto;
+        padding: 20px;
+    }
+    
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .panel-header h3 {
+        color: white;
+        font-size: 20px;
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        color: #a0a0b0;
+        font-size: 24px;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 20px;
+    }
+    
+    .close-btn:hover {
+        background: rgba(255,255,255,0.1);
+        color: white;
+    }
+    
+    .panel-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    /* 个人主页统计 */
+    .profile-stats {
+        display: flex;
+        justify-content: space-around;
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 4px;
+    }
+    
+    .stat-label {
+        font-size: 13px;
+        color: #a0a0b0;
+    }
+    
+    .profile-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .profile-section h4 {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    
+    /* 管理面板 */
+    .admin-section {
+        background: rgba(255,255,255,0.05);
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .admin-section h4 {
+        color: white;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 12px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        color: white;
+        margin-bottom: 15px;
+    }
+    
+    .search-input:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    
+    .user-list {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .user-item:last-child {
+        border-bottom: none;
+    }
+    
+    .user-info-small {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .user-name {
+        color: white;
+        font-weight: 500;
+    }
+    
+    .user-email {
+        font-size: 12px;
+        color: #a0a0b0;
+    }
+    
+    .promote-btn {
+        padding: 5px 12px;
+        background: #34A853;
+        border: none;
+        border-radius: 15px;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .promote-btn:hover {
+        background: #2d8b46;
+    }
+    
+    .action-btn {
+        padding: 8px 16px;
+        background: #667eea;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .action-btn:hover {
+        background: #5a6fd1;
+    }
+    
+    .danger-btn {
+        width: 100%;
+        padding: 12px;
+        background: rgba(234, 67, 53, 0.2);
+        border: 1px solid #EA4335;
+        border-radius: 10px;
+        color: #EA4335;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: all 0.2s;
+    }
+    
+    .danger-btn:hover {
+        background: #EA4335;
+        color: white;
+    }
+    
+    .hidden {
+        display: none;
+    }
+</style>
+<script>
+    // ============ 数据初始化 ============
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    let users = JSON.parse(localStorage.getItem('users') || '[]');
+    let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+    let follows = JSON.parse(localStorage.getItem('follows') || '[]');
+    let likes = JSON.parse(localStorage.getItem('likes') || '[]');
+    let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+    
+    // 检查登录状态
+    if (!currentUser) {
+        window.location.href = 'login.html';
+    }
+
+    // ============ DOM 元素 ============
+    const userNameEl = document.getElementById('userName');
+    const userAvatarEl = document.getElementById('userAvatar');
+    const userRoleEl = document.getElementById('userRole');
+    const adminNavItem = document.getElementById('adminNavItem');
+    const notifBadge = document.getElementById('notifBadge');
+    
+    // ============ 初始化用户信息 ============
+    function initUserInfo() {
+        userNameEl.textContent = currentUser.username;
+        userAvatarEl.textContent = currentUser.username.charAt(0).toUpperCase();
+        
+        let roleText = '普通用户';
+        userRoleEl.className = 'user-badge';
+        
+        if (currentUser.role === 'admin') {
+            roleText = '管理员';
+            userRoleEl.classList.add('admin');
+        } else if (currentUser.role === 'community_leader') {
+            roleText = '社区长';
+            userRoleEl.classList.add('leader');
+        }
+        userRoleEl.textContent = roleText;
+        
+        // 社区长显示管理入口
+        if (currentUser.role === 'community_leader') {
+            adminNavItem.classList.remove('hidden');
+        }
+        
+        // 更新未读通知数
+        updateNotifBadge();
+    }
+
+    // ============ 更新通知角标 ============
+    function updateNotifBadge() {
+        const unread = notifications.filter(n => n.username === currentUser.username && !n.read).length;
+        if (unread > 0) {
+            notifBadge.textContent = unread;
+            notifBadge.classList.remove('hidden');
+        } else {
+            notifBadge.classList.add('hidden');
+        }
+    }
+
+    // ============ 当前激活的面板 ============
+    let currentPanel = 'home';
+
+    // ============ 标签切换 ============
+    function switchTab(tab) {
+        // 更新导航栏激活状态
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+        
+        // 保存当前面板
+        currentPanel = tab;
+        
+        // 隐藏所有面板
+        document.getElementById('notificationsPanel').classList.add('hidden');
+        document.getElementById('profilePanel').classList.add('hidden');
+        document.getElementById('adminPanel').classList.add('hidden');
+        
+        // 显示对应面板
+        if (tab === 'notifications') {
+            document.getElementById('notificationsPanel').classList.remove('hidden');
+            loadNotifications();
+        } else if (tab === 'profile') {
+            document.getElementById('profilePanel').classList.remove('hidden');
+            loadProfile();
+        } else if (tab === 'admin') {
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadAdminPanel();
+        }
+    }
+
+    // ============ 发布弹窗 ============
+    function showPostModal() {
+        document.getElementById('postModal').style.display = 'flex';
+    }
+    
+    function closePostModal() {
+        document.getElementById('postModal').style.display = 'none';
+        document.getElementById('modalPostContent').value = '';
+    }
+    
+    function submitPost() {
+        const content = document.getElementById('modalPostContent').value.trim();
+        if (!content) {
+            alert('请输入内容');
+            return;
+        }
+        
+        const newPost = {
+            id: Date.now(),
+            username: currentUser.username,
+            content: content,
+            likes: 0,
+            created_at: new Date().toISOString()
+        };
+        
+        posts.push(newPost);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        
+        closePostModal();
+        loadPosts();
+    }
+
+    // ============ 创建帖子（从主页直接发布） ============
+    function createPost() {
+        const content = document.getElementById('postContent').value.trim();
+        if (!content) {
+            alert('请输入内容');
+            return;
+        }
+        
+        const newPost = {
+            id: Date.now(),
+            username: currentUser.username,
+            content: content,
+            likes: 0,
+            created_at: new Date().toISOString()
+        };
+        
+        posts.push(newPost);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        
+        document.getElementById('postContent').value = '';
+        loadPosts();
+    }
+
+    // ============ 加载帖子 ============
+    function loadPosts() {
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        const recentPosts = posts
+            .filter(p => new Date(p.created_at) > sevenDaysAgo)
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        
+        const postsList = document.getElementById('postsList');
+        
+        if (recentPosts.length === 0) {
+            postsList.innerHTML = '<div class="empty-state">✨ 暂无帖子，来发布第一条吧～</div>';
+            return;
+        }
+        
+        postsList.innerHTML = recentPosts.map(post => {
+            const user = users.find(u => u.username === post.username);
+            const hasLiked = likes.some(l => l.username === currentUser.username && l.post_id === post.id);
+            const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === post.username);
+            const canDelete = (currentUser.role === 'community_leader' || currentUser.role === 'admin') && post.username !== currentUser.username;
+            
+            let roleBadge = '';
+            if (user?.role === 'community_leader') {
+                roleBadge = '<span class="post-author-badge">社区长</span>';
+            } else if (user?.role === 'admin') {
+                roleBadge = '<span class="post-author-badge">管理员</span>';
+            }
+            
+            return `
+            <div class="post-item">
+                <div class="post-header">
+                    <div class="post-author">
+                        ${post.username} ${roleBadge}
+                    </div>
+                    <div class="post-time">${formatTime(post.created_at)}</div>
+                </div>
+                <div class="post-content">${escapeHtml(post.content)}</div>
+                <div class="post-stats">
+                    <span>❤️ ${post.likes}</span>
+                </div>
+                <div class="post-actions">
+                    ${post.username !== currentUser.username ? `
+                        <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            ${hasLiked ? '已点赞' : '点赞'}
+                        </button>
+                        <button class="action-btn" onclick="toggleFollow('${post.username}')">
+                            ${isFollowed ? '取消关注' : '关注'}
+                        </button>
+                    ` : ''}
+                    ${canDelete ? `
+                        <button class="action-btn" onclick="deletePost(${post.id})" style="border-color:#EA4335; color:#EA4335;">删除</button>
+                    ` : ''}
+                </div>
+            </div>
+        `}).join('');
+    }
+        // ============ 点赞功能 ============
+        function toggleLike(postId) {
+            const existing = likes.find(l => l.username === currentUser.username && l.post_id === postId);
+            const post = posts.find(p => p.id === postId);
+            
+            if (existing) {
+                // 取消点赞
+                const index = likes.findIndex(l => l.username === currentUser.username && l.post_id === postId);
+                likes.splice(index, 1);
+                post.likes--;
+            } else {
+                // 点赞
+                likes.push({
+                    username: currentUser.username,
+                    post_id: postId,
+                    created_at: new Date().toISOString()
+                });
+                post.likes++;
+            }
+            
+            localStorage.setItem('likes', JSON.stringify(likes));
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts();
+        }
+
+        // ============ 关注/取消关注 ============
+        function toggleFollow(targetUsername) {
+            const existing = follows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
+            
+            if (existing) {
+                // 取消关注
+                const index = follows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
+                follows.splice(index, 1);
+            } else {
+                // 关注
+                follows.push({
+                    follower: currentUser.username,
+                    followed: targetUsername,
+                    created_at: new Date().toISOString()
+                });
+                
+                // 发送通知
+                notifications.push({
+                    id: Date.now(),
+                    username: targetUsername,
+                    content: `用户 ${currentUser.username} 关注了你`,
+                    read: false,
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+            }
+            
+            localStorage.setItem('follows', JSON.stringify(follows));
+            loadPosts();
+        }
+
+        // ============ 删除帖子 ============
+        function deletePost(postId) {
+            if (!confirm('确定要删除这个帖子吗？')) return;
+            
+            const index = posts.findIndex(p => p.id === postId);
+            if (index !== -1) {
+                const post = posts[index];
+                posts.splice(index, 1);
+                localStorage.setItem('posts', JSON.stringify(posts));
+                
+                // 如果不是自己的帖子，通知作者
+                if (post.username !== currentUser.username) {
+                    notifications.push({
+                        id: Date.now(),
+                        username: post.username,
+                        content: `你的一个帖子已被管理员删除`,
+                        read: false,
+                        created_at: new Date().toISOString()
+                    });
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                }
+                
+                loadPosts();
+            }
+        }
+
+        // ============ 加载通知 ============
+        function loadNotifications() {
+            const userNotifs = notifications
+                .filter(n => n.username === currentUser.username)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            const list = document.getElementById('notificationsList');
+            
+            if (userNotifs.length === 0) {
+                list.innerHTML = '<div class="empty-state">暂无通知</div>';
+                return;
+            }
+            
+            list.innerHTML = userNotifs.map(n => `
+                <div class="post-item" onclick="markNotificationRead(${n.id})">
+                    <div class="post-content">${n.content}</div>
+                    <div class="post-time">${formatTime(n.created_at)}</div>
+                </div>
+            `).join('');
+        }
+
+        // ============ 标记通知已读 ============
+        function markNotificationRead(id) {
+            const notif = notifications.find(n => n.id === id);
+            if (notif) {
+                notif.read = true;
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                updateNotifBadge();
+                loadNotifications();
+            }
+        }
+
+        // ============ 加载个人主页 ============
+        function loadProfile() {
+            const myPosts = posts.filter(p => p.username === currentUser.username);
+            const myFollowers = follows.filter(f => f.followed === currentUser.username);
+            const myFollowing = follows.filter(f => f.follower === currentUser.username);
+            
+            document.getElementById('postCount').textContent = myPosts.length;
+            document.getElementById('followerCount').textContent = myFollowers.length;
+            document.getElementById('followingCount').textContent = myFollowing.length;
+            
+            // 我的帖子
+            const myPostsList = document.getElementById('myPostsList');
+            if (myPosts.length === 0) {
+                myPostsList.innerHTML = '<div class="empty-state">暂无帖子</div>';
+            } else {
+                myPostsList.innerHTML = myPosts.slice(0, 5).map(post => `
+                    <div class="post-item">
+                        <div class="post-content">${escapeHtml(post.content)}</div>
+                        <div class="post-time">${formatTime(post.created_at)}</div>
+                    </div>
+                `).join('');
+            }
+            
+            // 我的关注
+            const myFollowingList = document.getElementById('myFollowingList');
+            if (myFollowing.length === 0) {
+                myFollowingList.innerHTML = '<div class="empty-state">暂无关注</div>';
+            } else {
+                myFollowingList.innerHTML = myFollowing.map(f => {
+                    const user = users.find(u => u.username === f.followed);
+                    return `
+                    <div class="user-item">
+                        <div class="user-info-small">
+                            <span class="user-name">${f.followed}</span>
+                            <span class="user-email">${user?.email || ''}</span>
+                        </div>
+                        <button class="action-btn" onclick="toggleFollow('${f.followed}')">取消关注</button>
+                    </div>
+                `}).join('');
+            }
+        }
+
+        // ============ 加载管理面板（社区长专用） ============
+        function loadAdminPanel() {
+            if (currentUser.role !== 'community_leader') return;
+            
+            // 加载所有普通用户
+            const normalUsers = users.filter(u => u.role === 'user');
+            const userList = document.getElementById('userList');
+            
+            if (normalUsers.length === 0) {
+                userList.innerHTML = '<div class="empty-state">暂无普通用户</div>';
+                return;
+            }
+            
+            userList.innerHTML = normalUsers.map(user => `
+                <div class="user-item">
+                    <div class="user-info-small">
+                        <span class="user-name">${user.username}</span>
+                        <span class="user-email">${user.email}</span>
+                    </div>
+                    <button class="promote-btn" onclick="promoteToAdmin('${user.username}')">提升为管理员</button>
+                </div>
+            `).join('');
+        }
+
+        // ============ 提升为管理员（社区长功能） ============
+        function promoteToAdmin(username) {
+            if (currentUser.role !== 'community_leader') return;
+            
+            const user = users.find(u => u.username === username);
+            if (user) {
+                user.role = 'admin';
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // 发送通知
+                notifications.push({
+                    id: Date.now(),
+                    username: username,
+                    content: '恭喜！你已被社区长提升为管理员',
+                    read: false,
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                
+                alert(`已提升 ${username} 为管理员`);
+                loadAdminPanel();
+            }
+        }
+
+        // ============ 搜索用户（管理面板） ============
+        document.getElementById('userSearch')?.addEventListener('input', function(e) {
+            if (currentUser.role !== 'community_leader') return;
+            
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = users.filter(u => 
+                u.role === 'user' && (
+                    u.username.toLowerCase().includes(searchTerm) || 
+                    u.email.toLowerCase().includes(searchTerm)
+                )
+            );
+            
+            const userList = document.getElementById('userList');
+            if (filtered.length === 0) {
+                userList.innerHTML = '<div class="empty-state">未找到用户</div>';
+                return;
+            }
+            
+            userList.innerHTML = filtered.map(user => `
+                <div class="user-item">
+                    <div class="user-info-small">
+                        <span class="user-name">${user.username}</span>
+                        <span class="user-email">${user.email}</span>
+                    </div>
+                    <button class="promote-btn" onclick="promoteToAdmin('${user.username}')">提升为管理员</button>
+                </div>
+            `).join('');
+        });
+
+        // ============ 从输入框提升管理员 ============
+        function promoteToAdmin() {
+            const username = document.getElementById('promoteUsername').value.trim();
+            if (!username) {
+                alert('请输入用户名');
+                return;
+            }
+            promoteToAdmin(username);
+            document.getElementById('promoteUsername').value = '';
+        }
+
+        // ============ 退出登录 ============
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        // ============ 辅助函数 ============
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000 / 60); // 分钟差
+            
+            if (diff < 1) return '刚刚';
+            if (diff < 60) return diff + '分钟前';
+            if (diff < 1440) return Math.floor(diff / 60) + '小时前';
+            return `${date.getMonth()+1}月${date.getDate()}日`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============ 定时刷新 ============
+        setInterval(() => {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            posts = posts.filter(p => new Date(p.created_at) > sevenDaysAgo);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            // 只刷新当前可见的内容
+            if (currentPanel === 'home') {
+                loadPosts();
+            } else if (currentPanel === 'notifications') {
+                loadNotifications();
+            } else if (currentPanel === 'profile') {
+                loadProfile();
+            } else if (currentPanel === 'admin' && currentUser.role === 'community_leader') {
+                loadAdminPanel();
+            }
+        }, 60000);
+
+        // ============ 初始化 ============
+        initUserInfo();
+        loadPosts();
+    </script>
+</body>
+</html>
