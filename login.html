@@ -49,26 +49,6 @@
             pointer-events: none;
         }
         
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(1px 1px at 95px 220px, #fff, rgba(0,0,0,0)),
-                        radial-gradient(1px 1px at 260px 420px, #ffd700, rgba(0,0,0,0)),
-                        radial-gradient(1px 1px at 380px 550px, #87ceeb, rgba(0,0,0,0)),
-                        radial-gradient(2px 2px at 490px 170px, #fff, rgba(0,0,0,0)),
-                        radial-gradient(1px 1px at 580px 460px, #fff, rgba(0,0,0,0)),
-                        radial-gradient(1px 1px at 710px 320px, #ffd700, rgba(0,0,0,0));
-            background-size: 300px 300px;
-            background-repeat: repeat;
-            opacity: 0.3;
-            animation: stars 240s linear reverse infinite;
-            pointer-events: none;
-        }
-        
         @keyframes stars {
             from { transform: translateY(0) translateX(0); }
             to { transform: translateY(-1000px) translateX(200px); }
@@ -174,24 +154,6 @@
             font-weight: 600;
         }
         
-        /* IP检测提示 */
-        .ip-check {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 12px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            color: #a0a0b0;
-            font-size: 14px;
-        }
-        
-        .ip-check.success {
-            background: rgba(52, 168, 83, 0.1);
-            border-color: #34A853;
-            color: #34A853;
-        }
-        
         /* 标签切换 */
         .tab-bar {
             display: flex;
@@ -256,12 +218,6 @@
         
         input::placeholder {
             color: #5a5a6a;
-        }
-        
-        .input-hint {
-            font-size: 12px;
-            color: #6a6a7a;
-            margin-top: 6px;
         }
         
         .btn {
@@ -329,9 +285,6 @@
                 <div class="welcome-subtitle">现在开始您的探索之旅吧 <span>✓</span></div>
             </div>
             
-            <!-- IP检测提示区 -->
-            <div id="ipCheckMessage" class="ip-check">正在检测登录状态...</div>
-            
             <!-- 标签切换 -->
             <div class="tab-bar">
                 <div class="tab active" onclick="switchTab('login')">登录</div>
@@ -343,6 +296,10 @@
                 <div class="form-group">
                     <label>邮箱</label>
                     <input type="email" id="loginEmail" placeholder="请输入邮箱">
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="loginPassword" placeholder="请输入密码">
                 </div>
                 <button class="btn" onclick="login()">登录</button>
             </div>
@@ -356,7 +313,14 @@
                 <div class="form-group">
                     <label>邮箱</label>
                     <input type="email" id="regEmail" placeholder="请输入邮箱">
-                    <div class="input-hint">社区长专属邮箱：chfanguang@outlook.com</div>
+                </div>
+                <div class="form-group">
+                    <label>密码</label>
+                    <input type="password" id="regPassword" placeholder="请输入密码">
+                </div>
+                <div class="form-group">
+                    <label>确认密码</label>
+                    <input type="password" id="regConfirmPassword" placeholder="请再次输入密码">
                 </div>
                 <button class="btn" onclick="register()">注册</button>
             </div>
@@ -370,39 +334,12 @@
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
         
-        // 社区长专属邮箱
+        // 社区长专属邮箱（不显示在页面上）
         const LEADER_EMAIL = 'chfanguang@outlook.com';
         
-        // 获取客户端IP（模拟）
-        function getClientIp() {
-            let ip = localStorage.getItem('clientIp');
-            if (!ip) {
-                ip = '127.0.0.' + Math.floor(Math.random() * 255);
-                localStorage.setItem('clientIp', ip);
-            }
-            return ip;
-        }
-
-        // 检测IP是否已登录
-        function checkIpLogin() {
-            const ip = getClientIp();
-            const ipCheckDiv = document.getElementById('ipCheckMessage');
-            
-            if (currentUser) {
-                const user = users.find(u => u.username === currentUser.username);
-                if (user && user.ip === ip) {
-                    ipCheckDiv.className = 'ip-check success';
-                    ipCheckDiv.innerHTML = '检测到您已登录，正在跳转...';
-                    
-                    setTimeout(() => {
-                        window.location.href = 'chfg.html';
-                    }, 2000);
-                    return;
-                }
-            }
-            
-            ipCheckDiv.className = 'ip-check';
-            ipCheckDiv.innerHTML = '未检测到登录状态，请登录或注册';
+        // 检查是否已登录（去掉IP检测，只检查localStorage）
+        if (currentUser) {
+            window.location.href = 'chfg.html';
         }
 
         // 切换标签
@@ -427,10 +364,10 @@
         // 登录
         function login() {
             const email = document.getElementById('loginEmail').value.trim();
-            const ip = getClientIp();
+            const password = document.getElementById('loginPassword').value.trim();
             
-            if (!email) {
-                showMessage('请输入邮箱', 'error');
+            if (!email || !password) {
+                showMessage('请输入邮箱和密码', 'error');
                 return;
             }
             
@@ -440,14 +377,15 @@
                 return;
             }
             
+            if (user.password !== password) {
+                showMessage('密码错误', 'error');
+                return;
+            }
+            
             if (user.banned) {
                 showMessage('账号已被封禁', 'error');
                 return;
             }
-            
-            // 更新IP
-            user.ip = ip;
-            localStorage.setItem('users', JSON.stringify(users));
             
             // 保存登录状态
             localStorage.setItem('currentUser', JSON.stringify(user));
@@ -462,10 +400,21 @@
         function register() {
             const username = document.getElementById('regUsername').value.trim();
             const email = document.getElementById('regEmail').value.trim();
-            const ip = getClientIp();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
             
-            if (!username || !email) {
-                showMessage('请填写完整信息', 'error');
+            if (!username || !email || !password || !confirmPassword) {
+                showMessage('请填写所有信息', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('两次输入的密码不一致', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('密码至少6位', 'error');
                 return;
             }
             
@@ -481,20 +430,14 @@
                 return;
             }
             
-            // 检查IP是否已注册
-            if (users.some(u => u.ip === ip)) {
-                showMessage('该IP已注册过账号', 'error');
-                return;
-            }
-            
-            // 判断是否为社区长
+            // 判断是否为社区长（根据邮箱，但不显示在页面上）
             const role = (email === LEADER_EMAIL) ? 'community_leader' : 'user';
             
             // 创建新用户
             const newUser = {
                 username,
                 email,
-                ip,
+                password,
                 role,
                 banned: 0,
                 created_at: new Date().toISOString()
@@ -520,9 +463,6 @@
             msgDiv.className = `message ${type}`;
             msgDiv.style.display = 'block';
         }
-
-        // 初始化
-        checkIpLogin();
     </script>
 </body>
 </html>
