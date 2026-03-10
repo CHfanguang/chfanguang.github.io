@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHFG社区 · 测试</title>
+    <title>CHFG社区 · 星尘</title>
     <style>
         * {
             margin: 0;
@@ -11,13 +11,80 @@
             box-sizing: border-box;
         }
         
+        /* ===== 动态星空背景 ===== */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: #f0f2f5;
+            background: linear-gradient(125deg, #0a0a2a, #1a1a3a, #0a0a2a);
+            color: #fff;
             padding-top: 60px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
         
-        /* 彩虹动态渐变吸顶栏 */
+        /* 星星动画 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 80px 120px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 160px 50px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 300px 180px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 450px 250px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 600px 400px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 750px 150px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 900px 550px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 100px 600px, #fff, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            background-repeat: repeat;
+            opacity: 0.5;
+            animation: stars 120s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 第二层星星 (小星星) */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(1px 1px at 120px 230px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 340px 670px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 580px 820px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 720px 320px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 880px 480px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 250px 750px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 450px 150px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 650px 950px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 850px 250px, #fff, rgba(0,0,0,0));
+            background-size: 300px 300px;
+            background-repeat: repeat;
+            opacity: 0.3;
+            animation: stars 180s linear reverse infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes stars {
+            from { transform: translateY(0) translateX(0); }
+            to { transform: translateY(-200px) translateX(100px); }
+        }
+        
+        /* 所有内容都在星星上面 */
+        .container, .sticky-bar, .modal-content, .card {
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* ===== 彩虹动态渐变吸顶栏 ===== */
         .sticky-bar {
             position: fixed;
             top: 0;
@@ -40,7 +107,8 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 20px rgba(0,255,255,0.3);
+            backdrop-filter: blur(5px);
         }
         
         @keyframes rainbow {
@@ -55,130 +123,149 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 0 10px cyan, 0 0 20px blue, 2px 2px 4px rgba(0,0,0,0.3);
             animation: glow 2s ease-in-out infinite;
         }
         
         @keyframes glow {
-            0%, 100% { text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
-            50% { text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+            0%, 100% { text-shadow: 0 0 10px cyan, 0 0 20px blue; }
+            50% { text-shadow: 0 0 20px cyan, 0 0 40px blue, 0 0 60px white; }
         }
         
+        /* ===== 容器 ===== */
         .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
         
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
-            color: #1a1a1a;
-            font-size: 2.5em;
-            margin-bottom: 5px;
-        }
-        
-        .header .subtitle {
-            color: #666;
-            font-size: 0.9em;
-        }
-        
+        /* ===== 液态玻璃卡片 ===== */
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
+            background: rgba(20, 30, 50, 0.3);
+            backdrop-filter: blur(15px) saturate(180%);
+            -webkit-backdrop-filter: blur(15px) saturate(180%);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.1),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
         }
         
-        .form-group {
-            margin-bottom: 15px;
+        .card:hover {
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.2),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.5);
         }
         
+        /* ===== 青色按钮 ===== */
+        button {
+            background: transparent;
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+        }
+        
+        button:hover {
+            background: #00ffff;
+            color: #0a0a2a;
+            box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+            transform: translateY(-2px);
+        }
+        
+        button.small {
+            padding: 6px 15px;
+            font-size: 12px;
+        }
+        
+        button.danger {
+            border-color: #ff4444;
+            color: #ff4444;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+        
+        button.danger:hover {
+            background: #ff4444;
+            color: #0a0a2a;
+            box-shadow: 0 0 20px #ff4444;
+        }
+        
+        button.warning {
+            border-color: #ffaa00;
+            color: #ffaa00;
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        }
+        
+        button.warning:hover {
+            background: #ffaa00;
+            color: #0a0a2a;
+            box-shadow: 0 0 20px #ffaa00;
+        }
+        
+        button.success {
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        }
+        
+        button.success:hover {
+            background: #00ff88;
+            color: #0a0a2a;
+            box-shadow: 0 0 20px #00ff88;
+        }
+        
+        /* ===== 输入框 ===== */
         input, textarea, select {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            color: #fff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
         }
         
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #0070f3;
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.15);
         }
         
-        button {
-            background: #0070f3;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-right: 8px;
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
         
-        button:hover {
-            background: #0051b3;
-        }
-        
-        button.small {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-        
-        button.danger {
-            background: #dc3545;
-        }
-        
-        button.danger:hover {
-            background: #b02a37;
-        }
-        
-        button.warning {
-            background: #ffc107;
-            color: #212529;
-        }
-        
-        button.warning:hover {
-            background: #e0a800;
-        }
-        
-        button.success {
-            background: #28a745;
-        }
-        
-        button.success:hover {
-            background: #218838;
-        }
-        
-        .auth-section {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
+        /* ===== 用户信息 ===== */
         .user-info {
-            background: #e3f2fd;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00ffff;
             padding: 8px 15px;
-            border-radius: 20px;
-            color: #1976d2;
+            border-radius: 30px;
+            color: #00ffff;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 10px;
+            backdrop-filter: blur(10px);
         }
         
+        /* ===== 帖子样式 ===== */
         .post {
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
             padding: 15px 0;
         }
         
@@ -190,18 +277,19 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 8px;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9em;
             align-items: center;
         }
         
         .post-author {
             font-weight: 600;
-            color: #0070f3;
+            color: #00ffff;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 5px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
         }
         
         .post-author:hover {
@@ -210,28 +298,32 @@
         
         .author-badge {
             font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 12px;
-            background: #0070f3;
-            color: white;
+            padding: 2px 8px;
+            border-radius: 30px;
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            color: #00ffff;
         }
         
         .author-badge.leader {
-            background: #8B4513;
+            border-color: #ffaa00;
+            color: #ffaa00;
         }
         
         .author-badge.admin {
-            background: #dc3545;
+            border-color: #ff4444;
+            color: #ff4444;
         }
         
         .post-content {
             font-size: 1.1em;
             line-height: 1.5;
             white-space: pre-wrap;
+            color: rgba(255, 255, 255, 0.9);
         }
         
         .post-time {
-            color: #999;
+            color: rgba(255, 255, 255, 0.5);
             font-size: 0.85em;
         }
         
@@ -239,7 +331,7 @@
             display: flex;
             gap: 15px;
             margin-top: 10px;
-            color: #666;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9em;
         }
         
@@ -251,209 +343,57 @@
             align-items: center;
         }
         
+        /* ===== 点赞按钮特殊样式 ===== */
         .like-btn {
-            background: none;
+            background: transparent;
             border: 1px solid #ff4d4d;
             color: #ff4d4d;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            box-shadow: 0 0 5px rgba(255, 77, 77, 0.3);
         }
         
         .like-btn:hover {
-            background: #ffe6e6;
+            background: #ff4d4d;
+            color: #0a0a2a;
+            box-shadow: 0 0 15px #ff4d4d;
         }
         
         .like-btn.liked {
             background: #ff4d4d;
-            color: white;
-        }
-        
-        .follow-btn {
-            background: #28a745;
-        }
-        
-        .follow-btn:hover {
-            background: #218838;
-        }
-        
-        .unfollow-btn {
-            background: #6c757d;
-        }
-        
-        .unfollow-btn:hover {
-            background: #5a6268;
-        }
-        
-        .report-btn {
-            background: #ffc107;
-            color: #212529;
-        }
-        
-        .report-btn:hover {
-            background: #e0a800;
-        }
-        
-        .reported-btn {
-            background: #6c757d;
-            cursor: not-allowed;
-        }
-        
-        .delete-btn {
-            background: #dc3545;
-            font-size: 12px;
-            padding: 4px 8px;
+            color: #0a0a2a;
         }
         
         .empty-state {
             text-align: center;
-            color: #999;
+            color: rgba(255, 255, 255, 0.5);
             padding: 40px 20px;
         }
         
         .error-message {
-            color: #dc3545;
+            color: #ff4444;
             font-size: 0.9em;
             margin-top: 5px;
+            text-shadow: 0 0 5px rgba(255, 68, 68, 0.5);
         }
         
         .success-message {
-            color: #28a745;
+            color: #00ff88;
             font-size: 0.9em;
             margin-top: 5px;
+            text-shadow: 0 0 5px rgba(0, 255, 136, 0.5);
         }
         
         .hidden {
             display: none;
-        }
-        
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-        }
-        
-        .badge {
-            background: #0070f3;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 8px;
-        }
-        
-        .badge.admin {
-            background: #dc3545;
-        }
-        
-        .badge.leader {
-            background: #8B4513;
-        }
-        
-        .badge.notification {
-            background: #ffc107;
-            color: #212529;
-            cursor: pointer;
-        }
-        
-        .admin-link {
-            color: #0070f3;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-            text-align: center;
-        }
-        
-        .admin-link:hover {
-            text-decoration: underline;
-        }
-        
-        .password-hint {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        .user-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .user-list-item:last-child {
-            border-bottom: none;
-        }
-        
-        .user-list-name {
-            font-weight: 600;
-            color: #0070f3;
-            cursor: pointer;
-        }
-        
-        .user-list-role {
-            font-size: 11px;
-            padding: 2px 6px;
-            border-radius: 12px;
-            background: #0070f3;
-            color: white;
-            margin-left: 8px;
-        }
-        
-        .tab-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
-        }
-        
-        .tab {
-            cursor: pointer;
-            padding: 5px 15px;
-            color: #666;
-        }
-        
-        .tab.active {
-            color: #0070f3;
-            font-weight: 600;
-            border-bottom: 2px solid #0070f3;
         }
     </style>
 </head>
 <body>
     <!-- 彩虹动态渐变吸顶栏 -->
     <div class="sticky-bar">
-        <div class="sticky-bar-content">CHFG社区</div>
+        <div class="sticky-bar-content">CHFG社区 · 星尘</div>
     </div>
 
     <div class="container">
@@ -464,27 +404,27 @@
                     <input type="text" id="username" placeholder="输入用户名（仅支持字母数字）" pattern="[A-Za-z0-9]+">
                 </div>
                 
-                <div class="auth-section">
+                <div class="auth-section" style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button onclick="register()">普通用户注册</button>
                     <button onclick="login()">登录</button>
                 </div>
                 
-                <div class="admin-link" onclick="toggleAdminRegister()">
+                <div class="admin-link" style="color: #00ffff; cursor: pointer; font-size: 14px; margin-top: 10px; text-align: center; text-shadow: 0 0 5px cyan;" onclick="toggleAdminRegister()">
                     我是管理组或社区长？点这里
                 </div>
                 
                 <div id="adminRegisterForm" class="hidden">
-                    <div class="form-group">
+                    <div class="form-group" style="margin-top: 15px;">
                         <input type="text" id="adminUsername" placeholder="管理员账户名">
                     </div>
                     <div class="form-group">
                         <input type="password" id="adminPassword" placeholder="管理员密码">
                     </div>
-                    <div class="password-hint">
+                    <div class="password-hint" style="font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 5px;">
                         社区长密码：chfanguang081205<br>
                         管理员密码：chfanguangfs, chfanguangglz, chfanguangglchan, chfanguangcnmwcnm, chfanguangvwws
                     </div>
-                    <button onclick="registerAdmin()" class="success">管理员注册</button>
+                    <button onclick="registerAdmin()" class="success" style="margin-top: 10px;">管理员注册</button>
                 </div>
                 
                 <div id="authMessage" class="error-message"></div>
@@ -493,8 +433,8 @@
             <div id="authView" class="hidden">
                 <div class="user-info" id="userInfo">
                     <span id="currentUsername"></span>
-                    <span id="userRole" class="badge"></span>
-                    <span id="notificationBadge" class="badge notification hidden" onclick="showNotifications()">0</span>
+                    <span id="userRole" class="badge" style="background: transparent; border: 1px solid currentColor; padding: 2px 8px; border-radius: 30px;"></span>
+                    <span id="notificationBadge" style="background: transparent; border: 1px solid #ffaa00; color: #ffaa00; padding: 2px 8px; border-radius: 30px; cursor: pointer;" class="hidden" onclick="showNotifications()">0</span>
                     <button class="small danger" onclick="logout()">退出</button>
                 </div>
             </div>
@@ -522,23 +462,24 @@
 
     <!-- 帖子列表 -->
     <div class="card" id="postsCard">
-        <h3 style="margin-bottom: 15px;">最新帖子</h3>
+        <h3 style="margin-bottom: 15px; color: #00ffff; text-shadow: 0 0 10px cyan;">最新帖子</h3>
         <div id="postsList"></div>
     </div>
 </div>
 
+<!-- ===== 液态玻璃弹窗 ===== -->
 <!-- 用户详情弹窗 -->
-<div id="userModal" class="modal hidden">
-    <div class="modal-content">
+<div id="userModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 0 50px rgba(0,255,255,0.2);">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h3 id="modalUsername"></h3>
-            <span id="modalUserRole" class="badge"></span>
+            <h3 id="modalUsername" style="color: #00ffff;"></h3>
+            <span id="modalUserRole" style="border: 1px solid currentColor; padding: 4px 12px; border-radius: 30px;"></span>
         </div>
         
         <!-- 标签栏 -->
-        <div class="tab-bar">
-            <span class="tab active" onclick="switchUserTab('info')">用户信息</span>
-            <span class="tab" onclick="switchUserTab('posts')">Ta的帖子</span>
+        <div class="tab-bar" style="display: flex; gap: 10px; margin: 20px 0; border-bottom: 1px solid rgba(0,255,255,0.3); padding-bottom: 10px;">
+            <span class="tab" style="cursor: pointer; padding: 5px 15px; color: rgba(255,255,255,0.7);" onclick="switchUserTab('info')">用户信息</span>
+            <span class="tab" style="cursor: pointer; padding: 5px 15px; color: rgba(255,255,255,0.7);" onclick="switchUserTab('posts')">Ta的帖子</span>
         </div>
         
         <!-- 用户信息 -->
@@ -556,9 +497,9 @@
             <div id="userPostsList" style="max-height: 300px; overflow-y: auto;"></div>
         </div>
         
-        <div class="modal-buttons">
-            <button id="modalFollowBtn" onclick="handleFollow()" class="follow-btn"></button>
-            <button id="modalReportBtn" onclick="showReportModal()" class="report-btn">举报</button>
+        <div class="modal-buttons" style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; flex-wrap: wrap;">
+            <button id="modalFollowBtn" onclick="handleFollow()"></button>
+            <button id="modalReportBtn" onclick="showReportModal()">举报</button>
             <button class="danger" onclick="deleteAccount()" id="deleteAccountBtn">注销此账户</button>
             <button onclick="closeModal()">关闭</button>
         </div>
@@ -566,70 +507,70 @@
 </div>
 
 <!-- 关注列表弹窗 -->
-<div id="followingModal" class="modal hidden">
-    <div class="modal-content">
-        <h3>我的关注</h3>
-        <div id="followingList" style="max-height: 400px; overflow-y: auto;"></div>
-        <div class="modal-buttons">
+<div id="followingModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <h3 style="color: #00ffff;">我的关注</h3>
+        <div id="followingList" style="max-height: 400px; overflow-y: auto; margin: 20px 0;"></div>
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: flex-end;">
             <button onclick="closeFollowingModal()">关闭</button>
         </div>
     </div>
 </div>
 
 <!-- 粉丝列表弹窗 -->
-<div id="followersModal" class="modal hidden">
-    <div class="modal-content">
-        <h3>我的粉丝</h3>
-        <div id="followersList" style="max-height: 400px; overflow-y: auto;"></div>
-        <div class="modal-buttons">
+<div id="followersModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <h3 style="color: #00ffff;">我的粉丝</h3>
+        <div id="followersList" style="max-height: 400px; overflow-y: auto; margin: 20px 0;"></div>
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: flex-end;">
             <button onclick="closeFollowersModal()">关闭</button>
         </div>
     </div>
 </div>
 
 <!-- 举报弹窗 -->
-<div id="reportModal" class="modal hidden">
-    <div class="modal-content">
-        <h3>举报用户</h3>
-        <div class="form-group">
-            <select id="reportReason">
-                <option value="不当言论">不当言论</option>
-                <option value="骚扰行为">骚扰行为</option>
-                <option value="广告营销">广告营销</option>
-                <option value="其他">其他</option>
+<div id="reportModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 500px; width: 90%;">
+        <h3 style="color: #00ffff;">举报用户</h3>
+        <div class="form-group" style="margin: 20px 0;">
+            <select id="reportReason" style="background: rgba(255,255,255,0.1); color: white;">
+                <option value="不当言论" style="background: #1a1a3a;">不当言论</option>
+                <option value="骚扰行为" style="background: #1a1a3a;">骚扰行为</option>
+                <option value="广告营销" style="background: #1a1a3a;">广告营销</option>
+                <option value="其他" style="background: #1a1a3a;">其他</option>
             </select>
         </div>
         <div class="form-group">
-            <textarea id="reportDetail" placeholder="详细说明（选填）" rows="3"></textarea>
+            <textarea id="reportDetail" placeholder="详细说明（选填）" rows="3" style="background: rgba(255,255,255,0.1); color: white;"></textarea>
         </div>
-        <div class="modal-buttons">
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: flex-end;">
             <button onclick="submitReport()" class="danger">提交举报</button>
             <button onclick="closeReportModal()">取消</button>
         </div>
     </div>
 </div>
 <!-- 通知中心弹窗 -->
-<div id="notificationsModal" class="modal hidden">
-    <div class="modal-content" style="max-width: 500px;">
-        <h3>通知中心</h3>
-        <div style="margin: 20px 0; max-height: 400px; overflow-y: auto;">
+<div id="notificationsModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <h3 style="color: #00ffff;">通知中心</h3>
+        <div style="margin: 20px 0;">
             <div id="notificationsList"></div>
         </div>
-        <div class="modal-buttons">
+        <div class="modal-buttons" style="display: flex; gap: 10px; justify-content: flex-end;">
             <button onclick="closeNotificationsModal()">关闭</button>
         </div>
     </div>
 </div>
 
 <!-- 管理面板弹窗 -->
-<div id="adminModal" class="modal hidden">
-    <div class="modal-content" style="max-width: 600px;">
-        <h3>管理面板</h3>
+<div id="adminModal" class="modal" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); display: none; justify-content: center; align-items: center; z-index: 2000;">
+    <div class="modal-content" style="background: rgba(20, 30, 50, 0.4); backdrop-filter: blur(30px); border: 1px solid rgba(0,255,255,0.5); border-radius: 30px; padding: 30px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+        <h3 style="color: #00ffff;">管理面板</h3>
         
-        <div class="tab-bar">
-            <span class="tab active" onclick="switchAdminTab('applications')">管理员申请</span>
-            <span class="tab" onclick="switchAdminTab('reports')">举报处理</span>
-            <span class="tab" onclick="switchAdminTab('notifications')">系统通知</span>
+        <div class="tab-bar" style="display: flex; gap: 10px; margin: 20px 0; border-bottom: 1px solid rgba(0,255,255,0.3); padding-bottom: 10px;">
+            <span class="tab" style="cursor: pointer; padding: 5px 15px; color: rgba(255,255,255,0.7);" onclick="switchAdminTab('applications')">管理员申请</span>
+            <span class="tab" style="cursor: pointer; padding: 5px 15px; color: rgba(255,255,255,0.7);" onclick="switchAdminTab('reports')">举报处理</span>
+            <span class="tab" style="cursor: pointer; padding: 5px 15px; color: rgba(255,255,255,0.7);" onclick="switchAdminTab('notifications')">系统通知</span>
         </div>
         
         <div id="adminApplicationsTab">
@@ -644,7 +585,7 @@
             <div id="adminNotificationsList" style="max-height: 300px; overflow-y: auto;"></div>
         </div>
         
-        <div class="modal-buttons">
+        <div class="modal-buttons" style="display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end;">
             <button onclick="closeAdminModal()">关闭</button>
         </div>
     </div>
@@ -684,18 +625,14 @@
         return ip;
     }
 
-    // 初始化
+    // 初始化 - 修改版：先清除旧登录状态
     function init() {
-        if (currentToken) {
-            const username = atob(currentToken).split(':')[0];
-            const user = users.find(u => u.username === username);
-            if (user && !user.banned) {
-                currentUser = user;
-                updateUIForAuth();
-            } else {
-                logout();
-            }
+        // 如果有旧的登录状态，先清除（解决一进去就显示管理面板的问题）
+        if (localStorage.getItem('token')) {
+            localStorage.removeItem('token');
+            currentToken = null;
         }
+        
         loadPosts();
     }
 
@@ -842,47 +779,45 @@
         showMessage('authMessage', '登录成功！', 'success');
         loadPosts();
     }
-        // 退出登录
-        function logout() {
-            currentToken = null;
-            currentUser = null;
-            localStorage.removeItem('token');
-            document.getElementById('unauthView').classList.remove('hidden');
-            document.getElementById('authView').classList.add('hidden');
-            document.getElementById('userActionsCard').classList.add('hidden');
-            document.getElementById('postCard').classList.add('hidden');
-            document.getElementById('username').value = '';
-            document.getElementById('adminUsername').value = '';
-            document.getElementById('adminPassword').value = '';
-        }
 
-        // 更新UI
-        function updateUIForAuth() {
-            document.getElementById('unauthView').classList.add('hidden');
-            document.getElementById('authView').classList.remove('hidden');
-            document.getElementById('userActionsCard').classList.remove('hidden');
-            document.getElementById('postCard').classList.remove('hidden');
-            document.getElementById('currentUsername').textContent = currentUser.username;
-            
-            const roleBadge = document.getElementById('userRole');
-            let roleText = '普通用户';
-            if (currentUser.role === 'admin') roleText = '管理员';
-            if (currentUser.role === 'community_leader') roleText = '社区长';
-            
-            roleBadge.textContent = roleText;
-            roleBadge.className = `badge ${
-                currentUser.role === 'admin' ? 'admin' : 
-                currentUser.role === 'community_leader' ? 'leader' : ''
-            }`;
-            
-            if (currentUser.role === 'admin' || currentUser.role === 'community_leader') {
-                document.getElementById('adminPanelBtn').classList.remove('hidden');
-                document.getElementById('applyAdminBtn').classList.add('hidden');
-            }
-            
-            loadUnreadCount();
-        }
+    // 退出登录
+    function logout() {
+        currentToken = null;
+        currentUser = null;
+        localStorage.removeItem('token');
+        document.getElementById('unauthView').classList.remove('hidden');
+        document.getElementById('authView').classList.add('hidden');
+        document.getElementById('userActionsCard').classList.add('hidden');
+        document.getElementById('postCard').classList.add('hidden');
+        document.getElementById('username').value = '';
+        document.getElementById('adminUsername').value = '';
+        document.getElementById('adminPassword').value = '';
+    }
 
+    // 更新UI
+    function updateUIForAuth() {
+        document.getElementById('unauthView').classList.add('hidden');
+        document.getElementById('authView').classList.remove('hidden');
+        document.getElementById('userActionsCard').classList.remove('hidden');
+        document.getElementById('postCard').classList.remove('hidden');
+        document.getElementById('currentUsername').textContent = currentUser.username;
+        
+        const roleBadge = document.getElementById('userRole');
+        let roleText = '普通用户';
+        if (currentUser.role === 'admin') roleText = '管理员';
+        if (currentUser.role === 'community_leader') roleText = '社区长';
+        
+        roleBadge.textContent = roleText;
+        roleBadge.style.borderColor = currentUser.role === 'admin' ? '#ff4444' : currentUser.role === 'community_leader' ? '#ffaa00' : '#00ffff';
+        roleBadge.style.color = currentUser.role === 'admin' ? '#ff4444' : currentUser.role === 'community_leader' ? '#ffaa00' : '#00ffff';
+        
+        if (currentUser.role === 'admin' || currentUser.role === 'community_leader') {
+            document.getElementById('adminPanelBtn').classList.remove('hidden');
+            document.getElementById('applyAdminBtn').classList.add('hidden');
+        }
+        
+        loadUnreadCount();
+    }
         // 加载未读通知
         function loadUnreadCount() {
             const count = notifications.filter(n => 
@@ -904,13 +839,13 @@
             
             const list = document.getElementById('notificationsList');
             list.innerHTML = userNotifs.map(n => `
-                <div class="notification-item ${n.status === 'unread' ? 'unread' : ''}" onclick="markNotificationRead(${n.id})">
-                    <div>${n.content}</div>
-                    <div class="notification-time">${formatTime(n.created_at)}</div>
+                <div style="border-bottom: 1px solid rgba(0,255,255,0.2); padding: 10px; cursor: pointer; ${n.status === 'unread' ? 'background: rgba(0,255,255,0.1);' : ''}" onclick="markNotificationRead(${n.id})">
+                    <div style="color: ${n.status === 'unread' ? '#00ffff' : 'rgba(255,255,255,0.7)'};">${n.content}</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">${formatTime(n.created_at)}</div>
                 </div>
             `).join('');
             
-            document.getElementById('notificationsModal').classList.remove('hidden');
+            document.getElementById('notificationsModal').style.display = 'flex';
         }
 
         // 标记通知已读
@@ -986,7 +921,7 @@
             
             const postsList = document.getElementById('postsList');
             if (postsWithStatus.length === 0) {
-                postsList.innerHTML = '<div class="empty-state">暂无帖子，来发布第一条吧～</div>';
+                postsList.innerHTML = '<div class="empty-state">✨ 暂无帖子，来发布第一条吧～</div>';
                 return;
             }
 
@@ -1026,7 +961,7 @@
                                     onclick="toggleFollow('${post.username}', ${post.isFollowed})">
                                 ${post.isFollowed ? '取消关注' : '关注'}
                             </button>
-                            <button class="small report-btn ${post.hasReported ? 'reported-btn' : ''}" 
+                            <button class="small report-btn" 
                                     onclick="reportUser('${post.username}')"
                                     ${post.hasReported ? 'disabled' : ''}>
                                 ${post.hasReported ? '已举报' : '举报'}
@@ -1052,7 +987,6 @@
             const post = posts.find(p => p.id === postId);
             
             if (hasLiked) {
-                // 取消点赞
                 const index = likes.findIndex(l => 
                     l.username === currentUser.username && l.post_id === postId
                 );
@@ -1061,7 +995,6 @@
                     post.likes = Math.max(0, (post.likes || 0) - 1);
                 }
             } else {
-                // 点赞
                 likes.push({
                     username: currentUser.username,
                     post_id: postId,
@@ -1082,7 +1015,6 @@
             }
 
             if (isFollowed) {
-                // 取消关注
                 const index = follows.findIndex(f => 
                     f.follower === currentUser.username && f.followed === targetUsername
                 );
@@ -1090,7 +1022,6 @@
                     follows.splice(index, 1);
                 }
             } else {
-                // 关注
                 follows.push({
                     follower: currentUser.username,
                     followed: targetUsername,
@@ -1116,13 +1047,13 @@
             
             const list = document.getElementById('followingList');
             list.innerHTML = followingList.map(f => `
-                <div class="user-list-item">
-                    <span class="user-list-name" onclick="openUserModal('${f.username}')">${f.username}</span>
-                    <span class="user-list-role">${f.role === 'admin' ? '管理员' : f.role === 'community_leader' ? '社区长' : '普通用户'}</span>
+                <div class="user-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,255,255,0.2);">
+                    <span style="color: #00ffff; cursor: pointer;" onclick="openUserModal('${f.username}')">${f.username}</span>
+                    <span style="border: 1px solid ${f.role === 'admin' ? '#ff4444' : f.role === 'community_leader' ? '#ffaa00' : '#00ffff'}; color: ${f.role === 'admin' ? '#ff4444' : f.role === 'community_leader' ? '#ffaa00' : '#00ffff'}; padding: 2px 8px; border-radius: 30px; font-size: 11px;">${f.role === 'admin' ? '管理员' : f.role === 'community_leader' ? '社区长' : '普通用户'}</span>
                 </div>
             `).join('');
             
-            document.getElementById('followingModal').classList.remove('hidden');
+            document.getElementById('followingModal').style.display = 'flex';
         }
 
         // 显示粉丝列表
@@ -1139,13 +1070,13 @@
             
             const list = document.getElementById('followersList');
             list.innerHTML = followersList.map(f => `
-                <div class="user-list-item">
-                    <span class="user-list-name" onclick="openUserModal('${f.username}')">${f.username}</span>
-                    <span class="user-list-role">${f.role === 'admin' ? '管理员' : f.role === 'community_leader' ? '社区长' : '普通用户'}</span>
+                <div class="user-list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,255,255,0.2);">
+                    <span style="color: #00ffff; cursor: pointer;" onclick="openUserModal('${f.username}')">${f.username}</span>
+                    <span style="border: 1px solid ${f.role === 'admin' ? '#ff4444' : f.role === 'community_leader' ? '#ffaa00' : '#00ffff'}; color: ${f.role === 'admin' ? '#ff4444' : f.role === 'community_leader' ? '#ffaa00' : '#00ffff'}; padding: 2px 8px; border-radius: 30px; font-size: 11px;">${f.role === 'admin' ? '管理员' : f.role === 'community_leader' ? '社区长' : '普通用户'}</span>
                 </div>
             `).join('');
             
-            document.getElementById('followersModal').classList.remove('hidden');
+            document.getElementById('followersModal').style.display = 'flex';
         }
 
         // 打开用户弹窗
@@ -1156,22 +1087,17 @@
             const user = users.find(u => u.username === username);
             const userPosts = posts.filter(p => p.username === username);
             
-            // 更新角色徽章
             const roleBadge = document.getElementById('modalUserRole');
             let roleText = '普通用户';
             if (user?.role === 'admin') roleText = '管理员';
             if (user?.role === 'community_leader') roleText = '社区长';
             roleBadge.textContent = roleText;
-            roleBadge.className = `badge ${
-                user?.role === 'admin' ? 'admin' : 
-                user?.role === 'community_leader' ? 'leader' : ''
-            }`;
+            roleBadge.style.borderColor = user?.role === 'admin' ? '#ff4444' : user?.role === 'community_leader' ? '#ffaa00' : '#00ffff';
+            roleBadge.style.color = user?.role === 'admin' ? '#ff4444' : user?.role === 'community_leader' ? '#ffaa00' : '#00ffff';
             
-            // 更新统计信息
             document.getElementById('userJoinTime').textContent = user?.created_at ? formatTime(user.created_at) : '未知';
             document.getElementById('userPostCount').textContent = userPosts.length;
             
-            // 加载用户帖子
             loadUserPosts(username);
             
             const modalFollowBtn = document.getElementById('modalFollowBtn');
@@ -1179,24 +1105,22 @@
             const deleteAccountBtn = document.getElementById('deleteAccountBtn');
             
             if (currentUser && username === currentUser.username) {
-                modalFollowBtn.classList.add('hidden');
-                modalReportBtn.classList.add('hidden');
-                deleteAccountBtn.classList.remove('hidden');
+                modalFollowBtn.style.display = 'none';
+                modalReportBtn.style.display = 'none';
+                deleteAccountBtn.style.display = 'block';
             } else {
-                modalFollowBtn.classList.remove('hidden');
-                modalReportBtn.classList.remove('hidden');
-                deleteAccountBtn.classList.add('hidden');
+                modalFollowBtn.style.display = 'block';
+                modalReportBtn.style.display = 'block';
+                deleteAccountBtn.style.display = 'none';
                 
                 const isFollowed = follows.some(f => 
                     f.follower === currentUser?.username && f.followed === username
                 );
                 modalFollowBtn.textContent = isFollowed ? '取消关注' : '关注';
-                modalFollowBtn.className = isFollowed ? 'unfollow-btn' : 'follow-btn';
             }
             
-            // 切换到信息标签
             switchUserTab('info');
-            document.getElementById('userModal').classList.remove('hidden');
+            document.getElementById('userModal').style.display = 'flex';
         }
 
         // 加载用户帖子
@@ -1207,14 +1131,14 @@
             
             const list = document.getElementById('userPostsList');
             if (userPosts.length === 0) {
-                list.innerHTML = '<div class="empty-state">暂无帖子</div>';
+                list.innerHTML = '<div class="empty-state">✨ 暂无帖子</div>';
                 return;
             }
             
             list.innerHTML = userPosts.map(post => `
-                <div class="post" style="border: none; padding: 10px 0;">
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    <div class="post-time">${formatTime(post.created_at)}</div>
+                <div style="border-bottom: 1px solid rgba(0,255,255,0.2); padding: 10px 0;">
+                    <div style="color: rgba(255,255,255,0.9);">${escapeHtml(post.content)}</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 5px;">${formatTime(post.created_at)}</div>
                 </div>
             `).join('');
         }
@@ -1222,9 +1146,11 @@
         // 切换用户弹窗标签
         function switchUserTab(tab) {
             document.querySelectorAll('#userModal .tab').forEach(t => {
-                t.classList.remove('active');
+                t.style.color = 'rgba(255,255,255,0.7)';
+                t.style.borderBottom = 'none';
             });
-            event.target.classList.add('active');
+            event.target.style.color = '#00ffff';
+            event.target.style.borderBottom = '2px solid #00ffff';
             
             if (tab === 'info') {
                 document.getElementById('userInfoTab').classList.remove('hidden');
@@ -1246,8 +1172,8 @@
 
         // 显示举报弹窗
         function showReportModal() {
-            document.getElementById('userModal').classList.add('hidden');
-            document.getElementById('reportModal').classList.remove('hidden');
+            document.getElementById('userModal').style.display = 'none';
+            document.getElementById('reportModal').style.display = 'flex';
         }
 
         // 提交举报
@@ -1265,7 +1191,6 @@
                 created_at: new Date().toISOString()
             });
             
-            // 通知管理员
             notifications.push({
                 id: Date.now() + 1,
                 type: 'report',
@@ -1277,7 +1202,7 @@
             
             saveData();
             
-            alert('举报已提交，管理员会尽快处理');
+            alert('举报已提交');
             closeReportModal();
             loadPosts();
         }
@@ -1288,7 +1213,7 @@
             showReportModal();
         }
 
-        // 删除帖子（管理员）
+        // 删除帖子
         function deletePost(postId) {
             if (!confirm('确定要删除这个帖子吗？')) return;
             
@@ -1297,7 +1222,6 @@
                 const post = posts[postIndex];
                 posts.splice(postIndex, 1);
                 
-                // 通知用户
                 notifications.push({
                     id: Date.now(),
                     type: 'system',
@@ -1315,9 +1239,8 @@
 
         // 注销账户
         function deleteAccount() {
-            if (!confirm('确定要注销账户吗？所有帖子将永久删除！')) return;
+            if (!confirm('确定要注销账户吗？')) return;
             
-            // 删除用户所有内容
             posts = posts.filter(p => p.username !== currentUser.username);
             follows = follows.filter(f => 
                 f.follower !== currentUser.username && f.followed !== currentUser.username
@@ -1337,7 +1260,7 @@
         function applyForAdmin() {
             if (applications.some(a => a.username === currentUser.username && a.status === 'pending')) {
                 alert('已有待处理的申请');
-                          return;
+                return;
             }
             
             applications.push({
@@ -1347,7 +1270,6 @@
                 created_at: new Date().toISOString()
             });
             
-            // 通知管理员
             notifications.push({
                 id: Date.now(),
                 type: 'application',
@@ -1363,13 +1285,12 @@
 
         // 显示管理面板
         function showAdminPanel() {
-            // 申请列表
             const appsList = document.getElementById('applicationsList');
             appsList.innerHTML = applications.map(app => `
-                <div style="border-bottom: 1px solid #eee; padding: 10px;">
-                    <div>用户: ${app.username}</div>
-                    <div>状态: ${app.status === 'pending' ? '待处理' : app.status === 'approved' ? '已批准' : '已拒绝'}</div>
-                    <div>时间: ${formatTime(app.created_at)}</div>
+                <div style="border-bottom: 1px solid rgba(0,255,255,0.2); padding: 10px;">
+                    <div>用户: <span style="color: #00ffff;">${app.username}</span></div>
+                    <div>状态: <span style="color: ${app.status === 'pending' ? '#ffaa00' : app.status === 'approved' ? '#00ff88' : '#ff4444'};">${app.status === 'pending' ? '待处理' : app.status === 'approved' ? '已批准' : '已拒绝'}</span></div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">${formatTime(app.created_at)}</div>
                     ${app.status === 'pending' ? `
                         <div style="margin-top: 10px;">
                             <button class="small success" onclick="handleApplication(${app.id}, true)">批准</button>
@@ -1379,31 +1300,28 @@
                 </div>
             `).join('');
             
-            // 举报列表
             const reportsList = document.getElementById('reportsList');
             const pendingReports = reports.filter(r => r.status === 'pending');
             reportsList.innerHTML = pendingReports.map(r => `
-                <div style="border-bottom: 1px solid #eee; padding: 10px;">
-                    <div>举报人: ${r.reporter}</div>
-                    <div>被举报: ${r.reported_user}</div>
+                <div style="border-bottom: 1px solid rgba(0,255,255,0.2); padding: 10px;">
+                    <div>举报人: <span style="color: #00ffff;">${r.reporter}</span> → <span style="color: #ffaa00;">${r.reported_user}</span></div>
                     <div>原因: ${r.reason}</div>
-                    <div>时间: ${formatTime(r.created_at)}</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">${formatTime(r.created_at)}</div>
                     <div style="margin-top: 10px;">
-                        <button class="small success" onclick="handleReport(${r.id}, true)">处理</button>
+                        <button class="small success" onclick="handleReport(${r.id})">标记已处理</button>
                     </div>
                 </div>
             `).join('');
             
-            // 管理员通知
             const adminNotifs = notifications.filter(n => n.related_user === 'all_admins');
             document.getElementById('adminNotificationsList').innerHTML = adminNotifs.map(n => `
-                <div class="notification-item ${n.status === 'unread' ? 'unread' : ''}">
+                <div style="border-bottom: 1px solid rgba(0,255,255,0.2); padding: 10px; ${n.status === 'unread' ? 'background: rgba(0,255,255,0.1);' : ''}">
                     <div>${n.content}</div>
-                    <div class="notification-time">${formatTime(n.created_at)}</div>
+                    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">${formatTime(n.created_at)}</div>
                 </div>
             `).join('');
             
-            document.getElementById('adminModal').classList.remove('hidden');
+            document.getElementById('adminModal').style.display = 'flex';
         }
 
         // 处理申请
@@ -1446,9 +1364,11 @@
         // 切换管理面板标签
         function switchAdminTab(tab) {
             document.querySelectorAll('#adminModal .tab').forEach(t => {
-                t.classList.remove('active');
+                t.style.color = 'rgba(255,255,255,0.7)';
+                t.style.borderBottom = 'none';
             });
-            event.target.classList.add('active');
+            event.target.style.color = '#00ffff';
+            event.target.style.borderBottom = '2px solid #00ffff';
             
             document.getElementById('adminApplicationsTab').classList.add('hidden');
             document.getElementById('adminReportsTab').classList.add('hidden');
@@ -1475,7 +1395,7 @@
 
         function formatTime(timestamp) {
             const date = new Date(timestamp);
-            return `${date.getMonth()+1}月${date.getDate()}日 ${date.getHours()}:${String(date.getMinutes()).padStart(2,'0')}`;
+            return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
         }
 
         function escapeHtml(text) {
@@ -1485,32 +1405,32 @@
         }
 
         function closeModal() {
-            document.getElementById('userModal').classList.add('hidden');
+            document.getElementById('userModal').style.display = 'none';
         }
 
         function closeFollowingModal() {
-            document.getElementById('followingModal').classList.add('hidden');
+            document.getElementById('followingModal').style.display = 'none';
         }
 
         function closeFollowersModal() {
-            document.getElementById('followersModal').classList.add('hidden');
+            document.getElementById('followersModal').style.display = 'none';
         }
 
         function closeReportModal() {
-            document.getElementById('reportModal').classList.add('hidden');
+            document.getElementById('reportModal').style.display = 'none';
             document.getElementById('reportDetail').value = '';
-            document.getElementById('userModal').classList.remove('hidden');
+            document.getElementById('userModal').style.display = 'flex';
         }
 
         function closeNotificationsModal() {
-            document.getElementById('notificationsModal').classList.add('hidden');
+            document.getElementById('notificationsModal').style.display = 'none';
         }
 
         function closeAdminModal() {
-            document.getElementById('adminModal').classList.add('hidden');
+            document.getElementById('adminModal').style.display = 'none';
         }
 
-        // 定时刷新（7天检查）
+        // 定时刷新
         setInterval(() => {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
