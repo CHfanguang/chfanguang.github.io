@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CHFG社区 · 去中心化版</title>
+    <title>CHFG社区</title>
     <style>
         * {
             margin: 0;
@@ -50,7 +50,7 @@
             to { transform: translateY(-1000px) translateX(200px); }
         }
         
-        /* 吸顶栏 */
+        /* 吸顶栏 - 只有一个顶部栏 */
         .top-bar {
             position: fixed;
             top: 0;
@@ -81,6 +81,56 @@
             padding: 80px 16px 20px;
             position: relative;
             z-index: 10;
+        }
+        
+        /* 底部导航栏 - 只有这一个底部栏 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-item.active {
+            background: rgba(102, 126, 234, 0.2);
+        }
+        
+        .nav-item.active .nav-icon,
+        .nav-item.active .nav-text {
+            color: #667eea;
+        }
+        
+        .nav-icon {
+            font-size: 22px;
+            color: #a0a0b0;
+        }
+        
+        .nav-text {
+            font-size: 12px;
+            color: #a0a0b0;
+        }
+        
+        .hidden {
+            display: none !important;
         }
         
         /* 面板切换 */
@@ -181,6 +231,10 @@
             cursor: pointer;
         }
         
+        .post-author-name:hover {
+            text-decoration: underline;
+        }
+        
         .post-verified {
             display: inline-flex;
             align-items: center;
@@ -250,6 +304,10 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
         .user-info {
             display: flex;
             align-items: center;
@@ -294,10 +352,6 @@
             color: #6a6a7a;
             padding: 40px;
         }
-        
-        .hidden {
-            display: none !important;
-        }
     </style>
 </head>
 <body>
@@ -309,14 +363,6 @@
         <!-- 状态栏 -->
         <div class="status-bar" id="statusBar">
             🌍 正在连接 IPFS 网络...
-        </div>
-
-        <!-- 导航栏 -->
-        <div style="display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 30px;">
-            <button class="btn-small" style="flex:1;" onclick="switchPanel('home')" id="tabHome">🏠 首页</button>
-            <button class="btn-small" style="flex:1;" onclick="switchPanel('login')" id="tabLogin">🔑 登录</button>
-            <button class="btn-small" style="flex:1;" onclick="switchPanel('post')" id="tabPost">✏️ 发布</button>
-            <button class="btn-small" style="flex:1;" onclick="switchPanel('profile')" id="tabProfile">👤 我的</button>
         </div>
 
         <!-- 首页面板 -->
@@ -376,7 +422,7 @@
             </div>
         </div>
 
-        <!-- 管理面板（社区长专用） -->
+        <!-- 管理面板 -->
         <div id="adminPanel" class="panel">
             <div class="card">
                 <div class="card-title">⚡ 管理面板</div>
@@ -394,82 +440,30 @@
             </div>
         </div>
     </div>
-<!-- 底部导航栏（移动端快速切换） -->
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="switchPanel('home')">
-        <div class="nav-icon">🏠</div>
-        <div class="nav-text">首页</div>
-    </div>
-    <div class="nav-item" onclick="switchPanel('login')">
-        <div class="nav-icon">🔑</div>
-        <div class="nav-text">登录</div>
-    </div>
-    <div class="nav-item" onclick="switchPanel('post')">
-        <div class="nav-icon">✏️</div>
-        <div class="nav-text">发布</div>
-    </div>
-    <div class="nav-item" onclick="switchPanel('profile')">
-        <div class="nav-icon">👤</div>
-        <div class="nav-text">我的</div>
-    </div>
-    <div class="nav-item hidden" id="adminNavItem" onclick="switchPanel('admin')">
-        <div class="nav-icon">⚡</div>
-        <div class="nav-text">管理</div>
-    </div>
-</div>
 
-<style>
-    /* 底部导航栏 */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 70px;
-        background: rgba(20, 20, 30, 0.8);
-        backdrop-filter: blur(15px);
-        border-top: 1px solid rgba(255,255,255,0.1);
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        z-index: 1000;
-    }
-    
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 4px;
-        padding: 8px 12px;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    
-    .nav-item.active {
-        background: rgba(102, 126, 234, 0.2);
-    }
-    
-    .nav-item.active .nav-icon,
-    .nav-item.active .nav-text {
-        color: #667eea;
-    }
-    
-    .nav-icon {
-        font-size: 22px;
-        color: #a0a0b0;
-    }
-    
-    .nav-text {
-        font-size: 12px;
-        color: #a0a0b0;
-    }
-    
-    .hidden {
-        display: none !important;
-    }
-</style>
-
+    <!-- 底部导航栏（只有这一个） -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchPanel('home')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-text">首页</div>
+        </div>
+        <div class="nav-item" onclick="switchPanel('login')">
+            <div class="nav-icon">🔑</div>
+            <div class="nav-text">登录</div>
+        </div>
+        <div class="nav-item" onclick="switchPanel('post')">
+            <div class="nav-icon">✏️</div>
+            <div class="nav-text">发布</div>
+        </div>
+        <div class="nav-item" onclick="switchPanel('profile')">
+            <div class="nav-icon">👤</div>
+            <div class="nav-text">我的</div>
+        </div>
+        <div class="nav-item hidden" id="adminNavItem" onclick="switchPanel('admin')">
+            <div class="nav-icon">⚡</div>
+            <div class="nav-text">管理</div>
+        </div>
+    </div>
 <script>
     // ============ IPFS 配置 ============
     const IPFS_GATEWAY = 'https://ipfs.io/ipfs/';
@@ -482,7 +476,7 @@
     let allFollows = [];
     let allLikes = [];
     
-    const DATA_HASH_KEY = 'chfg_data_hash_v2';
+    const DATA_HASH_KEY = 'chfg_data_hash';
     let currentDataHash = localStorage.getItem(DATA_HASH_KEY);
 
     // ============ 初始化 ============
@@ -492,7 +486,6 @@
         if (currentDataHash) {
             await loadFromIPFS(currentDataHash);
         } else {
-            // 首次使用，创建初始数据
             allUsers = [];
             allPosts = [];
             allFollows = [];
@@ -501,24 +494,7 @@
         }
         
         updateStatus('✅ 已连接到 IPFS 网络');
-        
-        // 检查URL参数
-        checkUrlParams();
-        
-        // 默认显示首页
         switchPanel('home');
-    }
-
-    // ============ 检查URL参数（用于分享） ============
-    function checkUrlParams() {
-        const params = new URLSearchParams(window.location.search);
-        const postId = params.get('post');
-        const user = params.get('user');
-        
-        if (postId) {
-            // 可以跳转到指定帖子
-            console.log('查看帖子:', postId);
-        }
     }
 
     // ============ 更新状态栏 ============
@@ -539,8 +515,7 @@
         const jsonString = JSON.stringify(data);
         const blob = new Blob([jsonString], { type: 'application/json' });
         
-        // 保存到本地作为备份
-        localStorage.setItem('chfg_backup_data', jsonString);
+        localStorage.setItem('chfg_backup', jsonString);
         
         const formData = new FormData();
         formData.append('file', blob, 'data.json');
@@ -551,9 +526,7 @@
             const response = await fetch(WEB3_STORAGE, {
                 method: 'POST',
                 body: formData,
-                headers: {
-                    'Accept': 'application/json',
-                }
+                headers: { 'Accept': 'application/json' }
             });
             
             const result = await response.json();
@@ -561,12 +534,11 @@
             
             currentDataHash = cid;
             localStorage.setItem(DATA_HASH_KEY, cid);
-            
-            updateStatus('✅ 数据已保存，CID: ' + cid.slice(0, 8) + '...');
+            updateStatus('✅ 数据已保存');
             return cid;
         } catch (error) {
-            console.error('保存到 IPFS 失败:', error);
-            updateStatus('⚠️ 使用本地备份模式');
+            console.error('保存失败:', error);
+            updateStatus('⚠️ 使用本地存储');
             return null;
         }
     }
@@ -586,26 +558,22 @@
             
             updateStatus('✅ 数据加载成功');
         } catch (error) {
-            console.error('从 IPFS 加载失败:', error);
+            console.error('加载失败:', error);
             
-            // 从本地备份加载
-            const backup = localStorage.getItem('chfg_backup_data');
+            const backup = localStorage.getItem('chfg_backup');
             if (backup) {
                 const data = JSON.parse(backup);
                 allUsers = data.users || [];
                 allPosts = data.posts || [];
                 allFollows = data.follows || [];
                 allLikes = data.likes || [];
-                updateStatus('⚠️ 使用本地备份数据');
-            } else {
-                updateStatus('❌ 加载失败，请刷新重试');
+                updateStatus('⚠️ 使用本地备份');
             }
         }
     }
 
     // ============ 切换面板 ============
     function switchPanel(panel) {
-        // 更新导航栏样式
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
@@ -616,7 +584,6 @@
         });
         document.getElementById(panel + 'Panel').classList.add('active');
         
-        // 根据面板加载数据
         if (panel === 'home') {
             loadPosts();
         } else if (panel === 'profile' && currentUser) {
@@ -637,16 +604,13 @@
             return;
         }
         
-        // 检查用户是否存在
         if (allUsers.find(u => u.email === email)) {
             document.getElementById('loginMessage').textContent = '邮箱已注册';
             return;
         }
         
-        // 判断角色
         const role = email === 'chfanguang@outlook.com' ? 'community_leader' : 'user';
         
-        // 创建用户
         const newUser = {
             id: Date.now(),
             username,
@@ -663,8 +627,9 @@
         document.getElementById('loginMessage').style.color = '#34A853';
         document.getElementById('loginMessage').textContent = '注册成功！';
         
-        // 更新导航栏
-        document.getElementById('tabLogin').innerHTML = '👤 ' + username;
+        if (role === 'community_leader') {
+            document.getElementById('adminNavItem').classList.remove('hidden');
+        }
         
         setTimeout(() => switchPanel('home'), 1000);
     }
@@ -685,242 +650,232 @@
         document.getElementById('loginMessage').style.color = '#34A853';
         document.getElementById('loginMessage').textContent = '登录成功！';
         
-        // 更新导航栏
-        document.getElementById('tabLogin').innerHTML = '👤 ' + user.username;
-        
-        // 如果是社区长，显示管理入口
         if (user.role === 'community_leader') {
             document.getElementById('adminNavItem').classList.remove('hidden');
         }
         
         setTimeout(() => switchPanel('home'), 1000);
     }
-// ============ 发布帖子 ============
-async function createPost() {
-    if (!currentUser) {
-        document.getElementById('postMessage').textContent = '请先登录';
-        return;
-    }
-    
-    const content = document.getElementById('postContent').value.trim();
-    if (!content) return;
-    
-    const newPost = {
-        id: Date.now(),
-        username: currentUser.username,
-        userRole: currentUser.role,
-        content: content,
-        likes: 0,
-        created_at: new Date().toISOString()
-    };
-    
-    allPosts.unshift(newPost);
-    await saveToIPFS();
-    
-    document.getElementById('postContent').value = '';
-    document.getElementById('postMessage').textContent = '发布成功！';
-    
-    setTimeout(() => switchPanel('home'), 1000);
-}
 
-// ============ 加载帖子 ============
-function loadPosts() {
-    const container = document.getElementById('postsList');
-    
-    if (allPosts.length === 0) {
-        container.innerHTML = '<div class="empty-state">还没有帖子<br><br><button class="btn-small" onclick="switchPanel(\'post\')">发布第一条</button></div>';
-        return;
-    }
-    
-    // 只显示7天内的帖子
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
-    const recentPosts = allPosts
-        .filter(p => new Date(p.created_at) > sevenDaysAgo)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-    
-    if (recentPosts.length === 0) {
-        container.innerHTML = '<div class="empty-state">7天内没有新帖子<br><br><button class="btn-small" onclick="switchPanel(\'post\')">发布一条</button></div>';
-        return;
-    }
-    
-    container.innerHTML = recentPosts.map(post => {
-        const user = allUsers.find(u => u.username === post.username);
-        const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
-        const hasLiked = currentUser && allLikes.some(l => l.username === currentUser.username && l.postId === post.id);
-        const isFollowed = currentUser && allFollows.some(f => f.follower === currentUser.username && f.followed === post.username);
+    // ============ 发布帖子 ============
+    async function createPost() {
+        if (!currentUser) {
+            document.getElementById('postMessage').textContent = '请先登录';
+            return;
+        }
         
-        return `
-        <div class="post-item">
-            <div class="post-header">
-                <div class="post-author">
-                    <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
-                    ${isVerified ? '<span class="post-verified">✓</span>' : ''}
-                    ${user?.role === 'community_leader' ? '<span style="color:#FBBC05; font-size:11px; margin-left:5px;">社区长</span>' : ''}
-                    ${user?.role === 'admin' ? '<span style="color:#EA4335; font-size:11px; margin-left:5px;">管理员</span>' : ''}
-                </div>
-                <div class="post-time">${formatTime(post.created_at)}</div>
-            </div>
-            <div class="post-content">${escapeHtml(post.content)}</div>
-            <div class="post-stats">
-                <span>❤️ ${post.likes}</span>
-            </div>
-            <div class="post-actions">
-                ${currentUser ? `
-                    <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
-                        ${hasLiked ? '已赞' : '点赞'}
-                    </button>
-                ` : ''}
-                ${currentUser && post.username !== currentUser.username ? `
-                    <button class="action-btn ${isFollowed ? 'following' : ''}" onclick="toggleFollow('${post.username}')">
-                        ${isFollowed ? '取消关注' : '关注'}
-                    </button>
-                ` : ''}
-                ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'community_leader') && post.username !== currentUser.username ? `
-                    <button class="action-btn" style="border-color:#EA4335; color:#EA4335;" onclick="deletePost(${post.id})">删除</button>
-                ` : ''}
-            </div>
-        </div>
-    `}).join('');
-}
-
-// ============ 点赞 ============
-async function toggleLike(postId) {
-    if (!currentUser) {
-        alert('请先登录');
-        return;
-    }
-    
-    const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
-    const post = allPosts.find(p => p.id === postId);
-    
-    if (existing) {
-        // 取消点赞
-        const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
-        allLikes.splice(index, 1);
-        post.likes--;
-    } else {
-        // 点赞
-        allLikes.push({
+        const content = document.getElementById('postContent').value.trim();
+        if (!content) return;
+        
+        const newPost = {
+            id: Date.now(),
             username: currentUser.username,
-            postId: postId,
+            userRole: currentUser.role,
+            content: content,
+            likes: 0,
             created_at: new Date().toISOString()
-        });
-        post.likes++;
-    }
-    
-    await saveToIPFS();
-    loadPosts();
-}
-
-// ============ 关注/取消关注 ============
-async function toggleFollow(targetUsername) {
-    if (!currentUser) {
-        alert('请先登录');
-        return;
-    }
-    
-    const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
-    
-    if (existing) {
-        const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
-        allFollows.splice(index, 1);
-    } else {
-        allFollows.push({
-            follower: currentUser.username,
-            followed: targetUsername,
-            created_at: new Date().toISOString()
-        });
-    }
-    
-    await saveToIPFS();
-    loadPosts();
-}
-
-// ============ 删除帖子（管理员） ============
-async function deletePost(postId) {
-    if (!confirm('确定要删除这个帖子吗？')) return;
-    
-    const index = allPosts.findIndex(p => p.id === postId);
-    if (index !== -1) {
-        allPosts.splice(index, 1);
+        };
+        
+        allPosts.unshift(newPost);
         await saveToIPFS();
-        loadPosts();
+        
+        document.getElementById('postContent').value = '';
+        document.getElementById('postMessage').textContent = '发布成功！';
+        
+        setTimeout(() => switchPanel('home'), 1000);
     }
-}
-
-// ============ 查看用户资料 ============
-function viewUserProfile(username) {
-    // 这里可以弹窗显示用户信息
-    alert('查看用户: ' + username + '\n功能开发中...');
-}
-
-// ============ 加载个人主页 ============
-function loadProfile() {
-    if (!currentUser) {
-        document.getElementById('profileInfo').innerHTML = '<p style="color: #a0a0b0; text-align: center;">请先登录</p>';
-        document.getElementById('myPostsCard').style.display = 'none';
-        document.getElementById('myFollowsCard').style.display = 'none';
-        return;
-    }
-    
-    // 显示个人信息
-    document.getElementById('profileInfo').innerHTML = `
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="width:80px; height:80px; border-radius:40px; background:linear-gradient(135deg,#667eea,#764ba2); margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:600;">
-                ${currentUser.username.charAt(0).toUpperCase()}
-            </div>
-            <h3>${currentUser.username}</h3>
-            <p style="color:#a0a0b0; font-size:14px;">${currentUser.email}</p>
-            <p style="margin-top:10px;">
-                ${currentUser.role === 'community_leader' ? '<span style="background:#FBBC05; padding:4px 12px; border-radius:20px; font-size:12px;">社区长</span>' : ''}
-                ${currentUser.role === 'admin' ? '<span style="background:#EA4335; padding:4px 12px; border-radius:20px; font-size:12px;">管理员</span>' : ''}
-            </p>
-        </div>
-    `;
-    
-    // 显示我的帖子
-    const myPosts = allPosts.filter(p => p.username === currentUser.username).slice(0, 10);
-    const myPostsList = document.getElementById('myPostsList');
-    
-    if (myPosts.length === 0) {
-        myPostsList.innerHTML = '<div class="empty-state">暂无帖子</div>';
-    } else {
-        myPostsList.innerHTML = myPosts.map(post => `
-            <div class="post-item">
-                <div class="post-content">${escapeHtml(post.content)}</div>
-                <div class="post-time">${formatTime(post.created_at)}</div>
-            </div>
-        `).join('');
-    }
-    
-    // 显示我的关注
-    const myFollows = allFollows.filter(f => f.follower === currentUser.username);
-    const myFollowsList = document.getElementById('myFollowsList');
-    
-    if (myFollows.length === 0) {
-        myFollowsList.innerHTML = '<div class="empty-state">暂无关注</div>';
-    } else {
-        myFollowsList.innerHTML = myFollows.map(f => {
-            const user = allUsers.find(u => u.username === f.followed);
-            return `
-            <div class="user-item">
-                <div class="user-info">
-                    <div class="user-avatar">${f.followed.charAt(0).toUpperCase()}</div>
-                    <div class="user-details">
-                        <div class="user-name">${f.followed}</div>
-                        <div style="font-size:11px; color:#a0a0b0;">${user?.email || ''}</div>
+        // ============ 加载帖子 ============
+        function loadPosts() {
+            const container = document.getElementById('postsList');
+            
+            if (allPosts.length === 0) {
+                container.innerHTML = '<div class="empty-state">还没有帖子<br><br><button class="btn-small" onclick="switchPanel(\'post\')">发布第一条</button></div>';
+                return;
+            }
+            
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            
+            const recentPosts = allPosts
+                .filter(p => new Date(p.created_at) > sevenDaysAgo)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            if (recentPosts.length === 0) {
+                container.innerHTML = '<div class="empty-state">7天内没有新帖子<br><br><button class="btn-small" onclick="switchPanel(\'post\')">发布一条</button></div>';
+                return;
+            }
+            
+            container.innerHTML = recentPosts.map(post => {
+                const user = allUsers.find(u => u.username === post.username);
+                const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                const hasLiked = currentUser && allLikes.some(l => l.username === currentUser.username && l.postId === post.id);
+                const isFollowed = currentUser && allFollows.some(f => f.follower === currentUser.username && f.followed === post.username);
+                
+                return `
+                <div class="post-item">
+                    <div class="post-header">
+                        <div class="post-author">
+                            <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
+                            ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                            ${user?.role === 'community_leader' ? '<span style="color:#FBBC05; font-size:11px; margin-left:5px;">社区长</span>' : ''}
+                            ${user?.role === 'admin' ? '<span style="color:#EA4335; font-size:11px; margin-left:5px;">管理员</span>' : ''}
+                        </div>
+                        <div class="post-time">${formatTime(post.created_at)}</div>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-stats">
+                        <span>❤️ ${post.likes}</span>
+                    </div>
+                    <div class="post-actions">
+                        ${currentUser ? `
+                            <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                                ${hasLiked ? '已赞' : '点赞'}
+                            </button>
+                        ` : ''}
+                        ${currentUser && post.username !== currentUser.username ? `
+                            <button class="action-btn ${isFollowed ? 'following' : ''}" onclick="toggleFollow('${post.username}')">
+                                ${isFollowed ? '取消关注' : '关注'}
+                            </button>
+                        ` : ''}
+                        ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'community_leader') && post.username !== currentUser.username ? `
+                            <button class="action-btn" style="border-color:#EA4335; color:#EA4335;" onclick="deletePost(${post.id})">删除</button>
+                        ` : ''}
                     </div>
                 </div>
-                <button class="btn-small" onclick="toggleFollow('${f.followed}')">取消关注</button>
-            </div>
-        `}).join('');
-    }
-    
-    document.getElementById('myPostsCard').style.display = 'block';
-    document.getElementById('myFollowsCard').style.display = 'block';
-}
+            `}).join('');
+        }
+
+        // ============ 点赞 ============
+        async function toggleLike(postId) {
+            if (!currentUser) {
+                alert('请先登录');
+                return;
+            }
+            
+            const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
+            const post = allPosts.find(p => p.id === postId);
+            
+            if (existing) {
+                const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
+                allLikes.splice(index, 1);
+                post.likes--;
+            } else {
+                allLikes.push({
+                    username: currentUser.username,
+                    postId: postId,
+                    created_at: new Date().toISOString()
+                });
+                post.likes++;
+            }
+            
+            await saveToIPFS();
+            loadPosts();
+        }
+
+        // ============ 关注/取消关注 ============
+        async function toggleFollow(targetUsername) {
+            if (!currentUser) {
+                alert('请先登录');
+                return;
+            }
+            
+            const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
+            
+            if (existing) {
+                const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
+                allFollows.splice(index, 1);
+            } else {
+                allFollows.push({
+                    follower: currentUser.username,
+                    followed: targetUsername,
+                    created_at: new Date().toISOString()
+                });
+            }
+            
+            await saveToIPFS();
+            loadPosts();
+        }
+
+        // ============ 删除帖子 ============
+        async function deletePost(postId) {
+            if (!confirm('确定要删除这个帖子吗？')) return;
+            
+            const index = allPosts.findIndex(p => p.id === postId);
+            if (index !== -1) {
+                allPosts.splice(index, 1);
+                await saveToIPFS();
+                loadPosts();
+            }
+        }
+
+        // ============ 查看用户资料 ============
+        function viewUserProfile(username) {
+            alert('查看用户: ' + username);
+        }
+
+        // ============ 加载个人主页 ============
+        function loadProfile() {
+            if (!currentUser) {
+                document.getElementById('profileInfo').innerHTML = '<p style="color: #a0a0b0; text-align: center;">请先登录</p>';
+                document.getElementById('myPostsCard').style.display = 'none';
+                document.getElementById('myFollowsCard').style.display = 'none';
+                return;
+            }
+            
+            document.getElementById('profileInfo').innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="width:80px; height:80px; border-radius:40px; background:linear-gradient(135deg,#667eea,#764ba2); margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:600;">
+                        ${currentUser.username.charAt(0).toUpperCase()}
+                    </div>
+                    <h3>${currentUser.username}</h3>
+                    <p style="color:#a0a0b0; font-size:14px;">${currentUser.email}</p>
+                    <p style="margin-top:10px;">
+                        ${currentUser.role === 'community_leader' ? '<span style="background:#FBBC05; padding:4px 12px; border-radius:20px; font-size:12px;">社区长</span>' : ''}
+                        ${currentUser.role === 'admin' ? '<span style="background:#EA4335; padding:4px 12px; border-radius:20px; font-size:12px;">管理员</span>' : ''}
+                    </p>
+                </div>
+            `;
+            
+            const myPosts = allPosts.filter(p => p.username === currentUser.username).slice(0, 10);
+            const myPostsList = document.getElementById('myPostsList');
+            
+            if (myPosts.length === 0) {
+                myPostsList.innerHTML = '<div class="empty-state">暂无帖子</div>';
+            } else {
+                myPostsList.innerHTML = myPosts.map(post => `
+                    <div class="post-item">
+                        <div class="post-content">${escapeHtml(post.content)}</div>
+                        <div class="post-time">${formatTime(post.created_at)}</div>
+                    </div>
+                `).join('');
+            }
+            
+            const myFollows = allFollows.filter(f => f.follower === currentUser.username);
+            const myFollowsList = document.getElementById('myFollowsList');
+            
+            if (myFollows.length === 0) {
+                myFollowsList.innerHTML = '<div class="empty-state">暂无关注</div>';
+            } else {
+                myFollowsList.innerHTML = myFollows.map(f => {
+                    const user = allUsers.find(u => u.username === f.followed);
+                    return `
+                    <div class="user-item">
+                        <div class="user-info">
+                            <div class="user-avatar">${f.followed.charAt(0).toUpperCase()}</div>
+                            <div class="user-details">
+                                <div class="user-name">${f.followed}</div>
+                                <div style="font-size:11px; color:#a0a0b0;">${user?.email || ''}</div>
+                            </div>
+                        </div>
+                        <button class="btn-small" onclick="toggleFollow('${f.followed}')">取消关注</button>
+                    </div>
+                `}).join('');
+            }
+            
+            document.getElementById('myPostsCard').style.display = 'block';
+            document.getElementById('myFollowsCard').style.display = 'block';
+        }
+
         // ============ 加载管理面板 ============
         function loadAdminPanel() {
             if (!currentUser || currentUser.role !== 'community_leader') {
@@ -928,11 +883,9 @@ function loadProfile() {
                 return;
             }
             
-            // 更新统计
             document.getElementById('totalUsers').textContent = allUsers.length;
             document.getElementById('totalPosts').textContent = allPosts.length;
             
-            // 显示用户列表
             const users = allUsers.filter(u => u.role === 'user');
             let html = '<h4 style="margin:20px 0 10px;">普通用户列表</h4>';
             
@@ -985,18 +938,18 @@ function loadProfile() {
             return div.innerHTML;
         }
 
-        // ============ 初始化 ============
-        init();
-
         // ============ 定时刷新 ============
         setInterval(() => {
             if (currentDataHash) {
                 loadFromIPFS(currentDataHash);
             }
-            if (document.querySelector('.panel.active').id === 'homePanel') {
+            if (document.querySelector('.panel.active')?.id === 'homePanel') {
                 loadPosts();
             }
         }, 30000);
+
+        // ============ 初始化 ============
+        init();
     </script>
 </body>
 </html>
