@@ -83,7 +83,72 @@
             z-index: 10;
         }
         
-        /* 用戶卡片 */
+        /* 面板切換 */
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        /* 空狀態 */
+        .empty-state {
+            text-align: center;
+            color: #6a6a7a;
+            padding: 40px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* 卡片樣式 */
+        .card {
+            background: rgba(30, 30, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .post-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* 我的頁面專用樣式 */
         .profile-card {
             background: rgba(30, 30, 40, 0.6);
             backdrop-filter: blur(15px);
@@ -117,7 +182,6 @@
             color: white;
             font-size: 28px;
             font-weight: 600;
-            cursor: pointer;
             object-fit: cover;
         }
         
@@ -138,39 +202,37 @@
             border: 2px solid rgba(255,255,255,0.2);
         }
         
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
         .profile-info h3 {
             font-size: 18px;
             color: white;
-            margin-bottom: 4px;
         }
         
-        .user-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 20px;
-            font-size: 12px;
-            color: #a0a0b0;
+        /* 蓝色对号徽章 - 像推特官方账号一样 */
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: #1DA1F2;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 5px;
         }
         
-        .user-badge.admin {
-            border-color: #EA4335;
-            color: #EA4335;
-        }
-        
-        .user-badge.leader {
-            border-color: #FBBC05;
-            color: #FBBC05;
-        }
-        
-        /* 統計數字 */
         .stats-row {
             display: flex;
             justify-content: space-around;
             padding: 15px 0;
             border-top: 1px solid rgba(255,255,255,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .stat-block {
@@ -190,24 +252,156 @@
             margin-top: 4px;
         }
         
-        /* 面板切換 */
-        .panel {
-            display: none;
+        .post-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
-        .panel.active {
-            display: block;
+        .post-item:last-child {
+            border-bottom: none;
         }
         
-        /* 空狀態 */
-        .empty-state {
-            text-align: center;
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .post-author-name {
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .post-verified {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: #1DA1F2;
+            border-radius: 50%;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .post-content {
+            color: #d0d0e0;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+        }
+        
+        .post-time {
+            font-size: 12px;
             color: #6a6a7a;
-            padding: 40px;
+            margin-bottom: 10px;
         }
         
-        .hidden {
-            display: none !important;
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            color: #a0a0b0;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .action-btn.following {
+            background: #34A853;
+            border-color: #34A853;
+            color: white;
+        }
+        
+        .action-btn.liked {
+            background: #EA4335;
+            border-color: #EA4335;
+            color: white;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            background-size: cover;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .user-email {
+            font-size: 12px;
+            color: #a0a0b0;
+        }
+        
+        .profile-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-section h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .danger-btn {
+            width: 100%;
+            padding: 15px;
+            background: rgba(234, 67, 53, 0.2);
+            border: 1px solid #EA4335;
+            border-radius: 15px;
+            color: #EA4335;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -217,69 +411,41 @@
     </div>
 
     <div class="container">
-        <!-- 用戶卡片（所有面板共用） -->
-        <div class="profile-card">
-            <div class="profile-header">
-                <div class="avatar-container">
-                    <img id="profileAvatar" class="profile-avatar" src="" alt="avatar" style="display: none;">
-                    <div id="profileAvatarText" class="profile-avatar"></div>
-                    <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
-                    <div class="avatar-upload" onclick="document.getElementById('avatarUpload').click()">✏️</div>
-                </div>
-                <div class="profile-info">
-                    <h3 id="userName"></h3>
-                    <span class="user-badge" id="userRole"></span>
-                </div>
-            </div>
-            
-            <div class="stats-row">
-                <div class="stat-block" onclick="showFollowers()">
-                    <div class="stat-number" id="userFollowerCount">0</div>
-                    <div class="stat-label">粉絲</div>
-                </div>
-                <div class="stat-block" onclick="showFollowing()">
-                    <div class="stat-number" id="userFollowingCount">0</div>
-                    <div class="stat-label">關注</div>
-                </div>
-            </div>
-        </div>
-
         <!-- 面板切換區域 -->
-        <div id="homePanel" class="panel active">
-            <!-- 首頁 - 完全空白 -->
-        </div>
+        <!-- 首頁面板 - 完全空白 -->
+        <div id="homePanel" class="panel active"></div>
 
-        <div id="notificationsPanel" class="panel">
-            <!-- 通知 - 完全空白 -->
-        </div>
+        <!-- 通知面板 - 完全空白 -->
+        <div id="notificationsPanel" class="panel"></div>
 
+        <!-- 發布面板 - 頁面樣式，不是彈窗 -->
         <div id="postPanel" class="panel">
-            <!-- 發布頁面 -->
-            <div class="profile-card">
-                <h3 style="color: white; margin-bottom: 20px;">發布新貼文</h3>
-                <textarea id="postContent" placeholder="分享你的想法..." rows="6" style="width: 100%; padding: 15px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; color: white; font-size: 16px; resize: vertical; margin-bottom: 20px;"></textarea>
-                <button onclick="submitPost()" style="width: 100%; padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 15px; color: white; font-size: 16px; font-weight: 600; cursor: pointer;">發布</button>
+            <div class="card">
+                <div class="card-title">發布新貼文</div>
+                <textarea id="postContent" placeholder="分享你的想法..." rows="6"></textarea>
+                <button class="post-btn" onclick="submitPost()">發布</button>
             </div>
         </div>
 
+        <!-- 個人主頁面板 - 顯示資料卡 -->
         <div id="profilePanel" class="panel">
-            <!-- 個人主頁 -->
-            <div class="profile-card">
-                <h3 style="color: white; margin-bottom: 15px;">我的帖子</h3>
+            <div class="profile-card" id="profileCard"></div>
+            
+            <div class="profile-section">
+                <h4>我的帖子</h4>
                 <div id="myPostsList"></div>
             </div>
             
-            <div class="profile-card">
-                <h3 style="color: white; margin-bottom: 15px;">我的關注</h3>
+            <div class="profile-section">
+                <h4>我的關注</h4>
                 <div id="myFollowingList"></div>
             </div>
             
-            <button class="danger-btn" onclick="logout()" style="width: 100%; padding: 15px; background: rgba(234, 67, 53, 0.2); border: 1px solid #EA4335; border-radius: 15px; color: #EA4335; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 20px;">退出登錄</button>
+            <button class="danger-btn" onclick="logout()">退出登錄</button>
         </div>
 
-        <div id="adminPanel" class="panel">
-            <!-- 管理面板 - 完全空白 -->
-        </div>
+        <!-- 管理面板 - 完全空白 -->
+        <div id="adminPanel" class="panel"></div>
     </div>
 <!-- 底部导航栏 -->
 <div class="bottom-nav">
@@ -308,12 +474,14 @@
 
 <!-- 用戶資料卡彈窗（查看他人） -->
 <div id="userProfileModal" class="modal">
-    <div class="modal-content" style="max-width: 500px;">
+    <div class="modal-content">
         <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
             <div class="modal-avatar" id="modalUserAvatar"></div>
             <div>
-                <h3 id="modalUserName" style="color: white; margin-bottom: 5px;"></h3>
-                <span class="user-badge" id="modalUserRole"></span>
+                <h3 style="color: white; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;">
+                    <span id="modalUserName"></span>
+                    <span class="verified-badge" id="modalUserVerified" style="display: none;">✓</span>
+                </h3>
             </div>
         </div>
         
@@ -490,78 +658,6 @@
         color: #a0a0b0;
     }
     
-    .action-btn {
-        padding: 8px 16px;
-        background: rgba(255,255,255,0.05);
-        border: 1px solid rgba(255,255,255,0.1);
-        border-radius: 20px;
-        color: #a0a0b0;
-        font-size: 13px;
-        cursor: pointer;
-    }
-    
-    .action-btn.following {
-        background: #34A853;
-        border-color: #34A853;
-        color: white;
-    }
-    
-    .user-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .user-item:last-child {
-        border-bottom: none;
-    }
-    
-    .user-info-small {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-    
-    .user-name {
-        color: white;
-        font-weight: 500;
-    }
-    
-    .user-email {
-        font-size: 12px;
-        color: #a0a0b0;
-    }
-    
-    .post-item {
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .post-item:last-child {
-        border-bottom: none;
-    }
-    
-    .post-content {
-        color: #d0d0e0;
-        font-size: 15px;
-        line-height: 1.6;
-        margin-bottom: 8px;
-        white-space: pre-wrap;
-    }
-    
-    .post-time {
-        font-size: 12px;
-        color: #6a6a7a;
-    }
-    
-    .post-actions {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    
     .hidden {
         display: none !important;
     }
@@ -572,6 +668,7 @@
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         let posts = JSON.parse(localStorage.getItem('posts') || '[]');
         let follows = JSON.parse(localStorage.getItem('follows') || '[]');
+        let likes = JSON.parse(localStorage.getItem('likes') || '[]');
         let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
         let userAvatars = JSON.parse(localStorage.getItem('userAvatars') || '{}');
         
@@ -584,10 +681,6 @@
         const LEADER_EMAIL = 'chfanguang@outlook.com';
 
         // ============ DOM 元素 ============
-        const userNameEl = document.getElementById('userName');
-        const profileAvatar = document.getElementById('profileAvatar');
-        const profileAvatarText = document.getElementById('profileAvatarText');
-        const userRoleEl = document.getElementById('userRole');
         const adminNavItem = document.getElementById('adminNavItem');
         const notifBadge = document.getElementById('notifBadge');
         
@@ -595,62 +688,46 @@
         let currentPanel = 'home';
         let currentViewingUser = null;
 
-        // ============ 初始化用户信息 ============
-        function initUserInfo() {
-            userNameEl.textContent = currentUser.username;
+        // ============ 切换面板 ============
+        function switchPanel(panel) {
+            // 更新导航栏激活状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
             
-            // 头像处理
-            if (userAvatars[currentUser.username]) {
-                profileAvatar.src = userAvatars[currentUser.username];
-                profileAvatar.style.display = 'block';
-                profileAvatarText.style.display = 'none';
-            } else {
-                profileAvatar.style.display = 'none';
-                profileAvatarText.style.display = 'flex';
-                profileAvatarText.textContent = currentUser.username.charAt(0).toUpperCase();
+            // 隐藏所有面板
+            document.querySelectorAll('.panel').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // 显示对应面板
+            currentPanel = panel;
+            document.getElementById(panel + 'Panel').classList.add('active');
+            
+            // 如果切换到我的页面，加载资料卡
+            if (panel === 'profile') {
+                loadProfileCard();
+                loadMyPosts();
+                loadMyFollowing();
             }
-            
-            let roleText = '一般用戶';
-            userRoleEl.className = 'user-badge';
-            
-            if (currentUser.role === 'admin') {
-                roleText = '管理員';
-                userRoleEl.classList.add('admin');
-            } else if (currentUser.role === 'community_leader') {
-                roleText = '社區長';
-                userRoleEl.classList.add('leader');
-                adminNavItem.classList.remove('hidden');
-            }
-            userRoleEl.textContent = roleText;
-            
-            updateUserStats();
-            updateNotifBadge();
         }
 
-        // ============ 头像上传 ============
-        document.getElementById('avatarUpload').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    userAvatars[currentUser.username] = e.target.result;
-                    localStorage.setItem('userAvatars', JSON.stringify(userAvatars));
-                    
-                    profileAvatar.src = e.target.result;
-                    profileAvatar.style.display = 'block';
-                    profileAvatarText.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+        // ============ 初始化页面 ============
+        function initPage() {
+            // 显示管理入口
+            if (currentUser.role === 'community_leader') {
+                adminNavItem.classList.remove('hidden');
             }
-        });
-
-        // ============ 更新用户统计 ============
-        function updateUserStats() {
-            const myFollowers = follows.filter(f => f.followed === currentUser.username);
-            const myFollowing = follows.filter(f => f.follower === currentUser.username);
             
-            document.getElementById('userFollowerCount').textContent = myFollowers.length;
-            document.getElementById('userFollowingCount').textContent = myFollowing.length;
+            // 默认显示首页
+            switchPanel('home');
+            
+            // 更新通知角标
+            updateNotifBadge();
+            
+            // 为所有帖子添加点击事件
+            loadAllPosts();
         }
 
         // ============ 更新通知角标 ============
@@ -661,25 +738,6 @@
                 notifBadge.classList.remove('hidden');
             } else {
                 notifBadge.classList.add('hidden');
-            }
-        }
-
-        // ============ 面板切换 ============
-        function switchPanel(panel) {
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            event.currentTarget.classList.add('active');
-            
-            document.querySelectorAll('.panel').forEach(p => {
-                p.classList.remove('active');
-            });
-            
-            currentPanel = panel;
-            document.getElementById(panel + 'Panel').classList.add('active');
-            
-            if (panel === 'profile') {
-                loadProfile();
             }
         }
 
@@ -695,6 +753,7 @@
                 id: Date.now(),
                 username: currentUser.username,
                 content: content,
+                likes: 0,
                 created_at: new Date().toISOString()
             };
             
@@ -703,47 +762,199 @@
             
             document.getElementById('postContent').value = '';
             alert('發布成功！');
+            
+            // 如果当前在首页，刷新帖子列表
+            if (currentPanel === 'home') {
+                loadAllPosts();
+            }
         }
 
-        // ============ 加载个人主页 ============
-        function loadProfile() {
-            const myPosts = posts.filter(p => p.username === currentUser.username);
+        // ============ 加载所有帖子（首页用） ============
+        function loadAllPosts() {
+            const homePanel = document.getElementById('homePanel');
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             
-            // 我的帖子
-            const myPostsList = document.getElementById('myPostsList');
-            if (myPosts.length === 0) {
-                myPostsList.innerHTML = '<div class="empty-state">暫無貼文</div>';
-            } else {
-                myPostsList.innerHTML = myPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(post => `
+            const recentPosts = posts
+                .filter(p => new Date(p.created_at) > sevenDaysAgo)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            if (recentPosts.length === 0) {
+                homePanel.innerHTML = '<div class="empty-state">✨ 暫無貼文</div>';
+                return;
+            }
+            
+            let html = '';
+            recentPosts.forEach(post => {
+                const user = users.find(u => u.username === post.username);
+                const hasLiked = likes.some(l => l.username === currentUser.username && l.post_id === post.id);
+                const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === post.username);
+                const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                
+                html += `
                     <div class="post-item">
+                        <div class="post-author">
+                            <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
+                            ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                        </div>
                         <div class="post-content">${escapeHtml(post.content)}</div>
                         <div class="post-time">${formatTime(post.created_at)}</div>
+                        <div class="post-stats">
+                            <span>❤️ ${post.likes}</span>
+                        </div>
                         <div class="post-actions">
-                            <button class="action-btn" onclick="deletePost(${post.id})" style="border-color:#EA4335; color:#EA4335;">刪除</button>
+                            <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                                ${hasLiked ? '已讚' : '讚'}
+                            </button>
+                            ${post.username !== currentUser.username ? `
+                                <button class="action-btn ${isFollowed ? 'following' : ''}" onclick="toggleFollow('${post.username}')">
+                                    ${isFollowed ? '取消關注' : '關注'}
+                                </button>
+                            ` : ''}
                         </div>
                     </div>
-                `).join('');
+                `;
+            });
+            
+            homePanel.innerHTML = html;
+        }
+
+        // ============ 点赞 ============
+        function toggleLike(postId) {
+            const existing = likes.find(l => l.username === currentUser.username && l.post_id === postId);
+            const post = posts.find(p => p.id === postId);
+            
+            if (existing) {
+                const index = likes.findIndex(l => l.username === currentUser.username && l.post_id === postId);
+                likes.splice(index, 1);
+                post.likes--;
+            } else {
+                likes.push({
+                    username: currentUser.username,
+                    post_id: postId,
+                    created_at: new Date().toISOString()
+                });
+                post.likes++;
             }
             
-            // 我的关注
+            localStorage.setItem('likes', JSON.stringify(likes));
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            if (currentPanel === 'home') {
+                loadAllPosts();
+            }
+        }
+
+        // ============ 加载个人资料卡 ============
+        function loadProfileCard() {
+            const profileCard = document.getElementById('profileCard');
+            
+            let avatarHtml = '';
+            if (userAvatars[currentUser.username]) {
+                avatarHtml = `<img class="profile-avatar" src="${userAvatars[currentUser.username]}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+                avatarHtml = `<div class="profile-avatar">${currentUser.username.charAt(0).toUpperCase()}</div>`;
+            }
+            
+            const isVerified = (currentUser.role === 'admin' || currentUser.role === 'community_leader');
+            
+            const myFollowers = follows.filter(f => f.followed === currentUser.username).length;
+            const myFollowing = follows.filter(f => f.follower === currentUser.username).length;
+            
+            profileCard.innerHTML = `
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        ${avatarHtml}
+                        <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                        <div class="avatar-upload" onclick="document.getElementById('avatarUpload').click()">✏️</div>
+                    </div>
+                    <div class="profile-info">
+                        <h3>${currentUser.username}</h3>
+                        ${isVerified ? '<span class="verified-badge">✓</span>' : ''}
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-block" onclick="showFollowers()">
+                        <div class="stat-number">${myFollowers}</div>
+                        <div class="stat-label">粉絲</div>
+                    </div>
+                    <div class="stat-block" onclick="showFollowing()">
+                        <div class="stat-number">${myFollowing}</div>
+                        <div class="stat-label">關注</div>
+                    </div>
+                </div>
+            `;
+            
+            // 头像上传事件
+            document.getElementById('avatarUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        userAvatars[currentUser.username] = e.target.result;
+                        localStorage.setItem('userAvatars', JSON.stringify(userAvatars));
+                        loadProfileCard();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // ============ 加载我的帖子 ============
+        function loadMyPosts() {
+            const myPosts = posts.filter(p => p.username === currentUser.username)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            
+            const list = document.getElementById('myPostsList');
+            
+            if (myPosts.length === 0) {
+                list.innerHTML = '<div class="empty-state">暫無貼文</div>';
+                return;
+            }
+            
+            list.innerHTML = myPosts.map(post => `
+                <div class="post-item">
+                    <div class="post-content">${escapeHtml(post.content)}</div>
+                    <div class="post-time">${formatTime(post.created_at)}</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="deletePost(${post.id})" style="border-color:#EA4335; color:#EA4335;">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============ 加载我的关注 ============
+        function loadMyFollowing() {
             const myFollowing = follows.filter(f => f.follower === currentUser.username);
-            const myFollowingList = document.getElementById('myFollowingList');
+            const list = document.getElementById('myFollowingList');
             
             if (myFollowing.length === 0) {
-                myFollowingList.innerHTML = '<div class="empty-state">暫無關注</div>';
-            } else {
-                myFollowingList.innerHTML = myFollowing.map(f => {
-                    const user = users.find(u => u.username === f.followed);
-                    return `
-                    <div class="user-item">
-                        <div class="user-info-small">
-                            <span class="user-name">${f.followed}</span>
-                            <span class="user-email">${user?.email || ''}</span>
-                        </div>
-                        <button class="action-btn following" onclick="toggleFollow('${f.followed}')">取消關注</button>
-                    </div>
-                `}).join('');
+                list.innerHTML = '<div class="empty-state">暫無關注</div>';
+                return;
             }
+            
+            list.innerHTML = myFollowing.map(f => {
+                const user = users.find(u => u.username === f.followed);
+                const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                const avatar = userAvatars[f.followed] ? userAvatars[f.followed] : null;
+                
+                return `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-avatar-small" ${avatar ? `style="background-image: url(${avatar}); background-size: cover;"` : ''}>
+                            ${avatar ? '' : f.followed.charAt(0).toUpperCase()}
+                        </div>
+                        <div class="user-details">
+                            <div class="user-name">
+                                ${f.followed}
+                                ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                            </div>
+                            <div class="user-email">${user?.email || ''}</div>
+                        </div>
+                    </div>
+                    <button class="action-btn following" onclick="toggleFollow('${f.followed}')">取消關注</button>
+                </div>
+            `}).join('');
         }
 
         // ============ 关注/取消关注 ============
@@ -766,9 +977,11 @@
             if (currentViewingUser) {
                 viewUserProfile(currentViewingUser);
             }
-            updateUserStats();
-            if (currentPanel === 'profile') {
-                loadProfile();
+            if (currentPanel === 'home') {
+                loadAllPosts();
+            } else if (currentPanel === 'profile') {
+                loadMyFollowing();
+                loadProfileCard();
             }
         }
 
@@ -780,7 +993,10 @@
             if (index !== -1) {
                 posts.splice(index, 1);
                 localStorage.setItem('posts', JSON.stringify(posts));
-                loadProfile();
+                loadMyPosts();
+                if (currentPanel === 'home') {
+                    loadAllPosts();
+                }
             }
         }
 
@@ -802,11 +1018,14 @@
                 modalAvatar.textContent = username.charAt(0).toUpperCase();
             }
             
-            // 角色
-            let roleText = '一般用戶';
-            if (user?.role === 'admin') roleText = '管理員';
-            if (user?.role === 'community_leader') roleText = '社區長';
-            document.getElementById('modalUserRole').textContent = roleText;
+            // 蓝色对号
+            const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+            const verifiedBadge = document.getElementById('modalUserVerified');
+            if (isVerified) {
+                verifiedBadge.style.display = 'inline-flex';
+            } else {
+                verifiedBadge.style.display = 'none';
+            }
             
             // 统计
             const userPosts = posts.filter(p => p.username === username);
@@ -826,6 +1045,7 @@
                 const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === username);
                 const isFollowedBy = follows.some(f => f.follower === username && f.followed === currentUser.username);
                 
+                followBtn.classList.remove('following');
                 if (isFollowed && isFollowedBy) {
                     followBtn.textContent = '互相關注';
                     followBtn.classList.add('following');
@@ -837,7 +1057,6 @@
                     followBtn.classList.add('following');
                 } else {
                     followBtn.textContent = '關注';
-                    followBtn.classList.remove('following');
                 }
             }
             
@@ -874,15 +1093,26 @@
                 list.innerHTML = followers.map(f => {
                     const user = users.find(u => u.username === f.follower);
                     const isFollowing = follows.some(f2 => f2.follower === currentUser.username && f2.followed === f.follower);
+                    const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                    const avatar = userAvatars[f.follower] ? userAvatars[f.follower] : null;
+                    
                     return `
                     <div class="user-item">
-                        <div class="user-info-small">
-                            <span class="user-name">${f.follower}</span>
-                            <span class="user-email">${user?.email || ''}</span>
+                        <div class="user-info">
+                            <div class="user-avatar-small" ${avatar ? `style="background-image: url(${avatar}); background-size: cover;"` : ''}>
+                                ${avatar ? '' : f.follower.charAt(0).toUpperCase()}
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">
+                                    ${f.follower}
+                                    ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                                </div>
+                                <div class="user-email">${user?.email || ''}</div>
+                            </div>
                         </div>
                         <button class="action-btn ${isFollowing ? 'following' : ''}" onclick="toggleFollow('${f.follower}')">
                             ${isFollowing ? '取消關注' : '回粉'}
-                        </button>
+                                     </button>
                     </div>
                 `}).join('');
             }
@@ -900,11 +1130,22 @@
             } else {
                 list.innerHTML = following.map(f => {
                     const user = users.find(u => u.username === f.followed);
+                    const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                    const avatar = userAvatars[f.followed] ? userAvatars[f.followed] : null;
+                    
                     return `
                     <div class="user-item">
-                        <div class="user-info-small">
-                            <span class="user-name">${f.followed}</span>
-                            <span class="user-email">${user?.email || ''}</span>
+                        <div class="user-info">
+                            <div class="user-avatar-small" ${avatar ? `style="background-image: url(${avatar}); background-size: cover;"` : ''}>
+                                ${avatar ? '' : f.followed.charAt(0).toUpperCase()}
+                            </div>
+                            <div class="user-details">
+                                <div class="user-name">
+                                    ${f.followed}
+                                    ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                                </div>
+                                <div class="user-email">${user?.email || ''}</div>
+                            </div>
                         </div>
                         <button class="action-btn following" onclick="toggleFollow('${f.followed}')">取消關注</button>
                     </div>
@@ -952,20 +1193,21 @@
             return div.innerHTML;
         }
 
-        // ============ 定时清理7天前的帖子 ============
+        // ============ 定时刷新 ============
         setInterval(() => {
             const sevenDaysAgo = new Date();
             sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
             posts = posts.filter(p => new Date(p.created_at) > sevenDaysAgo);
             localStorage.setItem('posts', JSON.stringify(posts));
             
-            if (currentPanel === 'profile') {
-                loadProfile();
+            if (currentPanel === 'home') {
+                loadAllPosts();
             }
-        }, 60000);
+            updateNotifBadge();
+        }, 30000);
 
         // ============ 初始化 ============
-        initUserInfo();
+        initPage();
     </script>
 </body>
 </html>
