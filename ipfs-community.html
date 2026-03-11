@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CHFG社区</title>
+    <title>CHFG社区 · IPFS去中心化版</title>
     <style>
         * {
             margin: 0;
@@ -389,10 +389,6 @@
             padding: 40px;
         }
         
-        .empty-state button {
-            margin-top: 15px;
-        }
-        
         /* 管理面板专用样式 */
         .stats-grid {
             display: grid;
@@ -643,16 +639,10 @@
     async function init() {
         updateStatus('🌍 正在连接 IPFS 网络...');
         
-        // 从 localStorage 读取已登录用户
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-            currentUser = JSON.parse(savedUser);
-        }
-        
+        // 先加载数据
         if (currentDataHash) {
             await loadFromIPFS(currentDataHash);
         } else {
-            // 初始数据
             allUsers = [];
             allPosts = [];
             allFollows = [];
@@ -660,6 +650,24 @@
             allReports = [];
             userAvatars = {};
             await saveToIPFS();
+        }
+        
+        // 从 localStorage 读取已登录用户（必须在数据加载之后）
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            try {
+                const parsedUser = JSON.parse(savedUser);
+                // 验证用户是否还存在
+                const existingUser = allUsers.find(u => u.email === parsedUser.email);
+                if (existingUser) {
+                    currentUser = existingUser;
+                    localStorage.setItem('currentUser', JSON.stringify(existingUser));
+                } else {
+                    localStorage.removeItem('currentUser');
+                }
+            } catch (e) {
+                localStorage.removeItem('currentUser');
+            }
         }
         
         updateStatus('✅ 数据加载完成');
@@ -762,7 +770,7 @@
                 allFollows = data.follows || [];
                 allLikes = data.likes || [];
                 allReports = data.reports || [];
-                userAvatars = data.avatars || [];
+                userAvatars = data.avatars || {};
                 updateStatus('⚠️ 使用本地备份');
             }
         }
@@ -793,13 +801,9 @@
     function loadHomePanel() {
         const container = document.getElementById('postsList');
         
+        // 直接显示暂无，不诱导发布
         if (allPosts.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    暂无帖子<br><br>
-                    <button class="btn-small" onclick="switchPanel('post')">快来发布</button>
-                </div>
-            `;
+            container.innerHTML = '<div class="empty-state">暂无帖子</div>';
             return;
         }
         
@@ -811,12 +815,7 @@
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         
         if (recentPosts.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    7天内没有新帖子<br><br>
-                    <button class="btn-small" onclick="switchPanel('post')">发布一条</button>
-                </div>
-            `;
+            container.innerHTML = '<div class="empty-state">暂无帖子</div>';
             return;
         }
         
@@ -969,57 +968,57 @@
         
         setTimeout(() => switchPanel('home'), 1000);
     }
-        // ============ 点赞 ============
-        async function toggleLike(postId) {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
-            const post = allPosts.find(p => p.id === postId);
-            
-            if (existing) {
-                const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
-                allLikes.splice(index, 1);
-                post.likes--;
-            } else {
-                allLikes.push({
-                    username: currentUser.username,
-                    postId: postId,
-                    created_at: new Date().toISOString()
-                });
-                post.likes++;
-            }
-            
-            await saveToIPFS();
-            loadHomePanel();
-        }
 
-        // ============ 关注/取消关注 ============
-        async function toggleFollow(targetUsername) {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
-            
-            if (existing) {
-                const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
-                allFollows.splice(index, 1);
-            } else {
-                allFollows.push({
-                    follower: currentUser.username,
-                    followed: targetUsername,
-                    created_at: new Date().toISOString()
-                });
-            }
-            
-            await saveToIPFS();
-            loadHomePanel();
+    // ============ 点赞 ============
+    async function toggleLike(postId) {
+        if (!currentUser) {
+            alert('请先登录');
+            return;
         }
+        
+        const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
+        const post = allPosts.find(p => p.id === postId);
+        
+        if (existing) {
+            const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
+            allLikes.splice(index, 1);
+            post.likes--;
+        } else {
+            allLikes.push({
+                username: currentUser.username,
+                postId: postId,
+                created_at: new Date().toISOString()
+            });
+            post.likes++;
+        }
+        
+        await saveToIPFS();
+        loadHomePanel();
+    }
 
+    // ============ 关注/取消关注 ============
+    async function toggleFollow(targetUsername) {
+        if (!currentUser) {
+            alert('请先登录');
+            return;
+        }
+        
+        const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
+        
+        if (existing) {
+            const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
+            allFollows.splice(index, 1);
+        } else {
+            allFollows.push({
+                follower: currentUser.username,
+                followed: targetUsername,
+                created_at: new Date().toISOString()
+            });
+        }
+        
+        await saveToIPFS();
+        loadHomePanel();
+    }
         // ============ 举报帖子 ============
         async function reportPost(postId, reportedUser) {
             if (!currentUser) {
@@ -1219,7 +1218,8 @@
             if (action === 'ban') {
                 const user = allUsers.find(u => u.username === report.reportedUser);
                 if (user) {
-                    user.banned = 1;
+                    // 封禁用户（可以从用户列表中移除或标记）
+                    allUsers = allUsers.filter(u => u.username !== report.reportedUser);
                     // 删除该用户的所有帖子
                     allPosts = allPosts.filter(p => p.username !== report.reportedUser);
                 }
