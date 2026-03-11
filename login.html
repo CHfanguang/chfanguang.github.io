@@ -256,3 +256,156 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+    <script>
+        // ============ 数据存储 ============
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        
+        // 社区长专属邮箱
+        const LEADER_EMAIL = 'chfanguang@outlook.com';
+        
+        // 检查是否已登录
+        if (currentUser) {
+            window.location.href = 'chfg.html';
+        }
+
+        // 切换标签
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            
+            if (tab === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+            } else {
+                document.getElementById('registerForm').classList.remove('hidden');
+            }
+            
+            document.getElementById('message').style.display = 'none';
+        }
+
+        // 登录
+        function login() {
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            
+            if (!email || !password) {
+                showMessage('請輸入郵箱和密碼', 'error');
+                return;
+            }
+            
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                showMessage('用戶不存在', 'error');
+                return;
+            }
+            
+            if (user.password !== password) {
+                showMessage('密碼錯誤', 'error');
+                return;
+            }
+            
+            if (user.banned) {
+                showMessage('賬號已被封禁', 'error');
+                return;
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            showMessage('登錄成功，正在跳轉...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'chfg.html';
+            }, 1500);
+        }
+
+        // 注册
+        function register() {
+            const username = document.getElementById('regUsername').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirmPassword = document.getElementById('regConfirmPassword').value.trim();
+            
+            if (!username || !email || !password || !confirmPassword) {
+                showMessage('請填寫所有信息', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('兩次輸入的密碼不一致', 'error');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showMessage('密碼至少6位', 'error');
+                return;
+            }
+            
+            // 檢查郵箱是否已註冊
+            if (users.some(u => u.email === email)) {
+                showMessage('該郵箱已註冊', 'error');
+                return;
+            }
+            
+            // 檢查用戶名是否已存在
+            if (users.some(u => u.username === username)) {
+                showMessage('用戶名已存在', 'error');
+                return;
+            }
+            
+            // 判斷是否為社區長
+            let role = 'user';
+            if (email === LEADER_EMAIL) {
+                role = 'community_leader';
+            }
+            
+            // 創建新用戶
+            const newUser = {
+                username,
+                email,
+                password,
+                role,
+                banned: 0,
+                created_at: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 如果不是社區長，發送通知給社區長
+            if (role === 'user') {
+                const leader = users.find(u => u.email === LEADER_EMAIL);
+                if (leader) {
+                    notifications.push({
+                        id: Date.now(),
+                        username: leader.username,
+                        type: 'new_user',
+                        content: `新用戶註冊：${username} (${email})`,
+                        read: false,
+                        created_at: new Date().toISOString()
+                    });
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                }
+            }
+            
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            
+            showMessage('註冊成功，正在跳轉...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'chfg.html';
+            }, 1500);
+        }
+
+        function showMessage(text, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = text;
+            msgDiv.className = `message ${type}`;
+        }
+    </script>
+</body>
+</html>
