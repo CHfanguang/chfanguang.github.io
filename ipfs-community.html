@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CHFG社区 · 去中心化版</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            padding-bottom: 70px;
+            position: relative;
+            color: white;
+        }
+        
+        /* 星空背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(2px 2px at 15px 60px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 72px 150px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 145px 280px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 220px 90px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 350px 190px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 410px 310px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 520px 130px, #ffd700, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 680px 250px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 750px 380px, #87ceeb, rgba(0,0,0,0)),
+                        radial-gradient(3px 3px at 820px 90px, #fff, rgba(0,0,0,0));
+            background-size: 200px 200px;
+            background-repeat: repeat;
+            opacity: 0.6;
+            animation: stars 180s linear infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes stars {
+            from { transform: translateY(0) translateX(0); }
+            to { transform: translateY(-1000px) translateX(200px); }
+        }
+        
+        /* 吸顶栏 */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .rainbow-text {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #4285F4, #9B51E0, #34A853, #EA4335, #FBBC05, #FF6B35);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 80px 16px 20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* 面板切换 */
+        .panel {
+            display: none;
+        }
+        
+        .panel.active {
+            display: block;
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: rgba(30, 30, 40, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .card-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        /* 帖子样式 */
+        .post-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .post-author-name {
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .post-verified {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background: #1DA1F2;
+            border-radius: 50%;
+            color: white;
+            font-size: 11px;
+        }
+        
+        .post-time {
+            color: #6a6a7a;
+            font-size: 12px;
+        }
+        
+        .post-content {
+            color: #e0e0e0;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 10px 0;
+            white-space: pre-wrap;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 15px;
+            color: #a0a0b0;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 5px 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            color: #a0a0b0;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .action-btn.liked {
+            background: #EA4335;
+            border-color: #EA4335;
+            color: white;
+        }
+        
+        .action-btn.following {
+            background: #34A853;
+            border-color: #34A853;
+            color: white;
+        }
+        
+        /* 用户列表样式 */
+        .user-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* 状态提示 */
+        .status-bar {
+            text-align: center;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #6a6a7a;
+            padding: 40px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <span class="rainbow-text">CHFG社区</span>
+    </div>
+
+    <div class="container">
+        <!-- 状态栏 -->
+        <div class="status-bar" id="statusBar">
+            🌍 正在连接 IPFS 网络...
+        </div>
+
+        <!-- 导航栏 -->
+        <div style="display: flex; gap: 10px; margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 30px;">
+            <button class="btn-small" style="flex:1;" onclick="switchPanel('home')" id="tabHome">🏠 首页</button>
+            <button class="btn-small" style="flex:1;" onclick="switchPanel('login')" id="tabLogin">🔑 登录</button>
+            <button class="btn-small" style="flex:1;" onclick="switchPanel('post')" id="tabPost">✏️ 发布</button>
+            <button class="btn-small" style="flex:1;" onclick="switchPanel('profile')" id="tabProfile">👤 我的</button>
+        </div>
+
+        <!-- 首页面板 -->
+        <div id="homePanel" class="panel active">
+            <div class="card">
+                <div class="card-title">📢 最新帖子</div>
+                <div id="postsList"></div>
+            </div>
+        </div>
+
+        <!-- 登录/注册面板 -->
+        <div id="loginPanel" class="panel">
+            <div class="card">
+                <div class="card-title">🔑 登录 / 注册</div>
+                <div class="form-group">
+                    <input type="text" id="loginUsername" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="邮箱">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="密码">
+                </div>
+                <button class="btn" onclick="register()">注册</button>
+                <button class="btn" onclick="login()" style="background: #34A853;">登录</button>
+                <div id="loginMessage" style="color: #EA4335; text-align: center; margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- 发布面板 -->
+        <div id="postPanel" class="panel">
+            <div class="card">
+                <div class="card-title">✏️ 发布新帖</div>
+                <div class="form-group">
+                    <textarea id="postContent" rows="5" placeholder="分享你的想法..."></textarea>
+                </div>
+                <button class="btn" onclick="createPost()">发布</button>
+                <div id="postMessage" style="color: #34A853; text-align: center; margin-top: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- 个人面板 -->
+        <div id="profilePanel" class="panel">
+            <div class="card">
+                <div class="card-title">👤 个人主页</div>
+                <div id="profileInfo">
+                    <p style="color: #a0a0b0; text-align: center;">请先登录</p>
+                </div>
+            </div>
+            <div class="card" id="myPostsCard" style="display: none;">
+                <div class="card-title">📝 我的帖子</div>
+                <div id="myPostsList"></div>
+            </div>
+            <div class="card" id="myFollowsCard" style="display: none;">
+                <div class="card-title">👥 我的关注</div>
+                <div id="myFollowsList"></div>
+            </div>
+        </div>
+
+        <!-- 管理面板（社区长专用） -->
+        <div id="adminPanel" class="panel">
+            <div class="card">
+                <div class="card-title">⚡ 管理面板</div>
+                <div id="adminStats" style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="flex:1; text-align:center; background:rgba(102,126,234,0.1); padding:15px; border-radius:10px;">
+                        <div style="font-size:24px; font-weight:600; color:#667eea;" id="totalUsers">0</div>
+                        <div style="font-size:12px; color:#a0a0b0;">总用户</div>
+                    </div>
+                    <div style="flex:1; text-align:center; background:rgba(52,168,83,0.1); padding:15px; border-radius:10px;">
+                        <div style="font-size:24px; font-weight:600; color:#34A853;" id="totalPosts">0</div>
+                        <div style="font-size:12px; color:#a0a0b0;">总帖子</div>
+                    </div>
+                </div>
+                <div id="adminContent"></div>
+            </div>
+        </div>
+    </div>
