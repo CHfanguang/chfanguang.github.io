@@ -74,7 +74,6 @@
             color: transparent;
         }
         
-        /* 主要內容 */
         .container {
             max-width: 600px;
             margin: 0 auto;
@@ -96,22 +95,28 @@
         .empty-state {
             text-align: center;
             color: #6a6a7a;
-            padding: 40px;
+            padding: 60px 20px;
             font-size: 16px;
         }
         
         .clickable-btn {
             display: inline-block;
-            margin-top: 15px;
-            padding: 10px 25px;
+            margin-top: 20px;
+            padding: 12px 30px;
             background: #667eea;
             border: none;
             border-radius: 25px;
             color: white;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .clickable-btn:hover {
+            background: #5a6fd1;
+            transform: translateY(-2px);
         }
         
         .hidden {
@@ -131,10 +136,12 @@
         .card-title {
             color: white;
             font-size: 20px;
+            font-weight: 600;
             margin-bottom: 20px;
         }
         
-        textarea {
+        /* 發布頁面 */
+        .post-input {
             width: 100%;
             padding: 15px;
             background: rgba(0,0,0,0.3);
@@ -146,7 +153,7 @@
             margin-bottom: 20px;
         }
         
-        textarea:focus {
+        .post-input:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -161,6 +168,12 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .post-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102,126,234,0.3);
         }
         
         /* 帖子樣式 */
@@ -189,6 +202,7 @@
         
         .post-author-name:hover {
             text-decoration: underline;
+            color: #667eea;
         }
         
         .post-verified {
@@ -239,6 +253,7 @@
             color: #a0a0b0;
             font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
         .action-btn:hover {
@@ -257,7 +272,7 @@
             color: white;
         }
         
-        /* 我的頁面專用樣式 */
+        /* 我的頁面 */
         .profile-card {
             background: rgba(30, 30, 40, 0.6);
             backdrop-filter: blur(15px);
@@ -276,20 +291,20 @@
         
         .avatar-container {
             position: relative;
-            width: 70px;
-            height: 70px;
+            width: 80px;
+            height: 80px;
         }
         
         .profile-avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 35px;
+            width: 80px;
+            height: 80px;
+            border-radius: 40px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 28px;
+            font-size: 32px;
             font-weight: 600;
             object-fit: cover;
         }
@@ -298,10 +313,10 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             background: #667eea;
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -314,15 +329,14 @@
         .profile-info {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
         }
         
         .profile-info h3 {
-            font-size: 18px;
+            font-size: 20px;
             color: white;
         }
         
-        /* 蓝色对号徽章 */
         .verified-badge {
             display: inline-flex;
             align-items: center;
@@ -349,7 +363,7 @@
         }
         
         .stat-number {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
             color: white;
         }
@@ -383,14 +397,20 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
-        /* 用戶列表樣式 */
+        .danger-btn:hover {
+            background: #EA4335;
+            color: white;
+        }
+        
+        /* 用戶列表 */
         .user-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
+            padding: 12px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         
@@ -401,7 +421,7 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
         
         .user-avatar-small {
@@ -428,12 +448,96 @@
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
         }
         
         .user-email {
             font-size: 12px;
             color: #a0a0b0;
+        }
+        
+        /* 管理面板样式 */
+        .admin-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-card.blue { background: rgba(102, 126, 234, 0.1); }
+        .stat-card.green { background: rgba(52, 168, 83, 0.1); }
+        .stat-card.yellow { background: rgba(251, 188, 5, 0.1); }
+        
+        .stat-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .stat-card.blue .stat-card-value { color: #667eea; }
+        .stat-card.green .stat-card-value { color: #34A853; }
+        .stat-card.yellow .stat-card-value { color: #FBBC05; }
+        
+        .stat-card-label {
+            font-size: 13px;
+            color: #a0a0b0;
+            margin-top: 5px;
+        }
+        
+        .admin-section {
+            margin-bottom: 25px;
+        }
+        
+        .admin-section-title {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .announcement-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        
+        .promote-btn {
+            padding: 6px 12px;
+            background: #34A853;
+            border: none;
+            border-radius: 15px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -443,23 +547,26 @@
     </div>
 
     <div class="container">
-        <!-- 面板切換區域 -->
+        <!-- 首頁面板 -->
         <div id="homePanel" class="panel active">
             <div id="homePostsList"></div>
         </div>
 
+        <!-- 通知面板 -->
         <div id="notificationsPanel" class="panel">
             <div id="notificationsList"></div>
         </div>
 
+        <!-- 發布面板 -->
         <div id="postPanel" class="panel">
             <div class="card">
                 <div class="card-title">發布新貼文</div>
-                <textarea id="postContent" placeholder="分享你的想法..." rows="6"></textarea>
+                <textarea class="post-input" id="postContent" placeholder="分享你的想法..." rows="6"></textarea>
                 <button class="post-btn" onclick="submitPost()">發布</button>
             </div>
         </div>
 
+        <!-- 個人主頁面板 -->
         <div id="profilePanel" class="panel">
             <div class="profile-card" id="profileCard"></div>
             
@@ -476,7 +583,48 @@
             <button class="danger-btn" onclick="logout()">退出登錄</button>
         </div>
 
-        <div id="adminPanel" class="panel"></div>
+        <!-- 管理面板 -->
+        <div id="adminPanel" class="panel">
+            <div class="card">
+                <div class="card-title">⚡ 管理面板</div>
+                
+                <!-- 统计卡片 -->
+                <div class="admin-stats">
+                    <div class="stat-card blue">
+                        <div class="stat-card-value" id="totalUsers">0</div>
+                        <div class="stat-card-label">總用戶</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-card-value" id="totalPosts">0</div>
+                        <div class="stat-card-label">總貼文</div>
+                    </div>
+                    <div class="stat-card yellow">
+                        <div class="stat-card-value" id="adminCount">0</div>
+                        <div class="stat-card-label">管理組</div>
+                    </div>
+                </div>
+                
+                <!-- 新注册用户 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">📝 最新註冊</div>
+                    <div id="newUsersList" class="user-list"></div>
+                </div>
+                
+                <!-- 提升管理员 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">👑 提升管理員</div>
+                    <input type="text" class="search-input" id="searchUserInput" placeholder="搜索用戶...">
+                    <div id="userSearchResults" class="user-list"></div>
+                </div>
+                
+                <!-- 发布公告 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">📢 發布公告</div>
+                    <textarea class="announcement-input" id="announcementContent" placeholder="請輸入公告內容..." rows="3"></textarea>
+                    <button class="post-btn" onclick="postAnnouncement()">發布公告</button>
+                </div>
+            </div>
+        </div>
     </div>
 <!-- 底部导航栏 -->
 <div class="bottom-nav">
@@ -689,6 +837,13 @@
         color: #a0a0b0;
     }
     
+    .user-list {
+        max-height: 250px;
+        overflow-y: auto;
+        background: rgba(0,0,0,0.2);
+        border-radius: 10px;
+    }
+    
     .hidden {
         display: none !important;
     }
@@ -702,6 +857,7 @@
     let likes = JSON.parse(localStorage.getItem('likes') || '[]');
     let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
     let userAvatars = JSON.parse(localStorage.getItem('userAvatars') || '{}');
+    let announcements = JSON.parse(localStorage.getItem('announcements') || '[]');
     
     // 检查登录状态
     if (!currentUser) {
@@ -741,6 +897,12 @@
             loadProfileCard();
             loadMyPosts();
             loadMyFollowing();
+        } else if (panel === 'admin') {
+            if (currentUser.role === 'community_leader') {
+                loadAdminPanel();
+            } else {
+                document.getElementById('adminPanel').innerHTML = '<div class="card"><div class="empty-state">您沒有權限訪問管理面板</div></div>';
+            }
         }
     }
 
@@ -752,8 +914,6 @@
         
         switchPanel('home');
         updateNotifBadge();
-        loadHomePosts();
-        loadNotificationsList();
     }
 
     // ============ 更新通知角标 ============
@@ -800,11 +960,23 @@
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
         
-        const recentPosts = posts
+        // 合并普通帖子和公告
+        let allItems = [...posts];
+        announcements.forEach(a => {
+            allItems.push({
+                id: a.id,
+                username: '📢 公告',
+                content: a.content,
+                isAnnouncement: true,
+                created_at: a.created_at
+            });
+        });
+        
+        const recentItems = allItems
             .filter(p => new Date(p.created_at) > sevenDaysAgo)
             .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         
-        if (recentPosts.length === 0) {
+        if (recentItems.length === 0) {
             homePostsList.innerHTML = `
                 <div class="empty-state">
                     還沒有帖子喔<br><br>
@@ -815,35 +987,47 @@
         }
         
         let html = '';
-        recentPosts.forEach(post => {
-            const user = users.find(u => u.username === post.username);
-            const hasLiked = likes.some(l => l.username === currentUser.username && l.post_id === post.id);
-            const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === post.username);
-            const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
-            
-            html += `
-                <div class="post-item">
-                    <div class="post-author">
-                        <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
-                        ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+        recentItems.forEach(item => {
+            if (item.isAnnouncement) {
+                html += `
+                    <div class="post-item" style="background: rgba(251, 188, 5, 0.1); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
+                        <div class="post-author">
+                            <span class="post-author-name" style="color: #FBBC05;">📢 ${item.username}</span>
+                        </div>
+                        <div class="post-content" style="color: #FBBC05;">${escapeHtml(item.content)}</div>
+                        <div class="post-time">${formatTime(item.created_at)}</div>
                     </div>
-                    <div class="post-content">${escapeHtml(post.content)}</div>
-                    <div class="post-time">${formatTime(post.created_at)}</div>
-                    <div class="post-stats">
-                        <span>❤️ ${post.likes}</span>
-                    </div>
-                    <div class="post-actions">
-                        <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
-                            ${hasLiked ? '已讚' : '讚'}
-                        </button>
-                        ${post.username !== currentUser.username ? `
-                            <button class="action-btn ${isFollowed ? 'following' : ''}" onclick="toggleFollow('${post.username}')">
-                                ${isFollowed ? '取消關注' : '關注'}
+                `;
+            } else {
+                const user = users.find(u => u.username === item.username);
+                const hasLiked = likes.some(l => l.username === currentUser.username && l.post_id === item.id);
+                const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === item.username);
+                const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+                
+                html += `
+                    <div class="post-item">
+                        <div class="post-author">
+                            <span class="post-author-name" onclick="viewUserProfile('${item.username}')">${item.username}</span>
+                            ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                        </div>
+                        <div class="post-content">${escapeHtml(item.content)}</div>
+                        <div class="post-time">${formatTime(item.created_at)}</div>
+                        <div class="post-stats">
+                            <span>❤️ ${item.likes}</span>
+                        </div>
+                        <div class="post-actions">
+                            <button class="action-btn ${hasLiked ? 'liked' : ''}" onclick="toggleLike(${item.id})">
+                                ${hasLiked ? '已讚' : '讚'}
                             </button>
-                        ` : ''}
+                            ${item.username !== currentUser.username ? `
+                                <button class="action-btn ${isFollowed ? 'following' : ''}" onclick="toggleFollow('${item.username}')">
+                                    ${isFollowed ? '取消關注' : '關注'}
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            }
         });
         
         homePostsList.innerHTML = html;
@@ -918,6 +1102,16 @@ function toggleFollow(targetUsername) {
             followed: targetUsername,
             created_at: new Date().toISOString()
         });
+        
+        // 发送通知
+        notifications.push({
+            id: Date.now(),
+            username: targetUsername,
+            content: `用戶 ${currentUser.username} 關注了你`,
+            read: false,
+            created_at: new Date().toISOString()
+        });
+        localStorage.setItem('notifications', JSON.stringify(notifications));
     }
     
     localStorage.setItem('follows', JSON.stringify(follows));
@@ -1043,6 +1237,7 @@ function loadMyFollowing() {
         </div>
     `}).join('');
 }
+
 // ============ 删除帖子 ============
 function deletePost(postId) {
     if (!confirm('確定要刪除這篇貼文嗎？')) return;
@@ -1057,7 +1252,6 @@ function deletePost(postId) {
         }
     }
 }
-
 // ============ 查看用户资料 ============
 function viewUserProfile(username) {
     currentViewingUser = username;
@@ -1211,6 +1405,132 @@ function showFollowing() {
     
     document.getElementById('followingModal').style.display = 'flex';
 }
+        // ============ 加载管理面板 ============
+        function loadAdminPanel() {
+            // 更新统计
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalPosts').textContent = posts.length;
+            const adminCount = users.filter(u => u.role === 'admin' || u.role === 'community_leader').length;
+            document.getElementById('adminCount').textContent = adminCount;
+            
+            // 加载新注册用户
+            loadNewUsers();
+            
+            // 加载用户搜索结果（默认显示所有普通用户）
+            searchUsers('');
+        }
+
+        // ============ 加载新注册用户 ============
+        function loadNewUsers() {
+            const newUsers = users
+                .filter(u => u.role === 'user')
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                .slice(0, 10);
+            
+            const list = document.getElementById('newUsersList');
+            
+            if (newUsers.length === 0) {
+                list.innerHTML = '<div class="empty-state">暫無新用戶</div>';
+                return;
+            }
+            
+            list.innerHTML = newUsers.map(user => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-avatar-small">${user.username.charAt(0).toUpperCase()}</div>
+                        <div class="user-details">
+                            <div class="user-name">${user.username}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #6a6a7a;">${formatTime(user.created_at)}</div>
+                </div>
+            `).join('');
+        }
+
+        // ============ 搜索用户 ============
+        function searchUsers(keyword) {
+            const searchTerm = keyword.toLowerCase();
+            const results = users.filter(u => 
+                u.role === 'user' && (
+                    u.username.toLowerCase().includes(searchTerm) || 
+                    u.email.toLowerCase().includes(searchTerm)
+                )
+            );
+            
+            const list = document.getElementById('userSearchResults');
+            
+            if (results.length === 0) {
+                list.innerHTML = '<div class="empty-state">未找到用戶</div>';
+                return;
+            }
+            
+            list.innerHTML = results.map(user => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-avatar-small">${user.username.charAt(0).toUpperCase()}</div>
+                        <div class="user-details">
+                            <div class="user-name">${user.username}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    <button class="promote-btn" onclick="promoteToAdmin('${user.username}')">提升管理員</button>
+                </div>
+            `).join('');
+        }
+
+        // ============ 提升为管理员 ============
+        function promoteToAdmin(username) {
+            if (currentUser.role !== 'community_leader') return;
+            
+            if (!confirm(`確定要將 ${username} 提升為管理員嗎？`)) return;
+            
+            const user = users.find(u => u.username === username);
+            if (user) {
+                user.role = 'admin';
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // 发送通知
+                notifications.push({
+                    id: Date.now(),
+                    username: username,
+                    content: '恭喜！你已被社區長提升為管理員',
+                    read: false,
+                    created_at: new Date().toISOString()
+                });
+                localStorage.setItem('notifications', JSON.stringify(notifications));
+                
+                alert(`已將 ${username} 提升為管理員`);
+                searchUsers(document.getElementById('searchUserInput').value);
+                loadAdminPanel();
+            }
+        }
+
+        // ============ 发布公告 ============
+        function postAnnouncement() {
+            const content = document.getElementById('announcementContent').value.trim();
+            if (!content) {
+                alert('請輸入公告內容');
+                return;
+            }
+            
+            const announcement = {
+                id: Date.now(),
+                content: content,
+                created_at: new Date().toISOString()
+            };
+            
+            announcements.push(announcement);
+            localStorage.setItem('announcements', JSON.stringify(announcements));
+            
+            document.getElementById('announcementContent').value = '';
+            alert('公告已發布');
+            
+            if (currentPanel === 'home') {
+                loadHomePosts();
+            }
+        }
+
         // ============ 关闭弹窗 ============
         function closeUserModal() {
             document.getElementById('userProfileModal').style.display = 'none';
@@ -1249,6 +1569,11 @@ function showFollowing() {
             return div.innerHTML;
         }
 
+        // ============ 搜索框监听 ============
+        document.getElementById('searchUserInput')?.addEventListener('input', function(e) {
+            searchUsers(e.target.value);
+        });
+
         // ============ 定时刷新 ============
         setInterval(() => {
             const sevenDaysAgo = new Date();
@@ -1260,6 +1585,8 @@ function showFollowing() {
                 loadHomePosts();
             } else if (currentPanel === 'notifications') {
                 loadNotificationsList();
+            } else if (currentPanel === 'admin' && currentUser.role === 'community_leader') {
+                loadAdminPanel();
             }
             updateNotifBadge();
         }, 30000);
