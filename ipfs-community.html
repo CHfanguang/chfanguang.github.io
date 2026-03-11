@@ -259,6 +259,7 @@
         .post-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .action-btn {
@@ -290,6 +291,10 @@
             align-items: center;
             padding: 10px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
         }
         
         .user-info {
@@ -329,6 +334,7 @@
             width: 80px;
             height: 80px;
             margin: 0 auto 15px;
+            cursor: pointer;
         }
         
         .profile-avatar {
@@ -341,7 +347,6 @@
             justify-content: center;
             font-size: 32px;
             font-weight: 600;
-            cursor: pointer;
             object-fit: cover;
         }
         
@@ -387,6 +392,99 @@
         .empty-state button {
             margin-top: 15px;
         }
+        
+        /* 管理面板专用样式 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #a0a0b0;
+            margin-top: 5px;
+        }
+        
+        .admin-section {
+            margin-bottom: 25px;
+        }
+        
+        .admin-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .reported-item {
+            background: rgba(234, 67, 53, 0.1);
+            border: 1px solid #EA4335;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .reported-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .reported-user {
+            font-weight: 600;
+            color: #EA4335;
+        }
+        
+        .reported-reason {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .reported-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+        }
+        
+        .badge.admin {
+            background: #EA4335;
+            color: white;
+        }
+        
+        .badge.leader {
+            background: #FBBC05;
+            color: black;
+        }
+        
+        .badge.user {
+            background: #34A853;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -403,7 +501,7 @@
         <!-- 首页面板 -->
         <div id="homePanel" class="panel active">
             <div class="card">
-                <div class="card-title">📢 最新帖子</div>
+                <div class="card-title">📢 最新动态</div>
                 <div id="postsList"></div>
             </div>
         </div>
@@ -455,21 +553,47 @@
             </div>
         </div>
 
-        <!-- 管理面板（仅社区长可见） -->
+        <!-- 管理面板（仅社区长可见）- 增强版 -->
         <div id="adminPanel" class="panel">
             <div class="card">
                 <div class="card-title">⚡ 管理面板</div>
-                <div id="adminStats" style="display: flex; gap: 15px; margin-bottom: 20px;">
-                    <div style="flex:1; text-align:center; background:rgba(102,126,234,0.1); padding:15px; border-radius:10px;">
-                        <div style="font-size:24px; font-weight:600; color:#667eea;" id="totalUsers">0</div>
-                        <div style="font-size:12px; color:#a0a0b0;">总用户</div>
+                
+                <!-- 统计卡片 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUsers">0</div>
+                        <div class="stat-label">总用户</div>
                     </div>
-                    <div style="flex:1; text-align:center; background:rgba(52,168,83,0.1); padding:15px; border-radius:10px;">
-                        <div style="font-size:24px; font-weight:600; color:#34A853;" id="totalPosts">0</div>
-                        <div style="font-size:12px; color:#a0a0b0;">总帖子</div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalPosts">0</div>
+                        <div class="stat-label">总帖子</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalAdmins">0</div>
+                        <div class="stat-label">管理员</div>
                     </div>
                 </div>
-                <div id="adminContent"></div>
+
+                <!-- 待处理举报 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">🚨 待处理举报</div>
+                    <div id="reportsList"></div>
+                </div>
+
+                <!-- 用户管理 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">👥 用户管理</div>
+                    <div class="form-group">
+                        <input type="text" id="searchUser" placeholder="搜索用户...">
+                    </div>
+                    <div id="userList"></div>
+                </div>
+
+                <!-- 社区长管理 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">👑 社区长管理</div>
+                    <div id="leaderList"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -508,9 +632,10 @@
     let allPosts = [];
     let allFollows = [];
     let allLikes = [];
+    let allReports = [];
     let userAvatars = {};
     
-    const DATA_HASH_KEY = 'chfg_data_hash';
+    const DATA_HASH_KEY = 'chfg_data_hash_v3';
     let currentDataHash = localStorage.getItem(DATA_HASH_KEY);
     let statusTimeout;
 
@@ -518,13 +643,21 @@
     async function init() {
         updateStatus('🌍 正在连接 IPFS 网络...');
         
+        // 从 localStorage 读取已登录用户
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+        }
+        
         if (currentDataHash) {
             await loadFromIPFS(currentDataHash);
         } else {
+            // 初始数据
             allUsers = [];
             allPosts = [];
             allFollows = [];
             allLikes = [];
+            allReports = [];
             userAvatars = {};
             await saveToIPFS();
         }
@@ -536,6 +669,14 @@
             document.getElementById('statusBar').classList.add('hidden');
         }, 5000);
         
+        // 如果已登录，更新UI
+        if (currentUser) {
+            document.getElementById('loginNavItem').classList.add('hidden');
+            if (currentUser.role === 'community_leader') {
+                document.getElementById('adminNavItem').classList.remove('hidden');
+            }
+        }
+        
         switchPanel('home');
     }
 
@@ -545,7 +686,6 @@
         statusBar.textContent = msg;
         statusBar.classList.remove('hidden');
         
-        // 重置定时器
         if (statusTimeout) clearTimeout(statusTimeout);
         statusTimeout = setTimeout(() => {
             statusBar.classList.add('hidden');
@@ -559,6 +699,7 @@
             posts: allPosts,
             follows: allFollows,
             likes: allLikes,
+            reports: allReports,
             avatars: userAvatars,
             timestamp: new Date().toISOString()
         };
@@ -606,6 +747,7 @@
             allPosts = data.posts || [];
             allFollows = data.follows || [];
             allLikes = data.likes || [];
+            allReports = data.reports || [];
             userAvatars = data.avatars || {};
             
             updateStatus('✅ 数据加载成功');
@@ -619,7 +761,8 @@
                 allPosts = data.posts || [];
                 allFollows = data.follows || [];
                 allLikes = data.likes || [];
-                userAvatars = data.avatars || {};
+                allReports = data.reports || [];
+                userAvatars = data.avatars || [];
                 updateStatus('⚠️ 使用本地备份');
             }
         }
@@ -691,6 +834,8 @@
                         ${avatar ? `<img src="${avatar}" style="width:24px; height:24px; border-radius:12px; object-fit:cover;">` : ''}
                         <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
                         ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                        ${user?.role === 'community_leader' ? '<span style="color:#FBBC05; font-size:11px; margin-left:5px;">社区长</span>' : ''}
+                        ${user?.role === 'admin' ? '<span style="color:#EA4335; font-size:11px; margin-left:5px;">管理员</span>' : ''}
                     </div>
                     <div class="post-time">${formatTime(post.created_at)}</div>
                 </div>
@@ -708,6 +853,7 @@
                     ` : ''}
                     ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'community_leader') && post.username !== currentUser.username ? `
                         <button class="action-btn" style="border-color:#EA4335; color:#EA4335;" onclick="deletePost(${post.id})">删除</button>
+                        <button class="action-btn" style="border-color:#FBBC05; color:#FBBC05;" onclick="reportPost('${post.id}', '${post.username}')">举报</button>
                     ` : ''}
                 </div>
             </div>
@@ -745,10 +891,11 @@
         await saveToIPFS();
         
         currentUser = newUser;
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+        
         document.getElementById('loginMessage').style.color = '#34A853';
         document.getElementById('loginMessage').textContent = '注册成功！';
         
-        // 登录后隐藏登录导航项
         document.getElementById('loginNavItem').classList.add('hidden');
         
         if (role === 'community_leader') {
@@ -771,10 +918,11 @@
         }
         
         currentUser = user;
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        
         document.getElementById('loginMessage').style.color = '#34A853';
         document.getElementById('loginMessage').textContent = '登录成功！';
         
-        // 登录后隐藏登录导航项
         document.getElementById('loginNavItem').classList.add('hidden');
         
         if (user.role === 'community_leader') {
@@ -782,6 +930,16 @@
         }
         
         setTimeout(() => switchPanel('home'), 1000);
+    }
+
+    // ============ 退出登录 ============
+    function logout() {
+        localStorage.removeItem('currentUser');
+        currentUser = null;
+        document.getElementById('loginNavItem').classList.remove('hidden');
+        document.getElementById('adminNavItem').classList.add('hidden');
+        switchPanel('home');
+        loadHomePanel();
     }
 
     // ============ 发布帖子 ============
@@ -862,6 +1020,31 @@
             loadHomePanel();
         }
 
+        // ============ 举报帖子 ============
+        async function reportPost(postId, reportedUser) {
+            if (!currentUser) {
+                alert('请先登录');
+                return;
+            }
+            
+            const reason = prompt('请输入举报原因：');
+            if (!reason) return;
+            
+            const newReport = {
+                id: Date.now(),
+                postId: postId,
+                reportedUser: reportedUser,
+                reporter: currentUser.username,
+                reason: reason,
+                status: 'pending',
+                created_at: new Date().toISOString()
+            };
+            
+            allReports.push(newReport);
+            await saveToIPFS();
+            alert('举报已提交');
+        }
+
         // ============ 删除帖子 ============
         async function deletePost(postId) {
             if (!confirm('确定要删除这个帖子吗？')) return;
@@ -923,6 +1106,7 @@
                         ${currentUser.role === 'community_leader' ? '<span style="background:#FBBC05; padding:4px 12px; border-radius:20px; font-size:12px;">社区长</span>' : ''}
                         ${currentUser.role === 'admin' ? '<span style="background:#EA4335; padding:4px 12px; border-radius:20px; font-size:12px;">管理员</span>' : ''}
                     </p>
+                    <button class="btn-small" onclick="logout()" style="margin-top:20px; background:#EA4335;">退出登录</button>
                 </div>
             `;
             
@@ -972,44 +1156,148 @@
             }
         }
 
-        // ============ 加载管理面板 ============
+        // ============ 加载管理面板（增强版） ============
         function loadAdminPanel() {
             if (!currentUser || currentUser.role !== 'community_leader') {
-                document.getElementById('adminContent').innerHTML = '<p style="color:#a0a0b0; text-align:center;">无权访问</p>';
+                document.getElementById('adminPanel').innerHTML = '<div class="card"><p style="color:#a0a0b0; text-align:center;">无权访问</p></div>';
                 return;
             }
             
+            // 更新统计
             document.getElementById('totalUsers').textContent = allUsers.length;
             document.getElementById('totalPosts').textContent = allPosts.length;
+            const adminCount = allUsers.filter(u => u.role === 'admin' || u.role === 'community_leader').length;
+            document.getElementById('totalAdmins').textContent = adminCount;
             
-            // 管理面板不显示最新帖子，只显示统计和用户列表
-            const users = allUsers.filter(u => u.role === 'user');
-            let html = '<h4 style="margin:20px 0 10px;">普通用户列表</h4>';
+            // 加载举报列表
+            loadReportsList();
             
-            if (users.length === 0) {
-                html += '<div class="empty-state">暂无普通用户</div>';
-            } else {
-                users.forEach(user => {
-                    const avatar = userAvatars[user.username];
-                    html += `
-                    <div class="user-item">
-                        <div class="user-info">
-                            ${avatar ? 
-                                `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
-                                `<div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>`
-                            }
-                            <div class="user-details">
-                                <div class="user-name">${user.username}</div>
-                                <div style="font-size:11px; color:#a0a0b0;">${user.email}</div>
-                            </div>
-                        </div>
-                        <button class="btn-small" onclick="promoteToAdmin('${user.username}')">提升管理员</button>
-                    </div>
-                    `;
-                });
+            // 加载用户列表
+            loadUserList();
+            
+            // 加载社区长列表
+            loadLeaderList();
+            
+            // 搜索功能
+            document.getElementById('searchUser').addEventListener('input', function(e) {
+                loadUserList(e.target.value);
+            });
+        }
+
+        // ============ 加载举报列表 ============
+        function loadReportsList() {
+            const pendingReports = allReports.filter(r => r.status === 'pending');
+            const reportsList = document.getElementById('reportsList');
+            
+            if (pendingReports.length === 0) {
+                reportsList.innerHTML = '<div class="empty-state">暂无待处理举报</div>';
+                return;
             }
             
-            document.getElementById('adminContent').innerHTML = html;
+            reportsList.innerHTML = pendingReports.map(report => `
+                <div class="reported-item">
+                    <div class="reported-header">
+                        <span class="reported-user">${report.reportedUser}</span>
+                        <span class="post-time">${formatTime(report.created_at)}</span>
+                    </div>
+                    <div class="reported-reason">举报人：${report.reporter}</div>
+                    <div class="reported-reason">原因：${report.reason}</div>
+                    <div class="reported-actions">
+                        <button class="btn-small" onclick="handleReport(${report.id}, 'ignore')" style="background:#34A853;">忽略</button>
+                        <button class="btn-small" onclick="handleReport(${report.id}, 'ban')" style="background:#EA4335;">封禁用户</button>
+                        <button class="btn-small" onclick="handleReport(${report.id}, 'delete')" style="background:#FBBC05;">删除帖子</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ============ 处理举报 ============
+        async function handleReport(reportId, action) {
+            const report = allReports.find(r => r.id === reportId);
+            if (!report) return;
+            
+            if (action === 'ban') {
+                const user = allUsers.find(u => u.username === report.reportedUser);
+                if (user) {
+                    user.banned = 1;
+                    // 删除该用户的所有帖子
+                    allPosts = allPosts.filter(p => p.username !== report.reportedUser);
+                }
+            } else if (action === 'delete') {
+                allPosts = allPosts.filter(p => p.id !== report.postId);
+            }
+            
+            report.status = 'processed';
+            await saveToIPFS();
+            loadAdminPanel();
+        }
+
+        // ============ 加载用户列表 ============
+        function loadUserList(searchTerm = '') {
+            let users = allUsers.filter(u => u.role === 'user');
+            
+            if (searchTerm) {
+                users = users.filter(u => 
+                    u.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    u.email.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            const userList = document.getElementById('userList');
+            
+            if (users.length === 0) {
+                userList.innerHTML = '<div class="empty-state">暂无用户</div>';
+                return;
+            }
+            
+            userList.innerHTML = users.map(user => {
+                const avatar = userAvatars[user.username];
+                return `
+                <div class="user-item">
+                    <div class="user-info">
+                        ${avatar ? 
+                            `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
+                            `<div class="user-avatar">${user.username.charAt(0).toUpperCase()}</div>`
+                        }
+                        <div class="user-details">
+                            <div class="user-name">${user.username}</div>
+                            <div style="font-size:11px; color:#a0a0b0;">${user.email}</div>
+                        </div>
+                    </div>
+                    <button class="btn-small" onclick="promoteToAdmin('${user.username}')">提升管理员</button>
+                </div>
+            `}).join('');
+        }
+
+        // ============ 加载社区长列表 ============
+        function loadLeaderList() {
+            const leaders = allUsers.filter(u => u.role === 'community_leader');
+            const leaderList = document.getElementById('leaderList');
+            
+            if (leaders.length === 0) {
+                leaderList.innerHTML = '<div class="empty-state">暂无社区长</div>';
+                return;
+            }
+            
+            leaderList.innerHTML = leaders.map(leader => {
+                const avatar = userAvatars[leader.username];
+                return `
+                <div class="user-item">
+                    <div class="user-info">
+                        ${avatar ? 
+                            `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
+                            `<div class="user-avatar">${leader.username.charAt(0).toUpperCase()}</div>`
+                        }
+                        <div class="user-details">
+                            <div class="user-name">
+                                ${leader.username}
+                                <span class="badge leader">社区长</span>
+                            </div>
+                            <div style="font-size:11px; color:#a0a0b0;">${leader.email}</div>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
         }
 
         // ============ 提升管理员 ============
@@ -1028,12 +1316,21 @@
         // ============ 查看用户资料 ============
         function viewUserProfile(username) {
             const user = allUsers.find(u => u.username === username);
+            if (!user) return;
+            
             const avatar = userAvatars[username];
             const userPosts = allPosts.filter(p => p.username === username).length;
             const followers = allFollows.filter(f => f.followed === username).length;
             const following = allFollows.filter(f => f.follower === username).length;
             
-            alert(`用户：${username}\n邮箱：${user?.email}\n角色：${user?.role === 'community_leader' ? '社区长' : user?.role === 'admin' ? '管理员' : '普通用户'}\n帖子：${userPosts}\n粉丝：${followers}\n关注：${following}`);
+            alert(
+                `用户：${username}\n` +
+                `邮箱：${user.email}\n` +
+                `角色：${user.role === 'community_leader' ? '社区长' : user.role === 'admin' ? '管理员' : '普通用户'}\n` +
+                `帖子：${userPosts}\n` +
+                `粉丝：${followers}\n` +
+                `关注：${following}`
+            );
         }
 
         // ============ 辅助函数 ============
