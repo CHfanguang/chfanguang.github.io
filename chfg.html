@@ -281,3 +281,691 @@
             <!-- 管理面板 - 完全空白 -->
         </div>
     </div>
+<!-- 底部导航栏 -->
+<div class="bottom-nav">
+    <div class="nav-item active" onclick="switchPanel('home')">
+        <div class="nav-icon">🏠</div>
+        <div class="nav-text">首頁</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('notifications')">
+        <div class="nav-icon">🔔</div>
+        <div class="nav-text">通知</div>
+        <span class="nav-badge hidden" id="notifBadge">0</span>
+    </div>
+    <div class="nav-item" onclick="switchPanel('post')">
+        <div class="nav-icon">✏️</div>
+        <div class="nav-text">發布</div>
+    </div>
+    <div class="nav-item" onclick="switchPanel('profile')">
+        <div class="nav-icon">👤</div>
+        <div class="nav-text">我的</div>
+    </div>
+    <div class="nav-item hidden" id="adminNavItem" onclick="switchPanel('admin')">
+        <div class="nav-icon">⚡</div>
+        <div class="nav-text">管理</div>
+    </div>
+</div>
+
+<!-- 用戶資料卡彈窗（查看他人） -->
+<div id="userProfileModal" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+            <div class="modal-avatar" id="modalUserAvatar"></div>
+            <div>
+                <h3 id="modalUserName" style="color: white; margin-bottom: 5px;"></h3>
+                <span class="user-badge" id="modalUserRole"></span>
+            </div>
+        </div>
+        
+        <div class="stats-row" style="margin-bottom: 20px;">
+            <div class="stat-block">
+                <div class="stat-number" id="modalPostCount">0</div>
+                <div class="stat-label">帖子</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number" id="modalFollowerCount">0</div>
+                <div class="stat-label">粉絲</div>
+            </div>
+            <div class="stat-block">
+                <div class="stat-number" id="modalFollowingCount">0</div>
+                <div class="stat-label">關注</div>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button class="action-btn" style="flex: 1;" id="modalFollowBtn" onclick="handleFollow()"></button>
+        </div>
+        
+        <h4 style="color: white; margin-bottom: 15px;">TA的動態</h4>
+        <div id="modalUserPosts" style="max-height: 300px; overflow-y: auto;"></div>
+        
+        <div class="modal-buttons" style="margin-top: 20px;">
+            <button class="modal-btn cancel" onclick="closeUserModal()">關閉</button>
+        </div>
+    </div>
+</div>
+
+<!-- 粉絲列表彈窗 -->
+<div id="followersModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: white; margin-bottom: 15px;">粉絲列表</h3>
+        <div id="followersList" style="max-height: 400px; overflow-y: auto;"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn cancel" onclick="closeFollowersModal()">關閉</button>
+        </div>
+    </div>
+</div>
+
+<!-- 關注列表彈窗 -->
+<div id="followingModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: white; margin-bottom: 15px;">關注列表</h3>
+        <div id="followingList" style="max-height: 400px; overflow-y: auto;"></div>
+        <div class="modal-buttons">
+            <button class="modal-btn cancel" onclick="closeFollowingModal()">關閉</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 底部导航栏 */
+    .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 70px;
+        background: rgba(20, 20, 30, 0.8);
+        backdrop-filter: blur(15px);
+        border-top: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .nav-item {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .nav-item.active {
+        background: rgba(102, 126, 234, 0.2);
+    }
+    
+    .nav-item.active .nav-icon,
+    .nav-item.active .nav-text {
+        color: #667eea;
+    }
+    
+    .nav-icon {
+        font-size: 22px;
+        color: #a0a0b0;
+    }
+    
+    .nav-text {
+        font-size: 12px;
+        color: #a0a0b0;
+    }
+    
+    .nav-badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 18px;
+        height: 18px;
+        background: #EA4335;
+        border-radius: 9px;
+        color: white;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+    
+    /* 弹窗 */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.7);
+        backdrop-filter: blur(5px);
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+    }
+    
+    .modal-content {
+        width: 90%;
+        max-width: 400px;
+        background: rgba(30, 30, 40, 0.9);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 25px;
+    }
+    
+    .modal-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-weight: 600;
+        background-size: cover;
+        background-position: center;
+    }
+    
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    
+    .modal-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    
+    .modal-btn.cancel {
+        background: rgba(255,255,255,0.1);
+        color: #a0a0b0;
+    }
+    
+    .action-btn {
+        padding: 8px 16px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        color: #a0a0b0;
+        font-size: 13px;
+        cursor: pointer;
+    }
+    
+    .action-btn.following {
+        background: #34A853;
+        border-color: #34A853;
+        color: white;
+    }
+    
+    .user-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .user-item:last-child {
+        border-bottom: none;
+    }
+    
+    .user-info-small {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .user-name {
+        color: white;
+        font-weight: 500;
+    }
+    
+    .user-email {
+        font-size: 12px;
+        color: #a0a0b0;
+    }
+    
+    .post-item {
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .post-item:last-child {
+        border-bottom: none;
+    }
+    
+    .post-content {
+        color: #d0d0e0;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 8px;
+        white-space: pre-wrap;
+    }
+    
+    .post-time {
+        font-size: 12px;
+        color: #6a6a7a;
+    }
+    
+    .post-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .hidden {
+        display: none !important;
+    }
+</style>
+    <script>
+        // ============ 数据初始化 ============
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+        let follows = JSON.parse(localStorage.getItem('follows') || '[]');
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+        let userAvatars = JSON.parse(localStorage.getItem('userAvatars') || '{}');
+        
+        // 检查登录状态
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+
+        // 社区长专属邮箱
+        const LEADER_EMAIL = 'chfanguang@outlook.com';
+
+        // ============ DOM 元素 ============
+        const userNameEl = document.getElementById('userName');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileAvatarText = document.getElementById('profileAvatarText');
+        const userRoleEl = document.getElementById('userRole');
+        const adminNavItem = document.getElementById('adminNavItem');
+        const notifBadge = document.getElementById('notifBadge');
+        
+        // ============ 当前面板 ============
+        let currentPanel = 'home';
+        let currentViewingUser = null;
+
+        // ============ 初始化用户信息 ============
+        function initUserInfo() {
+            userNameEl.textContent = currentUser.username;
+            
+            // 头像处理
+            if (userAvatars[currentUser.username]) {
+                profileAvatar.src = userAvatars[currentUser.username];
+                profileAvatar.style.display = 'block';
+                profileAvatarText.style.display = 'none';
+            } else {
+                profileAvatar.style.display = 'none';
+                profileAvatarText.style.display = 'flex';
+                profileAvatarText.textContent = currentUser.username.charAt(0).toUpperCase();
+            }
+            
+            let roleText = '一般用戶';
+            userRoleEl.className = 'user-badge';
+            
+            if (currentUser.role === 'admin') {
+                roleText = '管理員';
+                userRoleEl.classList.add('admin');
+            } else if (currentUser.role === 'community_leader') {
+                roleText = '社區長';
+                userRoleEl.classList.add('leader');
+                adminNavItem.classList.remove('hidden');
+            }
+            userRoleEl.textContent = roleText;
+            
+            updateUserStats();
+            updateNotifBadge();
+        }
+
+        // ============ 头像上传 ============
+        document.getElementById('avatarUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    userAvatars[currentUser.username] = e.target.result;
+                    localStorage.setItem('userAvatars', JSON.stringify(userAvatars));
+                    
+                    profileAvatar.src = e.target.result;
+                    profileAvatar.style.display = 'block';
+                    profileAvatarText.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // ============ 更新用户统计 ============
+        function updateUserStats() {
+            const myFollowers = follows.filter(f => f.followed === currentUser.username);
+            const myFollowing = follows.filter(f => f.follower === currentUser.username);
+            
+            document.getElementById('userFollowerCount').textContent = myFollowers.length;
+            document.getElementById('userFollowingCount').textContent = myFollowing.length;
+        }
+
+        // ============ 更新通知角标 ============
+        function updateNotifBadge() {
+            const unread = notifications.filter(n => n.username === currentUser.username && !n.read).length;
+            if (unread > 0) {
+                notifBadge.textContent = unread;
+                notifBadge.classList.remove('hidden');
+            } else {
+                notifBadge.classList.add('hidden');
+            }
+        }
+
+        // ============ 面板切换 ============
+        function switchPanel(panel) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            document.querySelectorAll('.panel').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            currentPanel = panel;
+            document.getElementById(panel + 'Panel').classList.add('active');
+            
+            if (panel === 'profile') {
+                loadProfile();
+            }
+        }
+
+        // ============ 发布帖子 ============
+        function submitPost() {
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                alert('請輸入內容');
+                return;
+            }
+            
+            const newPost = {
+                id: Date.now(),
+                username: currentUser.username,
+                content: content,
+                created_at: new Date().toISOString()
+            };
+            
+            posts.push(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            document.getElementById('postContent').value = '';
+            alert('發布成功！');
+        }
+
+        // ============ 加载个人主页 ============
+        function loadProfile() {
+            const myPosts = posts.filter(p => p.username === currentUser.username);
+            
+            // 我的帖子
+            const myPostsList = document.getElementById('myPostsList');
+            if (myPosts.length === 0) {
+                myPostsList.innerHTML = '<div class="empty-state">暫無貼文</div>';
+            } else {
+                myPostsList.innerHTML = myPosts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(post => `
+                    <div class="post-item">
+                        <div class="post-content">${escapeHtml(post.content)}</div>
+                        <div class="post-time">${formatTime(post.created_at)}</div>
+                        <div class="post-actions">
+                            <button class="action-btn" onclick="deletePost(${post.id})" style="border-color:#EA4335; color:#EA4335;">刪除</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            // 我的关注
+            const myFollowing = follows.filter(f => f.follower === currentUser.username);
+            const myFollowingList = document.getElementById('myFollowingList');
+            
+            if (myFollowing.length === 0) {
+                myFollowingList.innerHTML = '<div class="empty-state">暫無關注</div>';
+            } else {
+                myFollowingList.innerHTML = myFollowing.map(f => {
+                    const user = users.find(u => u.username === f.followed);
+                    return `
+                    <div class="user-item">
+                        <div class="user-info-small">
+                            <span class="user-name">${f.followed}</span>
+                            <span class="user-email">${user?.email || ''}</span>
+                        </div>
+                        <button class="action-btn following" onclick="toggleFollow('${f.followed}')">取消關注</button>
+                    </div>
+                `}).join('');
+            }
+        }
+
+        // ============ 关注/取消关注 ============
+        function toggleFollow(targetUsername) {
+            const existing = follows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
+            
+            if (existing) {
+                const index = follows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
+                follows.splice(index, 1);
+            } else {
+                follows.push({
+                    follower: currentUser.username,
+                    followed: targetUsername,
+                    created_at: new Date().toISOString()
+                });
+            }
+            
+            localStorage.setItem('follows', JSON.stringify(follows));
+            
+            if (currentViewingUser) {
+                viewUserProfile(currentViewingUser);
+            }
+            updateUserStats();
+            if (currentPanel === 'profile') {
+                loadProfile();
+            }
+        }
+
+        // ============ 删除帖子 ============
+        function deletePost(postId) {
+            if (!confirm('確定要刪除這篇貼文嗎？')) return;
+            
+            const index = posts.findIndex(p => p.id === postId);
+            if (index !== -1) {
+                posts.splice(index, 1);
+                localStorage.setItem('posts', JSON.stringify(posts));
+                loadProfile();
+            }
+        }
+
+        // ============ 查看用户资料 ============
+        function viewUserProfile(username) {
+            currentViewingUser = username;
+            const user = users.find(u => u.username === username);
+            
+            document.getElementById('modalUserName').textContent = username;
+            
+            // 头像
+            const modalAvatar = document.getElementById('modalUserAvatar');
+            if (userAvatars[username]) {
+                modalAvatar.style.backgroundImage = `url(${userAvatars[username]})`;
+                modalAvatar.style.backgroundSize = 'cover';
+                modalAvatar.textContent = '';
+            } else {
+                modalAvatar.style.backgroundImage = '';
+                modalAvatar.textContent = username.charAt(0).toUpperCase();
+            }
+            
+            // 角色
+            let roleText = '一般用戶';
+            if (user?.role === 'admin') roleText = '管理員';
+            if (user?.role === 'community_leader') roleText = '社區長';
+            document.getElementById('modalUserRole').textContent = roleText;
+            
+            // 统计
+            const userPosts = posts.filter(p => p.username === username);
+            const userFollowers = follows.filter(f => f.followed === username);
+            const userFollowing = follows.filter(f => f.follower === username);
+            
+            document.getElementById('modalPostCount').textContent = userPosts.length;
+            document.getElementById('modalFollowerCount').textContent = userFollowers.length;
+            document.getElementById('modalFollowingCount').textContent = userFollowing.length;
+            
+            // 关注按钮
+            const followBtn = document.getElementById('modalFollowBtn');
+            if (username === currentUser.username) {
+                followBtn.style.display = 'none';
+            } else {
+                followBtn.style.display = 'block';
+                const isFollowed = follows.some(f => f.follower === currentUser.username && f.followed === username);
+                const isFollowedBy = follows.some(f => f.follower === username && f.followed === currentUser.username);
+                
+                if (isFollowed && isFollowedBy) {
+                    followBtn.textContent = '互相關注';
+                    followBtn.classList.add('following');
+                } else if (isFollowed) {
+                    followBtn.textContent = '取消關注';
+                    followBtn.classList.add('following');
+                } else if (isFollowedBy) {
+                    followBtn.textContent = '回粉';
+                    followBtn.classList.add('following');
+                } else {
+                    followBtn.textContent = '關注';
+                    followBtn.classList.remove('following');
+                }
+            }
+            
+            // 加载用户帖子
+            const modalPosts = document.getElementById('modalUserPosts');
+            if (userPosts.length === 0) {
+                modalPosts.innerHTML = '<div class="empty-state">暫無貼文</div>';
+            } else {
+                modalPosts.innerHTML = userPosts.slice(0, 5).sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).map(post => `
+                    <div class="post-item" style="border: none; padding: 10px 0;">
+                        <div class="post-content">${escapeHtml(post.content)}</div>
+                        <div class="post-time">${formatTime(post.created_at)}</div>
+                    </div>
+                `).join('');
+            }
+            
+            document.getElementById('userProfileModal').style.display = 'flex';
+        }
+
+        // ============ 处理关注（从弹窗） ============
+        function handleFollow() {
+            toggleFollow(currentViewingUser);
+            viewUserProfile(currentViewingUser);
+        }
+
+        // ============ 显示粉丝列表 ============
+        function showFollowers() {
+            const followers = follows.filter(f => f.followed === currentUser.username);
+            const list = document.getElementById('followersList');
+            
+            if (followers.length === 0) {
+                list.innerHTML = '<div class="empty-state">暫無粉絲</div>';
+            } else {
+                list.innerHTML = followers.map(f => {
+                    const user = users.find(u => u.username === f.follower);
+                    const isFollowing = follows.some(f2 => f2.follower === currentUser.username && f2.followed === f.follower);
+                    return `
+                    <div class="user-item">
+                        <div class="user-info-small">
+                            <span class="user-name">${f.follower}</span>
+                            <span class="user-email">${user?.email || ''}</span>
+                        </div>
+                        <button class="action-btn ${isFollowing ? 'following' : ''}" onclick="toggleFollow('${f.follower}')">
+                            ${isFollowing ? '取消關注' : '回粉'}
+                        </button>
+                    </div>
+                `}).join('');
+            }
+            
+            document.getElementById('followersModal').style.display = 'flex';
+        }
+
+        // ============ 显示关注列表 ============
+        function showFollowing() {
+            const following = follows.filter(f => f.follower === currentUser.username);
+            const list = document.getElementById('followingList');
+            
+            if (following.length === 0) {
+                list.innerHTML = '<div class="empty-state">暫無關注</div>';
+            } else {
+                list.innerHTML = following.map(f => {
+                    const user = users.find(u => u.username === f.followed);
+                    return `
+                    <div class="user-item">
+                        <div class="user-info-small">
+                            <span class="user-name">${f.followed}</span>
+                            <span class="user-email">${user?.email || ''}</span>
+                        </div>
+                        <button class="action-btn following" onclick="toggleFollow('${f.followed}')">取消關注</button>
+                    </div>
+                `}).join('');
+            }
+            
+            document.getElementById('followingModal').style.display = 'flex';
+        }
+
+        // ============ 关闭弹窗 ============
+        function closeUserModal() {
+            document.getElementById('userProfileModal').style.display = 'none';
+            currentViewingUser = null;
+        }
+        
+        function closeFollowersModal() {
+            document.getElementById('followersModal').style.display = 'none';
+        }
+        
+        function closeFollowingModal() {
+            document.getElementById('followingModal').style.display = 'none';
+        }
+
+        // ============ 退出登录 ============
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        // ============ 辅助函数 ============
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000 / 60);
+            
+            if (diff < 1) return '剛剛';
+            if (diff < 60) return diff + '分鐘前';
+            if (diff < 1440) return Math.floor(diff / 60) + '小時前';
+            return `${date.getMonth()+1}月${date.getDate()}日`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============ 定时清理7天前的帖子 ============
+        setInterval(() => {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+            posts = posts.filter(p => new Date(p.created_at) > sevenDaysAgo);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            if (currentPanel === 'profile') {
+                loadProfile();
+            }
+        }, 60000);
+
+        // ============ 初始化 ============
+        initUserInfo();
+    </script>
+</body>
+</html>
