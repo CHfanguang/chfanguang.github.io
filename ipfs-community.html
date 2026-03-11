@@ -389,7 +389,33 @@
             padding: 40px;
         }
         
-        /* 管理面板专用样式 */
+        /* 通知样式 */
+        .notification-item {
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-item.unread {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .notification-content {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .notification-time {
+            color: #6a6a7a;
+            font-size: 11px;
+        }
+        
+        /* 管理面板样式 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -476,11 +502,6 @@
             background: #FBBC05;
             color: black;
         }
-        
-        .badge.user {
-            background: #34A853;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -489,7 +510,7 @@
     </div>
 
     <div class="container">
-        <!-- 状态栏（5秒后自动隐藏） -->
+        <!-- 状态栏 -->
         <div class="status-bar" id="statusBar">
             🌍 正在连接 IPFS 网络...
         </div>
@@ -502,22 +523,11 @@
             </div>
         </div>
 
-        <!-- 登录/注册面板 -->
-        <div id="loginPanel" class="panel">
+        <!-- 通知面板（新增） -->
+        <div id="notificationsPanel" class="panel">
             <div class="card">
-                <div class="card-title">🔑 登录 / 注册</div>
-                <div class="form-group">
-                    <input type="text" id="loginUsername" placeholder="用户名">
-                </div>
-                <div class="form-group">
-                    <input type="email" id="loginEmail" placeholder="邮箱">
-                </div>
-                <div class="form-group">
-                    <input type="password" id="loginPassword" placeholder="密码">
-                </div>
-                <button class="btn" onclick="register()">注册</button>
-                <button class="btn" onclick="login()" style="background: #34A853;">登录</button>
-                <div id="loginMessage" style="color: #EA4335; text-align: center; margin-top: 10px;"></div>
+                <div class="card-title">🔔 通知中心</div>
+                <div id="notificationsList"></div>
             </div>
         </div>
 
@@ -549,12 +559,10 @@
             </div>
         </div>
 
-        <!-- 管理面板（仅社区长可见）- 增强版 -->
+        <!-- 管理面板 -->
         <div id="adminPanel" class="panel">
             <div class="card">
                 <div class="card-title">⚡ 管理面板</div>
-                
-                <!-- 统计卡片 -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="totalUsers">0</div>
@@ -569,14 +577,10 @@
                         <div class="stat-label">管理员</div>
                     </div>
                 </div>
-
-                <!-- 待处理举报 -->
                 <div class="admin-section">
                     <div class="admin-section-title">🚨 待处理举报</div>
                     <div id="reportsList"></div>
                 </div>
-
-                <!-- 用户管理 -->
                 <div class="admin-section">
                     <div class="admin-section-title">👥 用户管理</div>
                     <div class="form-group">
@@ -584,8 +588,6 @@
                     </div>
                     <div id="userList"></div>
                 </div>
-
-                <!-- 社区长管理 -->
                 <div class="admin-section">
                     <div class="admin-section-title">👑 社区长管理</div>
                     <div id="leaderList"></div>
@@ -600,9 +602,9 @@
             <div class="nav-icon">🏠</div>
             <div class="nav-text">首页</div>
         </div>
-        <div class="nav-item" id="loginNavItem" onclick="switchPanel('login')">
-            <div class="nav-icon">🔑</div>
-            <div class="nav-text">登录</div>
+        <div class="nav-item" onclick="switchPanel('notifications')">
+            <div class="nav-icon">🔔</div>
+            <div class="nav-text">通知</div>
         </div>
         <div class="nav-item" onclick="switchPanel('post')">
             <div class="nav-icon">✏️</div>
@@ -629,6 +631,7 @@
     let allFollows = [];
     let allLikes = [];
     let allReports = [];
+    let allNotifications = [];
     let userAvatars = {};
     
     const DATA_HASH_KEY = 'chfg_data_hash_v3';
@@ -639,7 +642,16 @@
     async function init() {
         updateStatus('🌍 正在连接 IPFS 网络...');
         
-        // 先加载数据
+        // 从 localStorage 读取已登录用户
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            try {
+                currentUser = JSON.parse(savedUser);
+            } catch (e) {
+                localStorage.removeItem('currentUser');
+            }
+        }
+        
         if (currentDataHash) {
             await loadFromIPFS(currentDataHash);
         } else {
@@ -648,38 +660,19 @@
             allFollows = [];
             allLikes = [];
             allReports = [];
+            allNotifications = [];
             userAvatars = {};
             await saveToIPFS();
         }
         
-        // 从 localStorage 读取已登录用户（必须在数据加载之后）
-        const savedUser = localStorage.getItem('currentUser');
-        if (savedUser) {
-            try {
-                const parsedUser = JSON.parse(savedUser);
-                // 验证用户是否还存在
-                const existingUser = allUsers.find(u => u.email === parsedUser.email);
-                if (existingUser) {
-                    currentUser = existingUser;
-                    localStorage.setItem('currentUser', JSON.stringify(existingUser));
-                } else {
-                    localStorage.removeItem('currentUser');
-                }
-            } catch (e) {
-                localStorage.removeItem('currentUser');
-            }
-        }
-        
         updateStatus('✅ 数据加载完成');
         
-        // 5秒后隐藏状态栏
         statusTimeout = setTimeout(() => {
             document.getElementById('statusBar').classList.add('hidden');
         }, 5000);
         
         // 如果已登录，更新UI
         if (currentUser) {
-            document.getElementById('loginNavItem').classList.add('hidden');
             if (currentUser.role === 'community_leader') {
                 document.getElementById('adminNavItem').classList.remove('hidden');
             }
@@ -708,6 +701,7 @@
             follows: allFollows,
             likes: allLikes,
             reports: allReports,
+            notifications: allNotifications,
             avatars: userAvatars,
             timestamp: new Date().toISOString()
         };
@@ -756,6 +750,7 @@
             allFollows = data.follows || [];
             allLikes = data.likes || [];
             allReports = data.reports || [];
+            allNotifications = data.notifications || [];
             userAvatars = data.avatars || {};
             
             updateStatus('✅ 数据加载成功');
@@ -770,6 +765,7 @@
                 allFollows = data.follows || [];
                 allLikes = data.likes || [];
                 allReports = data.reports || [];
+                allNotifications = data.notifications || [];
                 userAvatars = data.avatars || {};
                 updateStatus('⚠️ 使用本地备份');
             }
@@ -790,6 +786,8 @@
         
         if (panel === 'home') {
             loadHomePanel();
+        } else if (panel === 'notifications') {
+            loadNotificationsPanel();
         } else if (panel === 'profile') {
             loadProfilePanel();
         } else if (panel === 'admin' && currentUser?.role === 'community_leader') {
@@ -801,7 +799,6 @@
     function loadHomePanel() {
         const container = document.getElementById('postsList');
         
-        // 直接显示暂无，不诱导发布
         if (allPosts.length === 0) {
             container.innerHTML = '<div class="empty-state">暂无帖子</div>';
             return;
@@ -859,87 +856,57 @@
         `}).join('');
     }
 
-    // ============ 注册 ============
-    async function register() {
-        const username = document.getElementById('loginUsername').value.trim();
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
+    // ============ 加载通知面板 ============
+    function loadNotificationsPanel() {
+        const container = document.getElementById('notificationsList');
         
-        if (!username || !email || !password) {
-            document.getElementById('loginMessage').textContent = '请填写所有字段';
+        if (!currentUser) {
+            container.innerHTML = '<div class="empty-state">请先登录</div>';
             return;
         }
         
-        if (allUsers.find(u => u.email === email)) {
-            document.getElementById('loginMessage').textContent = '邮箱已注册';
+        const userNotifications = allNotifications
+            .filter(n => n.username === currentUser.username)
+            .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        
+        if (userNotifications.length === 0) {
+            container.innerHTML = '<div class="empty-state">暂无通知</div>';
             return;
         }
         
-        const role = email === 'chfanguang@outlook.com' ? 'community_leader' : 'user';
-        
-        const newUser = {
+        container.innerHTML = userNotifications.map(notif => `
+            <div class="notification-item ${notif.read ? '' : 'unread'}" onclick="markNotificationRead(${notif.id})">
+                <div class="notification-content">${notif.content}</div>
+                <div class="notification-time">${formatTime(notif.created_at)}</div>
+            </div>
+        `).join('');
+    }
+
+    // ============ 标记通知已读 ============
+    async function markNotificationRead(id) {
+        const notif = allNotifications.find(n => n.id === id);
+        if (notif) {
+            notif.read = true;
+            await saveToIPFS();
+            loadNotificationsPanel();
+        }
+    }
+
+    // ============ 添加通知 ============
+    async function addNotification(username, content) {
+        const newNotif = {
             id: Date.now(),
-            username,
-            email,
-            password,
-            role,
+            username: username,
+            content: content,
+            read: false,
             created_at: new Date().toISOString()
         };
-        
-        allUsers.push(newUser);
+        allNotifications.push(newNotif);
         await saveToIPFS();
-        
-        currentUser = newUser;
-        localStorage.setItem('currentUser', JSON.stringify(newUser));
-        
-        document.getElementById('loginMessage').style.color = '#34A853';
-        document.getElementById('loginMessage').textContent = '注册成功！';
-        
-        document.getElementById('loginNavItem').classList.add('hidden');
-        
-        if (role === 'community_leader') {
-            document.getElementById('adminNavItem').classList.remove('hidden');
-        }
-        
-        setTimeout(() => switchPanel('home'), 1000);
     }
 
-    // ============ 登录 ============
-    async function login() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value.trim();
-        
-        const user = allUsers.find(u => u.email === email && u.password === password);
-        
-        if (!user) {
-            document.getElementById('loginMessage').textContent = '邮箱或密码错误';
-            return;
-        }
-        
-        currentUser = user;
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        
-        document.getElementById('loginMessage').style.color = '#34A853';
-        document.getElementById('loginMessage').textContent = '登录成功！';
-        
-        document.getElementById('loginNavItem').classList.add('hidden');
-        
-        if (user.role === 'community_leader') {
-            document.getElementById('adminNavItem').classList.remove('hidden');
-        }
-        
-        setTimeout(() => switchPanel('home'), 1000);
-    }
-
-    // ============ 退出登录 ============
-    function logout() {
-        localStorage.removeItem('currentUser');
-        currentUser = null;
-        document.getElementById('loginNavItem').classList.remove('hidden');
-        document.getElementById('adminNavItem').classList.add('hidden');
-        switchPanel('home');
-        loadHomePanel();
-    }
+    // ============ 注册（从login.html跳转后不需要） ============
+    // 登录状态已在login.html处理，这里只保留检查
 
     // ============ 发布帖子 ============
     async function createPost() {
@@ -990,6 +957,11 @@
                 created_at: new Date().toISOString()
             });
             post.likes++;
+            
+            // 给帖子作者发送通知
+            if (post.username !== currentUser.username) {
+                await addNotification(post.username, `${currentUser.username} 点赞了你的帖子`);
+            }
         }
         
         await saveToIPFS();
@@ -1014,6 +986,9 @@
                 followed: targetUsername,
                 created_at: new Date().toISOString()
             });
+            
+            // 给被关注用户发送通知
+            await addNotification(targetUsername, `${currentUser.username} 关注了你`);
         }
         
         await saveToIPFS();
@@ -1041,6 +1016,13 @@
             
             allReports.push(newReport);
             await saveToIPFS();
+            
+            // 给社区长发通知
+            const leaders = allUsers.filter(u => u.role === 'community_leader');
+            for (let leader of leaders) {
+                await addNotification(leader.username, `新举报：用户 ${currentUser.username} 举报了 ${reportedUser}`);
+            }
+            
             alert('举报已提交');
         }
 
@@ -1050,7 +1032,14 @@
             
             const index = allPosts.findIndex(p => p.id === postId);
             if (index !== -1) {
+                const post = allPosts[index];
                 allPosts.splice(index, 1);
+                
+                // 给帖子作者发送通知
+                if (post.username !== currentUser?.username) {
+                    await addNotification(post.username, '你的帖子已被管理员删除');
+                }
+                
                 await saveToIPFS();
                 loadHomePanel();
             }
@@ -1155,7 +1144,7 @@
             }
         }
 
-        // ============ 加载管理面板（增强版） ============
+        // ============ 加载管理面板 ============
         function loadAdminPanel() {
             if (!currentUser || currentUser.role !== 'community_leader') {
                 document.getElementById('adminPanel').innerHTML = '<div class="card"><p style="color:#a0a0b0; text-align:center;">无权访问</p></div>';
@@ -1218,13 +1207,15 @@
             if (action === 'ban') {
                 const user = allUsers.find(u => u.username === report.reportedUser);
                 if (user) {
-                    // 封禁用户（可以从用户列表中移除或标记）
-                    allUsers = allUsers.filter(u => u.username !== report.reportedUser);
                     // 删除该用户的所有帖子
                     allPosts = allPosts.filter(p => p.username !== report.reportedUser);
+                    // 给被封禁用户发通知
+                    await addNotification(report.reportedUser, '你的账号已被封禁');
                 }
             } else if (action === 'delete') {
                 allPosts = allPosts.filter(p => p.id !== report.postId);
+                // 给帖子作者发通知
+                await addNotification(report.reportedUser, '你的帖子因违规已被删除');
             }
             
             report.status = 'processed';
@@ -1308,9 +1299,16 @@
             if (user) {
                 user.role = 'admin';
                 await saveToIPFS();
+                await addNotification(username, '恭喜！你已被提升为管理员');
                 loadAdminPanel();
                 alert(`已将 ${username} 提升为管理员`);
             }
+        }
+
+        // ============ 退出登录 ============
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
         }
 
         // ============ 查看用户资料 ============
@@ -1318,7 +1316,6 @@
             const user = allUsers.find(u => u.username === username);
             if (!user) return;
             
-            const avatar = userAvatars[username];
             const userPosts = allPosts.filter(p => p.username === username).length;
             const followers = allFollows.filter(f => f.followed === username).length;
             const following = allFollows.filter(f => f.follower === username).length;
@@ -1356,8 +1353,11 @@
             if (currentDataHash) {
                 loadFromIPFS(currentDataHash);
             }
-            if (document.querySelector('.panel.active')?.id === 'homePanel') {
+            const activePanel = document.querySelector('.panel.active')?.id;
+            if (activePanel === 'homePanel') {
                 loadHomePanel();
+            } else if (activePanel === 'notificationsPanel') {
+                loadNotificationsPanel();
             }
         }, 30000);
 
