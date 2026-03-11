@@ -328,7 +328,7 @@
             gap: 5px;
         }
         
-        /* 头像上传 */
+        /* 头像上传 - 修复版 */
         .avatar-container {
             position: relative;
             width: 80px;
@@ -347,6 +347,13 @@
             justify-content: center;
             font-size: 32px;
             font-weight: 600;
+            object-fit: cover;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 40px;
             object-fit: cover;
         }
         
@@ -415,7 +422,7 @@
             font-size: 11px;
         }
         
-        /* 管理面板样式 */
+        /* 管理面板样式 - 社区长专用 */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -484,6 +491,7 @@
         .reported-actions {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .badge {
@@ -523,7 +531,7 @@
             </div>
         </div>
 
-        <!-- 通知面板（新增） -->
+        <!-- 通知面板 -->
         <div id="notificationsPanel" class="panel">
             <div class="card">
                 <div class="card-title">🔔 通知中心</div>
@@ -559,10 +567,12 @@
             </div>
         </div>
 
-        <!-- 管理面板 -->
+        <!-- 管理面板 - 社区长专用 -->
         <div id="adminPanel" class="panel">
             <div class="card">
-                <div class="card-title">⚡ 管理面板</div>
+                <div class="card-title">⚡ 社区长管理面板</div>
+                
+                <!-- 统计卡片 -->
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="totalUsers">0</div>
@@ -577,10 +587,14 @@
                         <div class="stat-label">管理员</div>
                     </div>
                 </div>
+
+                <!-- 待处理举报 -->
                 <div class="admin-section">
                     <div class="admin-section-title">🚨 待处理举报</div>
                     <div id="reportsList"></div>
                 </div>
+
+                <!-- 用户管理 -->
                 <div class="admin-section">
                     <div class="admin-section-title">👥 用户管理</div>
                     <div class="form-group">
@@ -588,8 +602,16 @@
                     </div>
                     <div id="userList"></div>
                 </div>
+
+                <!-- 管理员列表 -->
                 <div class="admin-section">
-                    <div class="admin-section-title">👑 社区长管理</div>
+                    <div class="admin-section-title">👑 管理员列表</div>
+                    <div id="adminList"></div>
+                </div>
+
+                <!-- 社区长列表 -->
+                <div class="admin-section">
+                    <div class="admin-section-title">⭐ 社区长列表</div>
                     <div id="leaderList"></div>
                 </div>
             </div>
@@ -634,7 +656,7 @@
     let allNotifications = [];
     let userAvatars = {};
     
-    const DATA_HASH_KEY = 'chfg_data_hash_v3';
+    const DATA_HASH_KEY = 'chfg_data_hash_v4';
     let currentDataHash = localStorage.getItem(DATA_HASH_KEY);
     let statusTimeout;
 
@@ -671,7 +693,7 @@
             document.getElementById('statusBar').classList.add('hidden');
         }, 5000);
         
-        // 如果已登录，更新UI
+        // 如果已登录，显示管理入口
         if (currentUser) {
             if (currentUser.role === 'community_leader') {
                 document.getElementById('adminNavItem').classList.remove('hidden');
@@ -818,7 +840,8 @@
         
         container.innerHTML = recentPosts.map(post => {
             const user = allUsers.find(u => u.username === post.username);
-            const isVerified = (user?.role === 'admin' || user?.role === 'community_leader');
+            // 管理员和社区长都有蓝色对号徽章
+            const hasBlueBadge = (user?.role === 'admin' || user?.role === 'community_leader');
             const hasLiked = currentUser && allLikes.some(l => l.username === currentUser.username && l.postId === post.id);
             const isFollowed = currentUser && allFollows.some(f => f.follower === currentUser.username && f.followed === post.username);
             const avatar = userAvatars[post.username];
@@ -829,7 +852,7 @@
                     <div class="post-author">
                         ${avatar ? `<img src="${avatar}" style="width:24px; height:24px; border-radius:12px; object-fit:cover;">` : ''}
                         <span class="post-author-name" onclick="viewUserProfile('${post.username}')">${post.username}</span>
-                        ${isVerified ? '<span class="post-verified">✓</span>' : ''}
+                        ${hasBlueBadge ? '<span class="post-verified">✓</span>' : ''}
                         ${user?.role === 'community_leader' ? '<span style="color:#FBBC05; font-size:11px; margin-left:5px;">社区长</span>' : ''}
                         ${user?.role === 'admin' ? '<span style="color:#EA4335; font-size:11px; margin-left:5px;">管理员</span>' : ''}
                     </div>
@@ -904,325 +927,336 @@
         allNotifications.push(newNotif);
         await saveToIPFS();
     }
+// ============ 发布帖子 ============
+async function createPost() {
+    if (!currentUser) {
+        document.getElementById('postMessage').textContent = '请先登录';
+        return;
+    }
+    
+    const content = document.getElementById('postContent').value.trim();
+    if (!content) return;
+    
+    const newPost = {
+        id: Date.now(),
+        username: currentUser.username,
+        userRole: currentUser.role,
+        content: content,
+        likes: 0,
+        created_at: new Date().toISOString()
+    };
+    
+    allPosts.unshift(newPost);
+    await saveToIPFS();
+    
+    document.getElementById('postContent').value = '';
+    document.getElementById('postMessage').textContent = '发布成功！';
+    
+    setTimeout(() => switchPanel('home'), 1000);
+}
 
-    // ============ 注册（从login.html跳转后不需要） ============
-    // 登录状态已在login.html处理，这里只保留检查
-
-    // ============ 发布帖子 ============
-    async function createPost() {
-        if (!currentUser) {
-            document.getElementById('postMessage').textContent = '请先登录';
-            return;
-        }
-        
-        const content = document.getElementById('postContent').value.trim();
-        if (!content) return;
-        
-        const newPost = {
-            id: Date.now(),
+// ============ 点赞 ============
+async function toggleLike(postId) {
+    if (!currentUser) {
+        alert('请先登录');
+        return;
+    }
+    
+    const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
+    const post = allPosts.find(p => p.id === postId);
+    
+    if (existing) {
+        const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
+        allLikes.splice(index, 1);
+        post.likes--;
+    } else {
+        allLikes.push({
             username: currentUser.username,
-            userRole: currentUser.role,
-            content: content,
-            likes: 0,
+            postId: postId,
             created_at: new Date().toISOString()
-        };
+        });
+        post.likes++;
         
-        allPosts.unshift(newPost);
-        await saveToIPFS();
-        
-        document.getElementById('postContent').value = '';
-        document.getElementById('postMessage').textContent = '发布成功！';
-        
-        setTimeout(() => switchPanel('home'), 1000);
-    }
-
-    // ============ 点赞 ============
-    async function toggleLike(postId) {
-        if (!currentUser) {
-            alert('请先登录');
-            return;
+        // 给帖子作者发送通知
+        if (post.username !== currentUser.username) {
+            await addNotification(post.username, `${currentUser.username} 点赞了你的帖子`);
         }
+    }
+    
+    await saveToIPFS();
+    loadHomePanel();
+}
+
+// ============ 关注/取消关注 ============
+async function toggleFollow(targetUsername) {
+    if (!currentUser) {
+        alert('请先登录');
+        return;
+    }
+    
+    const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
+    
+    if (existing) {
+        const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
+        allFollows.splice(index, 1);
+    } else {
+        allFollows.push({
+            follower: currentUser.username,
+            followed: targetUsername,
+            created_at: new Date().toISOString()
+        });
         
-        const existing = allLikes.find(l => l.username === currentUser.username && l.postId === postId);
-        const post = allPosts.find(p => p.id === postId);
+        // 给被关注用户发送通知
+        await addNotification(targetUsername, `${currentUser.username} 关注了你`);
+    }
+    
+    await saveToIPFS();
+    loadHomePanel();
+}
+
+// ============ 举报帖子 ============
+async function reportPost(postId, reportedUser) {
+    if (!currentUser) {
+        alert('请先登录');
+        return;
+    }
+    
+    const reason = prompt('请输入举报原因：');
+    if (!reason) return;
+    
+    const newReport = {
+        id: Date.now(),
+        postId: postId,
+        reportedUser: reportedUser,
+        reporter: currentUser.username,
+        reason: reason,
+        status: 'pending',
+        created_at: new Date().toISOString()
+    };
+    
+    allReports.push(newReport);
+    await saveToIPFS();
+    
+    // 给所有社区长发通知
+    const leaders = allUsers.filter(u => u.role === 'community_leader');
+    for (let leader of leaders) {
+        await addNotification(leader.username, `新举报：用户 ${currentUser.username} 举报了 ${reportedUser} - ${reason}`);
+    }
+    
+    alert('举报已提交');
+}
+
+// ============ 删除帖子 ============
+async function deletePost(postId) {
+    if (!confirm('确定要删除这个帖子吗？')) return;
+    
+    const index = allPosts.findIndex(p => p.id === postId);
+    if (index !== -1) {
+        const post = allPosts[index];
+        allPosts.splice(index, 1);
         
-        if (existing) {
-            const index = allLikes.findIndex(l => l.username === currentUser.username && l.postId === postId);
-            allLikes.splice(index, 1);
-            post.likes--;
-        } else {
-            allLikes.push({
-                username: currentUser.username,
-                postId: postId,
-                created_at: new Date().toISOString()
-            });
-            post.likes++;
-            
-            // 给帖子作者发送通知
-            if (post.username !== currentUser.username) {
-                await addNotification(post.username, `${currentUser.username} 点赞了你的帖子`);
-            }
+        // 给帖子作者发送通知
+        if (post.username !== currentUser?.username) {
+            await addNotification(post.username, '你的帖子已被管理员删除');
         }
         
         await saveToIPFS();
         loadHomePanel();
     }
+}
 
-    // ============ 关注/取消关注 ============
-    async function toggleFollow(targetUsername) {
-        if (!currentUser) {
-            alert('请先登录');
-            return;
-        }
-        
-        const existing = allFollows.find(f => f.follower === currentUser.username && f.followed === targetUsername);
-        
-        if (existing) {
-            const index = allFollows.findIndex(f => f.follower === currentUser.username && f.followed === targetUsername);
-            allFollows.splice(index, 1);
-        } else {
-            allFollows.push({
-                follower: currentUser.username,
-                followed: targetUsername,
-                created_at: new Date().toISOString()
-            });
-            
-            // 给被关注用户发送通知
-            await addNotification(targetUsername, `${currentUser.username} 关注了你`);
-        }
-        
-        await saveToIPFS();
-        loadHomePanel();
-    }
-        // ============ 举报帖子 ============
-        async function reportPost(postId, reportedUser) {
-            if (!currentUser) {
-                alert('请先登录');
-                return;
-            }
-            
-            const reason = prompt('请输入举报原因：');
-            if (!reason) return;
-            
-            const newReport = {
-                id: Date.now(),
-                postId: postId,
-                reportedUser: reportedUser,
-                reporter: currentUser.username,
-                reason: reason,
-                status: 'pending',
-                created_at: new Date().toISOString()
-            };
-            
-            allReports.push(newReport);
-            await saveToIPFS();
-            
-            // 给社区长发通知
-            const leaders = allUsers.filter(u => u.role === 'community_leader');
-            for (let leader of leaders) {
-                await addNotification(leader.username, `新举报：用户 ${currentUser.username} 举报了 ${reportedUser}`);
-            }
-            
-            alert('举报已提交');
-        }
-
-        // ============ 删除帖子 ============
-        async function deletePost(postId) {
-            if (!confirm('确定要删除这个帖子吗？')) return;
-            
-            const index = allPosts.findIndex(p => p.id === postId);
-            if (index !== -1) {
-                const post = allPosts[index];
-                allPosts.splice(index, 1);
+// ============ 头像上传 - 修复版 ============
+function setupAvatarUpload() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                // 保存头像到 userAvatars
+                userAvatars[currentUser.username] = e.target.result;
                 
-                // 给帖子作者发送通知
-                if (post.username !== currentUser?.username) {
-                    await addNotification(post.username, '你的帖子已被管理员删除');
-                }
-                
+                // 立即保存到 IPFS
                 await saveToIPFS();
-                loadHomePanel();
-            }
-        }
-
-        // ============ 头像上传 ============
-        function setupAvatarUpload() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = async (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = async (e) => {
-                        userAvatars[currentUser.username] = e.target.result;
-                        await saveToIPFS();
-                        loadProfilePanel();
-                    };
-                    reader.readAsDataURL(file);
-                }
+                
+                // 重新加载个人主页
+                loadProfilePanel();
             };
-            input.click();
+            reader.readAsDataURL(file);
         }
+    };
+    input.click();
+}
 
-        // ============ 加载个人主页面板 ============
-        function loadProfilePanel() {
-            if (!currentUser) {
-                document.getElementById('profileInfo').innerHTML = '<p style="color: #a0a0b0; text-align: center;">请先登录</p>';
-                document.getElementById('myPostsCard').style.display = 'none';
-                document.getElementById('myFollowsCard').style.display = 'none';
-                return;
-            }
-            
-            document.getElementById('myPostsCard').style.display = 'block';
-            document.getElementById('myFollowsCard').style.display = 'block';
-            
-            const avatar = userAvatars[currentUser.username];
-            
-            document.getElementById('profileInfo').innerHTML = `
-                <div style="text-align: center;">
-                    <div class="avatar-container" onclick="setupAvatarUpload()">
-                        ${avatar ? 
-                            `<img src="${avatar}" class="profile-avatar" style="width:80px; height:80px; border-radius:40px; object-fit:cover;">` : 
-                            `<div class="profile-avatar">${currentUser.username.charAt(0).toUpperCase()}</div>`
-                        }
-                        <div class="avatar-upload">✏️</div>
-                    </div>
-                    <h3 style="margin-top:10px;">${currentUser.username}</h3>
-                    <p style="color:#a0a0b0; font-size:14px;">${currentUser.email}</p>
-                    <p style="margin-top:10px;">
-                        ${currentUser.role === 'community_leader' ? '<span style="background:#FBBC05; padding:4px 12px; border-radius:20px; font-size:12px;">社区长</span>' : ''}
-                        ${currentUser.role === 'admin' ? '<span style="background:#EA4335; padding:4px 12px; border-radius:20px; font-size:12px;">管理员</span>' : ''}
-                    </p>
-                    <button class="btn-small" onclick="logout()" style="margin-top:20px; background:#EA4335;">退出登录</button>
-                </div>
-            `;
-            
-            // 我的帖子
-            const myPosts = allPosts.filter(p => p.username === currentUser.username).slice(0, 10);
-            const myPostsList = document.getElementById('myPostsList');
-            
-            if (myPosts.length === 0) {
-                myPostsList.innerHTML = '<div class="empty-state">暂无帖子</div>';
-            } else {
-                myPostsList.innerHTML = myPosts.map(post => `
-                    <div class="post-item">
-                        <div class="post-content">${escapeHtml(post.content)}</div>
-                        <div class="post-time">${formatTime(post.created_at)}</div>
-                    </div>
-                `).join('');
-            }
-            
-            // 我的关注
-            const myFollows = allFollows.filter(f => f.follower === currentUser.username);
-            const myFollowsList = document.getElementById('myFollowsList');
-            
-            if (myFollows.length === 0) {
-                myFollowsList.innerHTML = '<div class="empty-state">暂无关注</div>';
-            } else {
-                myFollowsList.innerHTML = myFollows.map(f => {
-                    const user = allUsers.find(u => u.username === f.followed);
-                    const avatar = userAvatars[f.followed];
-                    return `
-                    <div class="user-item">
-                        <div class="user-info">
-                            ${avatar ? 
-                                `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
-                                `<div class="user-avatar">${f.followed.charAt(0).toUpperCase()}</div>`
-                            }
-                            <div class="user-details">
-                                <div class="user-name">
-                                    ${f.followed}
-                                    ${user?.role === 'admin' || user?.role === 'community_leader' ? '<span class="post-verified">✓</span>' : ''}
-                                </div>
-                                <div style="font-size:11px; color:#a0a0b0;">${user?.email || ''}</div>
-                            </div>
-                        </div>
-                        <button class="btn-small" onclick="toggleFollow('${f.followed}')">取消关注</button>
-                    </div>
-                `}).join('');
-            }
-        }
-
-        // ============ 加载管理面板 ============
-        function loadAdminPanel() {
-            if (!currentUser || currentUser.role !== 'community_leader') {
-                document.getElementById('adminPanel').innerHTML = '<div class="card"><p style="color:#a0a0b0; text-align:center;">无权访问</p></div>';
-                return;
-            }
-            
-            // 更新统计
-            document.getElementById('totalUsers').textContent = allUsers.length;
-            document.getElementById('totalPosts').textContent = allPosts.length;
-            const adminCount = allUsers.filter(u => u.role === 'admin' || u.role === 'community_leader').length;
-            document.getElementById('totalAdmins').textContent = adminCount;
-            
-            // 加载举报列表
-            loadReportsList();
-            
-            // 加载用户列表
-            loadUserList();
-            
-            // 加载社区长列表
-            loadLeaderList();
-            
-            // 搜索功能
-            document.getElementById('searchUser').addEventListener('input', function(e) {
-                loadUserList(e.target.value);
-            });
-        }
-
-        // ============ 加载举报列表 ============
-        function loadReportsList() {
-            const pendingReports = allReports.filter(r => r.status === 'pending');
-            const reportsList = document.getElementById('reportsList');
-            
-            if (pendingReports.length === 0) {
-                reportsList.innerHTML = '<div class="empty-state">暂无待处理举报</div>';
-                return;
-            }
-            
-            reportsList.innerHTML = pendingReports.map(report => `
-                <div class="reported-item">
-                    <div class="reported-header">
-                        <span class="reported-user">${report.reportedUser}</span>
-                        <span class="post-time">${formatTime(report.created_at)}</span>
-                    </div>
-                    <div class="reported-reason">举报人：${report.reporter}</div>
-                    <div class="reported-reason">原因：${report.reason}</div>
-                    <div class="reported-actions">
-                        <button class="btn-small" onclick="handleReport(${report.id}, 'ignore')" style="background:#34A853;">忽略</button>
-                        <button class="btn-small" onclick="handleReport(${report.id}, 'ban')" style="background:#EA4335;">封禁用户</button>
-                        <button class="btn-small" onclick="handleReport(${report.id}, 'delete')" style="background:#FBBC05;">删除帖子</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // ============ 处理举报 ============
-        async function handleReport(reportId, action) {
-            const report = allReports.find(r => r.id === reportId);
-            if (!report) return;
-            
-            if (action === 'ban') {
-                const user = allUsers.find(u => u.username === report.reportedUser);
-                if (user) {
-                    // 删除该用户的所有帖子
-                    allPosts = allPosts.filter(p => p.username !== report.reportedUser);
-                    // 给被封禁用户发通知
-                    await addNotification(report.reportedUser, '你的账号已被封禁');
+// ============ 加载个人主页面板 ============
+function loadProfilePanel() {
+    if (!currentUser) {
+        document.getElementById('profileInfo').innerHTML = '<p style="color: #a0a0b0; text-align: center;">请先登录</p>';
+        document.getElementById('myPostsCard').style.display = 'none';
+        document.getElementById('myFollowsCard').style.display = 'none';
+        return;
+    }
+    
+    document.getElementById('myPostsCard').style.display = 'block';
+    document.getElementById('myFollowsCard').style.display = 'block';
+    
+    // 从 userAvatars 获取头像
+    const avatar = userAvatars[currentUser.username];
+    const hasBlueBadge = (currentUser.role === 'admin' || currentUser.role === 'community_leader');
+    
+    document.getElementById('profileInfo').innerHTML = `
+        <div style="text-align: center;">
+            <div class="avatar-container" onclick="setupAvatarUpload()">
+                ${avatar ? 
+                    `<img src="${avatar}" class="profile-avatar" style="width:80px; height:80px; border-radius:40px; object-fit:cover;">` : 
+                    `<div class="profile-avatar">${currentUser.username.charAt(0).toUpperCase()}</div>`
                 }
-            } else if (action === 'delete') {
-                allPosts = allPosts.filter(p => p.id !== report.postId);
-                // 给帖子作者发通知
-                await addNotification(report.reportedUser, '你的帖子因违规已被删除');
-            }
+                <div class="avatar-upload">✏️</div>
+            </div>
+            <h3 style="margin-top:10px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+                ${currentUser.username}
+                ${hasBlueBadge ? '<span class="post-verified">✓</span>' : ''}
+            </h3>
+            <p style="color:#a0a0b0; font-size:14px;">${currentUser.email}</p>
+            <p style="margin-top:10px;">
+                ${currentUser.role === 'community_leader' ? '<span style="background:#FBBC05; padding:4px 12px; border-radius:20px; font-size:12px;">社区长</span>' : ''}
+                ${currentUser.role === 'admin' ? '<span style="background:#EA4335; padding:4px 12px; border-radius:20px; font-size:12px;">管理员</span>' : ''}
+            </p>
+            <button class="btn-small" onclick="logout()" style="margin-top:20px; background:#EA4335;">退出登录</button>
+        </div>
+    `;
+    
+    // 我的帖子
+    const myPosts = allPosts.filter(p => p.username === currentUser.username).slice(0, 10);
+    const myPostsList = document.getElementById('myPostsList');
+    
+    if (myPosts.length === 0) {
+        myPostsList.innerHTML = '<div class="empty-state">暂无帖子</div>';
+    } else {
+        myPostsList.innerHTML = myPosts.map(post => `
+            <div class="post-item">
+                <div class="post-content">${escapeHtml(post.content)}</div>
+                <div class="post-time">${formatTime(post.created_at)}</div>
+            </div>
+        `).join('');
+    }
+    
+    // 我的关注
+    const myFollows = allFollows.filter(f => f.follower === currentUser.username);
+    const myFollowsList = document.getElementById('myFollowsList');
+    
+    if (myFollows.length === 0) {
+        myFollowsList.innerHTML = '<div class="empty-state">暂无关注</div>';
+    } else {
+        myFollowsList.innerHTML = myFollows.map(f => {
+            const user = allUsers.find(u => u.username === f.followed);
+            const avatar = userAvatars[f.followed];
+            const hasBlueBadge = (user?.role === 'admin' || user?.role === 'community_leader');
             
-            report.status = 'processed';
-            await saveToIPFS();
-            loadAdminPanel();
-        }
+            return `
+            <div class="user-item">
+                <div class="user-info">
+                    ${avatar ? 
+                        `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
+                        `<div class="user-avatar">${f.followed.charAt(0).toUpperCase()}</div>`
+                    }
+                    <div class="user-details">
+                        <div class="user-name">
+                            ${f.followed}
+                            ${hasBlueBadge ? '<span class="post-verified">✓</span>' : ''}
+                        </div>
+                        <div style="font-size:11px; color:#a0a0b0;">${user?.email || ''}</div>
+                    </div>
+                </div>
+                <button class="btn-small" onclick="toggleFollow('${f.followed}')">取消关注</button>
+            </div>
+        `}).join('');
+    }
+}
 
+// ============ 加载管理面板 - 社区长专用 ============
+function loadAdminPanel() {
+    if (!currentUser || currentUser.role !== 'community_leader') {
+        document.getElementById('adminPanel').innerHTML = '<div class="card"><p style="color:#a0a0b0; text-align:center;">无权访问</p></div>';
+        return;
+    }
+    
+    // 更新统计
+    document.getElementById('totalUsers').textContent = allUsers.length;
+    document.getElementById('totalPosts').textContent = allPosts.length;
+    const adminCount = allUsers.filter(u => u.role === 'admin').length;
+    document.getElementById('totalAdmins').textContent = adminCount;
+    
+    // 加载举报列表
+    loadReportsList();
+    
+    // 加载用户列表
+    loadUserList();
+    
+    // 加载管理员列表
+    loadAdminList();
+    
+    // 加载社区长列表
+    loadLeaderList();
+    
+    // 搜索功能
+    document.getElementById('searchUser').addEventListener('input', function(e) {
+        loadUserList(e.target.value);
+    });
+}
+
+// ============ 加载举报列表 ============
+function loadReportsList() {
+    const pendingReports = allReports.filter(r => r.status === 'pending');
+    const reportsList = document.getElementById('reportsList');
+    
+    if (pendingReports.length === 0) {
+        reportsList.innerHTML = '<div class="empty-state">暂无待处理举报</div>';
+        return;
+    }
+    
+    reportsList.innerHTML = pendingReports.map(report => `
+        <div class="reported-item">
+            <div class="reported-header">
+                <span class="reported-user">${report.reportedUser}</span>
+                <span class="post-time">${formatTime(report.created_at)}</span>
+            </div>
+            <div class="reported-reason">举报人：${report.reporter}</div>
+            <div class="reported-reason">原因：${report.reason}</div>
+            <div class="reported-actions">
+                <button class="btn-small" onclick="handleReport(${report.id}, 'ignore')" style="background:#34A853;">忽略</button>
+                <button class="btn-small" onclick="handleReport(${report.id}, 'ban')" style="background:#EA4335;">封禁用户</button>
+                <button class="btn-small" onclick="handleReport(${report.id}, 'delete')" style="background:#FBBC05;">删除帖子</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============ 处理举报 ============
+async function handleReport(reportId, action) {
+    const report = allReports.find(r => r.id === reportId);
+    if (!report) return;
+    
+    if (action === 'ban') {
+        const user = allUsers.find(u => u.username === report.reportedUser);
+        if (user) {
+            // 删除该用户的所有帖子
+            allPosts = allPosts.filter(p => p.username !== report.reportedUser);
+            // 给被封禁用户发通知
+            await addNotification(report.reportedUser, '你的账号已被封禁');
+        }
+    } else if (action === 'delete') {
+        allPosts = allPosts.filter(p => p.id !== report.postId);
+        // 给帖子作者发通知
+        await addNotification(report.reportedUser, '你的帖子因违规已被删除');
+    }
+    
+    report.status = 'processed';
+    await saveToIPFS();
+    loadAdminPanel();
+}
         // ============ 加载用户列表 ============
         function loadUserList(searchTerm = '') {
             let users = allUsers.filter(u => u.role === 'user');
@@ -1260,6 +1294,40 @@
             `}).join('');
         }
 
+        // ============ 加载管理员列表 ============
+        function loadAdminList() {
+            const admins = allUsers.filter(u => u.role === 'admin');
+            const adminList = document.getElementById('adminList');
+            
+            if (admins.length === 0) {
+                adminList.innerHTML = '<div class="empty-state">暂无管理员</div>';
+                return;
+            }
+            
+            adminList.innerHTML = admins.map(admin => {
+                const avatar = userAvatars[admin.username];
+                const hasBlueBadge = true; // 管理员有蓝色对号
+                
+                return `
+                <div class="user-item">
+                    <div class="user-info">
+                        ${avatar ? 
+                            `<img src="${avatar}" style="width:40px; height:40px; border-radius:20px; object-fit:cover;">` : 
+                            `<div class="user-avatar">${admin.username.charAt(0).toUpperCase()}</div>`
+                        }
+                        <div class="user-details">
+                            <div class="user-name">
+                                ${admin.username}
+                                ${hasBlueBadge ? '<span class="post-verified">✓</span>' : ''}
+                                <span class="badge admin">管理员</span>
+                            </div>
+                            <div style="font-size:11px; color:#a0a0b0;">${admin.email}</div>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+
         // ============ 加载社区长列表 ============
         function loadLeaderList() {
             const leaders = allUsers.filter(u => u.role === 'community_leader');
@@ -1272,6 +1340,8 @@
             
             leaderList.innerHTML = leaders.map(leader => {
                 const avatar = userAvatars[leader.username];
+                const hasBlueBadge = true; // 社区长也有蓝色对号
+                
                 return `
                 <div class="user-item">
                     <div class="user-info">
@@ -1282,6 +1352,7 @@
                         <div class="user-details">
                             <div class="user-name">
                                 ${leader.username}
+                                ${hasBlueBadge ? '<span class="post-verified">✓</span>' : ''}
                                 <span class="badge leader">社区长</span>
                             </div>
                             <div style="font-size:11px; color:#a0a0b0;">${leader.email}</div>
@@ -1316,12 +1387,14 @@
             const user = allUsers.find(u => u.username === username);
             if (!user) return;
             
+            const avatar = userAvatars[username];
+            const hasBlueBadge = (user.role === 'admin' || user.role === 'community_leader');
             const userPosts = allPosts.filter(p => p.username === username).length;
             const followers = allFollows.filter(f => f.followed === username).length;
             const following = allFollows.filter(f => f.follower === username).length;
             
             alert(
-                `用户：${username}\n` +
+                `用户：${username} ${hasBlueBadge ? '✓' : ''}\n` +
                 `邮箱：${user.email}\n` +
                 `角色：${user.role === 'community_leader' ? '社区长' : user.role === 'admin' ? '管理员' : '普通用户'}\n` +
                 `帖子：${userPosts}\n` +
@@ -1358,6 +1431,10 @@
                 loadHomePanel();
             } else if (activePanel === 'notificationsPanel') {
                 loadNotificationsPanel();
+            } else if (activePanel === 'profilePanel' && currentUser) {
+                loadProfilePanel();
+            } else if (activePanel === 'adminPanel' && currentUser?.role === 'community_leader') {
+                loadAdminPanel();
             }
         }, 30000);
 
