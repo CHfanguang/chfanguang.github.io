@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CHFG社区 · 开始</title>
+    <title>CHFG社区 · 登录</title>
     <style>
         * {
             margin: 0;
@@ -53,7 +53,7 @@
             to { transform: translateY(-1000px) translateX(200px); }
         }
         
-        /* 吸顶栏 - 单行文字 */
+        /* 吸顶栏 */
         .top-bar {
             position: fixed;
             top: 0;
@@ -260,6 +260,7 @@
         // ============ 数据存储 ============
         let users = JSON.parse(localStorage.getItem('users') || '[]');
         let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let notifications = JSON.parse(localStorage.getItem('notifications') || '[]');
         
         // 社区长专属邮箱
         const LEADER_EMAIL = 'chfanguang@outlook.com';
@@ -374,6 +375,23 @@
             
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
+            
+            // 如果不是社區長，發送通知給社區長
+            if (role === 'user') {
+                // 找到社區長
+                const leader = users.find(u => u.email === LEADER_EMAIL);
+                if (leader) {
+                    notifications.push({
+                        id: Date.now(),
+                        username: leader.username,
+                        type: 'new_user',
+                        content: `新用戶註冊：${username} (${email})`,
+                        read: false,
+                        created_at: new Date().toISOString()
+                    });
+                    localStorage.setItem('notifications', JSON.stringify(notifications));
+                }
+            }
             
             // 自動登錄
             localStorage.setItem('currentUser', JSON.stringify(newUser));
