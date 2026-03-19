@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shadow Moon · 其他</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>Shadow Moon · CH凡光</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 body{
@@ -12,9 +12,10 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei";
   background:linear-gradient(135deg,#cfcfcf,#f6f6f6 30%,#bdbdbd 60%,#f0f0f0);
   color:#000;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* 吸顶 LOGO */
+/* 吸顶栏 */
 .top-logo{
   position:sticky;
   top:14px;
@@ -26,15 +27,15 @@ body{
   backdrop-filter:blur(30px) saturate(220%);
   -webkit-backdrop-filter:blur(30px) saturate(220%);
   border-radius:30px;
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.7),
-    0 18px 40px rgba(0,0,0,.18);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 18px 40px rgba(0,0,0,.18);
 }
-
 .logo{
   font-size:30px;
   font-weight:900;
   letter-spacing:.6px;
+}
+.logo span {
+  text-shadow: none;
 }
 
 /* 内容动画 */
@@ -57,30 +58,37 @@ body{
   border-radius:28px;
   padding:30px;
   line-height:1.7;
-  box-shadow:
-    inset 0 1px 1px rgba(255,255,255,.7),
-    0 30px 50px rgba(0,0,0,.18);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.7), 0 30px 50px rgba(0,0,0,.18);
+  position: relative;
+  overflow: hidden;
 }
 
-/* 下载链接样式 (已无下载链接，保留以备将来使用，但当前无用) */
-.download a {
-  color: #0066cc;
-  text-decoration: underline;
-  word-break: break-all;
+/* 科技线条装饰 */
+.tech-line {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  margin: 22px 0;
+  opacity: 0.6;
 }
-.download a:hover {
-  color: #004499;
+.tech-dot {
+  color: #00ffff;
+  font-weight: bold;
 }
 
+.title{
+  font-size:26px;
+  font-weight:900;
+  margin-bottom:10px;
+}
 .footer{
   text-align:center;
-  margin:40px 0 100px;
+  margin:80px 0 160px;
   color:#888;
   font-size:14px;
   line-height:1.6;
 }
 
-/* ===== 底部导航 ===== */
+/* 底部导航 */
 .bottom-nav{
   position:fixed;
   bottom:26px;
@@ -95,6 +103,7 @@ body{
   display:flex;
   justify-content:space-evenly;
   padding:16px 0;
+  z-index:1000;
 }
 .bottom-nav a{
   text-decoration:none;
@@ -102,12 +111,92 @@ body{
   color:#000;
   padding: 0 8px;
 }
+
+/* 像素字体 */
+.pixel-header {
+  text-align: center;
+  margin-bottom:30px;
+  width:100%;
+}
+.pixel-line {
+  display: block;
+  font-family: 'Press Start 2P', monospace;
+  font-weight:400;
+  line-height:1.5;
+  letter-spacing:2px;
+  text-shadow: 0 0 8px currentColor, 0 0 20px currentColor, 0 0 35px currentColor;
+}
+.pixel-shadow {
+  color: rgba(155,77,255,0.9);
+  font-size:40px;
+  margin-bottom:8px;
+}
+.pixel-ch {
+  color: rgba(61,126,255,0.9);
+  font-size:38px;
+}
+@media (max-width: 550px) {
+  .pixel-shadow { font-size:30px; }
+  .pixel-ch { font-size:28px; }
+}
+
+/* 彩色发光 */
+.title span:not([style*="color:#000"]) {
+  text-shadow: 0 0 5px currentColor,0 0 15px currentColor;
+  transition: text-shadow 0.2s ease;
+}
+.title span[style*="color:#000"] {
+  text-shadow: none;
+}
+
+.qq-tip {
+  color: #888;
+  font-style: italic;
+  font-size:14px;
+}
+
+/* 统一按钮样式 */
+.btn-uniform {
+  display: block;
+  margin: 22px auto;
+  padding: 12px 30px;
+  background: rgba(61,126,255,0.2);
+  border: 2px solid #3d7eff;
+  border-radius: 18px;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  width: fit-content;
+  min-width: 180px;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+.btn-uniform:hover {
+  background: rgba(61,126,255,0.35);
+  transform: translateY(-2px);
+}
+
+/* 下载提示文本：普通字重，两边加箭头 */
+.download-hint {
+  text-align: center;
+  font-weight: normal;
+  color: #000;
+  font-size: 16px;
+  margin: 16px 0 8px 0;
+}
+
+/* 没有文件名显示 */
 </style>
 </head>
-
 <body>
 
-<!-- 吸顶 LOGO -->
+<!-- 吸顶栏 -->
 <div class="top-logo">
   <span class="logo">
     <span style="color:#4285F4;">S</span>
@@ -116,39 +205,78 @@ body{
     <span style="color:#4285F4;">d</span>
     <span style="color:#34A853;">o</span>
     <span style="color:#EA4335;">w</span>
-    <span style="color:#34A853;"> M</span>
+    <span style="color:#000;"> </span>
+    <span style="color:#34A853;">M</span>
     <span style="color:#4285F4;">o</span>
     <span style="color:#EA4335;">o</span>
     <span style="color:#FBBC05;">n</span>
   </span>
 </div>
 
-<!-- 内容 -->
 <div class="container">
   <div class="glass">
-    <b>官方其他账号：</b><br><br>
-    tg：<a href="https://t.me/CHfanguang" target="_blank">t.me/CHfanguang</a><br>
-    fb：<a href="https://www.facebook.com/share/1bUbjR2mGj/" target="_blank">Facebook</a><br>
-    ig：<a href="https://www.instagram.com/chfanguan?igsh=OHhzamJ1amJqM244" target="_blank">Instagram</a><br>
-    X（原推特）：<a href="https://x.com/chfanguang" target="_blank">X</a><br>
-    snapchat：<a href="https://www.snapchat.com/add/chfanguang?share_id=Er0ZY1x6Ofw&locale=zh-Hans-HK" target="_blank">Snapchat</a><br>
-    discord：chfanguang<br>
-    reddit：<a href="https://www.reddit.com/u/CHfanguang/s/0ggrRz4FcO" target="_blank">Reddit</a><br>
-    <!-- YouTube 链接（按要求保留） -->
-    YouTube：<a href="https://youtube.com/@chfanguang?si=WK9x3mRbJ8TNxKx7" target="_blank">@chfanguang</a><br>
-    <!-- Gmail 条目（直接显示邮箱，无链接） -->
-    Gmail：gfan91119@gmail.com
+    <!-- 像素头部 -->
+    <div class="pixel-header">
+      <span class="pixel-line pixel-shadow">Shadow Moon</span>
+      <span class="pixel-line pixel-ch">CH凡光</span>
+    </div>
     
-    <!-- 官方软件下载区域已完全移除（包括“官方软件下载地址”文字和迅雷链接） -->
-    <!-- 原下载链接部分已删除，无任何残留 -->
-  </div>
-</div>
+    <!-- 彩色欢迎标题 -->
+    <div class="title">
+      <span style="color:#4285F4;">欢</span><span style="color:#EA4335;">迎</span><span style="color:#FBBC05;">进</span><span style="color:#4285F4;">入</span><span style="color:#34A853;"> </span><span style="color:#EA4335;">Shadow Moon</span><span style="color:#000;"> 官方网站</span>
+    </div>
+    
+    <div class="tech-line"></div>
+    
+    <!-- 服务项目列表 -->
+    <p><span class="tech-dot">•</span> 服务项目：<br>我的世界外挂 / VPN翻墙 / 华为装谷歌 / 帮助制作官网 / 网页美化 / 短信代轰炸无限时长 / 技术指导 / 开全家户籍 / 户籍出道 / 手机号轰炸无限循环 / tg飞机账号购买 / 翻墙避免被抓教程 / 翻墙必备软件 / 公安天眼查户籍 / 猎魔查户籍 / 查名下房产 / 查家庭住址 /所有商品均为1元</p>
 
-<!-- 页脚 -->
-<div class="footer">
-  Powered by Shadow Moon<br>
-  © CH凡光
-</div>
+    <!-- 两个功能按钮 -->
+    <a href="act.html" class="btn-uniform">进入演示模式</a>
+    <a href="pay.html" class="btn-uniform">自助购买</a>
+
+    <!-- QQ咨询通道 -->
+    <p><span class="tech-dot">•</span> 咨询通道：<br><a href="https://qm.qq.com/q/JYP3V4yogK" target="_blank">QQ好友</a></p>
+    <div class="qq-tip">未能跳转请手动添加QQ好友：3683029258</div>
+    
+    <p><span class="tech-dot">•</span> 备用通道：<a href="https://qm.qq.com/q/Gq3tfhiXG8" target="_blank">备用QQ好友</a></p>
+    <div class="qq-tip">未能跳转请手动添加QQ好友：3581370395</div>
+    
+    <div class="tech-line"></div>
+    
+    <!-- 客服及商品信息 -->
+    <p><span class="tech-dot">•</span> 客服时间：08:00–22:00（回复≤30分钟）</p>
+    <p><span class="tech-dot">•</span> 所有商品：1 元</p>
+    <p><span class="tech-dot">•</span> 支付方式：微信支付</p>
+    <p><span class="tech-dot">•</span> 售后服务：终身免费</p>
+    
+    <div class="tech-line"></div>
+    
+    <!-- 社群链接 -->
+    <p><span class="tech-dot">•</span> 官方QQ群：523725674</p>
+    <p><span class="tech-dot">•</span> 快手账号：<a href="https://v.kuaishou.com/JE2u8ANT" target="_blank">快手账号</a>（我的世界CH凡光）</p>
+    
+    <!-- ===== 新增下载区域 ===== -->
+    <!-- 上分隔线（利用快手下方的现有科技线，这里再加一条确保间距合适） -->
+    <div class="tech-line"></div>
+    
+    <!-- 提示文字：两边加箭头，普通字重 -->
+    <div class="download-hint">👇🏻 当前是网页版？点击下载 👇🏻</div>
+    
+    <!-- 下载按钮：指向CH凡光_11.apk，带download属性触发下载，无文件名显示 -->
+    <a href="CH凡光_11.apk" class="btn-uniform" download>点击下载</a>
+    
+    <!-- 下分隔线，将下载区与免责声明隔开 -->
+    <div class="tech-line"></div>
+    <!-- ===== 下载区域结束 ===== -->
+    
+    <!-- 免责声明 -->
+    <p><b>免责声明</b><br>本站内容仅供学习与技术交流。<br>使用相关软件产生的后果由使用者自行承担。<br>请遵守法律法规，合法使用。<br>本网站/软件售卖出的商品改不退还，请慎重考虑。<br>本网站所有商品均为1元/不讲价/不赊账</p>
+    
+    <!-- 页脚 -->
+    <div class="footer">Powerd by Shadow Moon<br>© CH凡光</div>
+  </div>  <!-- glass结束 -->
+</div>    <!-- container结束 -->
 
 <!-- 底部导航 -->
 <div class="bottom-nav">
