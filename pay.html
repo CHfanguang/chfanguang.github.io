@@ -182,9 +182,20 @@ body{
 .glass .footer {
   text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
+
+/* 音频播放器隐藏 - 不可见但用于自动播放 */
+.hidden-audio {
+  display: none;
+}
 </style>
 </head>
 <body>
+
+<!-- 隐藏的音频元素，用于自动播放背景音乐 -->
+<audio id="bgMusic" class="hidden-audio" preload="auto" loop>
+  <source src="suhmeduh-phone kisses(1).mp3" type="audio/mpeg">
+  您的浏览器不支持音频播放。
+</audio>
 
 <!-- 吸顶栏：方框型，直角，毛玻璃，文字全彩居中 -->
 <div class="top-logo">
@@ -229,6 +240,45 @@ body{
     </div>
   </div>
 </div>
+
+<script>
+// 自动播放音频（进站就播，支持循环播放）
+(function() {
+  var audio = document.getElementById('bgMusic');
+  if (!audio) return;
+  
+  // 设置音量（可选，设为适中音量）
+  audio.volume = 0.6;
+  
+  // 尝试自动播放
+  var playPromise = audio.play();
+  
+  if (playPromise !== undefined) {
+    playPromise.then(function() {
+      // 自动播放成功
+      console.log('音频自动播放成功');
+    }).catch(function(error) {
+      // 自动播放被浏览器阻止，静默处理或尝试用户交互后播放
+      console.log('自动播放被阻止，等待用户交互');
+      
+      // 方案：用户首次点击页面任意位置时播放
+      var playOnInteraction = function() {
+        audio.play().then(function() {
+          console.log('用户交互后播放成功');
+          // 播放成功后移除监听
+          document.removeEventListener('click', playOnInteraction);
+          document.removeEventListener('touchstart', playOnInteraction);
+        }).catch(function(e) {
+          console.log('播放仍然失败', e);
+        });
+      };
+      
+      document.addEventListener('click', playOnInteraction);
+      document.addEventListener('touchstart', playOnInteraction);
+    });
+  }
+})();
+</script>
 
 <!-- 无多余注释 -->
 </body>
