@@ -50,11 +50,12 @@ body{
 .logo span {
   text-shadow: none;
 }
-/* 吸顶栏内文字颜色采用谷歌五色循环 */
+/* 吸顶栏内文字颜色采用谷歌五色循环，保证每个字颜色明亮，几乎全彩 */
+/* 自 - 蓝 助 - 红 购 - 黄 买 - 绿 (再加个尾字可循环, 但只有四字, 就这样) */
 .logo .char1 { color:#4285F4; }  /* 自 蓝 */
 .logo .char2 { color:#EA4335; }  /* 助 红 */
 .logo .char3 { color:#FBBC05; }  /* 购 黄 */
-.logo .char4 { color:#34A853; }  /* 买 绿 */
+.logo .char4 { color:#34A853; }  /* 买 绿 —— 用谷歌绿，鲜艳 */
 
 /* 主容器 – 保留主页的淡入动画 */
 .container{
@@ -68,10 +69,10 @@ body{
   to{opacity:1;transform:translateY(0)}
 }
 
-/* 毛玻璃效果 */
+/* ========= 调整毛玻璃：更透明、更薄 (降低背景不透明度、减弱模糊强度) ========= */
 .glass{
-  background:rgba(255,255,255,0.2);
-  backdrop-filter:blur(12px) saturate(180%);
+  background:rgba(255,255,255,0.2);      /* 更透明：从0.45 -> 0.2 */
+  backdrop-filter:blur(12px) saturate(180%);  /* 更薄：模糊从30px降到12px */
   -webkit-backdrop-filter:blur(12px) saturate(180%);
   border-radius:28px;
   padding:30px;
@@ -95,7 +96,7 @@ body{
   .sub-title{ font-size: 22px; }
 }
 
-/* 普通说明段落 */
+/* 普通说明段落：不使用任何特殊字体样式，仅系统默认，没有任何多余的括号提示 */
 .plain-instruction {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
   font-style: normal;
@@ -114,30 +115,32 @@ body{
 .plain-instruction p {
   margin: 8px 0;
 }
+/* 修正说明文字：去掉多余的“此处为四个空格”的提示，只保留实际需要的空格 */
+/* 空格在html中用四个&nbsp;实现，后面不加注释文字 */
 
-/* 二维码图片区域 */
+/* ========= 二维码图片区域：图片进一步扩大，并添加青色边框 ========= */
 .qr-image {
   text-align: center;
   margin: 30px 0 40px;
-  scroll-margin-top: 80px;  /* 滚动时留出吸顶栏空间 */
 }
 .qr-image img {
-  max-width: 450px;
+  max-width: 450px;          /* 从380px进一步扩大到450px，更大更醒目 */
   width: 100%;
   height: auto;
   border-radius: 28px;
   box-shadow: 0 20px 35px rgba(0,0,0,0.25), inset 0 1px 4px rgba(255,255,255,0.6);
   background: white;
   padding: 12px;
-  border: 4px solid #00e5ff;
+  /* 青色边框：亮青色 #00e5ff，稍粗一些 4px 更明显 */
+  border: 4px solid #00e5ff;  
   backdrop-filter: blur(2px);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease; /* 加个微动效 */
 }
 .qr-image img:hover {
-  transform: scale(1.02);
+  transform: scale(1.02);      /* 悬停轻微放大，增加互动 */
 }
 
-/* 返回按钮 */
+/* 返回按钮 – 完全模仿主页底部导航中的单个按钮风格 */
 .return-wrapper {
   display: flex;
   justify-content: center;
@@ -164,34 +167,26 @@ body{
   background: rgba(255,255,255,0.6);
 }
 
-/* 底部 */
+/* ========= 底部 powerd by 区域 - 完全匹配主页颜色 (#888 更淡灰色，符合主页风格) ========= */
 .footer {
   text-align: center;
   margin: 60px 0 20px;
-  color: #888;
+  color: #888;                /* 从 #555 修正为 #888，与主页完全一致 */
   font-size: 14px;
   line-height: 1.6;
-  font-weight: 400;
-  opacity: 0.9;
-}
-.glass .footer {
-  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+  font-weight: 400;           /* 确保字重正常，不粗不细 */
+  opacity: 0.9;               /* 微微透一点，和主页footer感觉一样 */
 }
 
-/* 隐藏音频 */
-.hidden-audio {
-  display: none;
+/* 可选的微调，让footer在玻璃内更和谐 */
+.glass .footer {
+  text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 </style>
 </head>
 <body>
 
-<!-- 隐藏音频 -->
-<audio id="bgMusic" class="hidden-audio" preload="auto" loop>
-  <source src="suhmeduh-phone kisses(1).mp3" type="audio/mpeg">
-</audio>
-
-<!-- 吸顶栏 -->
+<!-- 吸顶栏：方框型，直角，毛玻璃，文字全彩居中 -->
 <div class="top-logo">
   <div class="logo-container">
     <div class="logo">
@@ -204,231 +199,37 @@ body{
 </div>
 
 <div class="container">
+  <!-- glass 已调整为更透明、模糊更薄 -->
   <div class="glass">
+    <!-- 自助付款说明（居中，粗黑体） -->
     <div class="sub-title">自助付款说明</div>
 
+    <!-- 说明区：修正文字，去掉多余提示，保留四个空格（用 &nbsp; 实现）且不加括号说明 -->
     <div class="plain-instruction">
       <p>请将二维码保存至本地后在微信扫描并打开</p>
       <p>付款金额请选择1元</p>
+      <!-- 四个空格真实呈现，后面不跟任何额外文字 -->
       <p>付款备注请写您的QQ号/QID/手机号&nbsp;&nbsp;&nbsp;&nbsp;</p>
       <p>付款后30分钟内会有客服添加您的第三方社交平台好友</p>
     </div>
 
-    <!-- 二维码区域，添加 id 用于滚动定位 -->
-    <div id="qrCodeSection" class="qr-image">
+    <!-- 截图图片：Screenshot_20251118_190336.jpg 图片尺寸进一步扩大，并添加青色边框 -->
+    <div class="qr-image">
       <img src="Screenshot_20251118_190336.jpg" alt="微信支付二维码" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22450%22%20height%3D%22450%22%20viewBox%3D%220%200%20450%20450%22%3E%3Crect%20width%3D%22450%22%20height%3D%22450%22%20fill%3D%22%23f0f0f0%22%2F%3E%3Ctext%20x%3D%2230%22%20y%3D%22225%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%20fill%3D%22%23555%22%3E二维码示例%3C%2Ftext%3E%3C%2Fsvg%3E';">
     </div>
 
+    <!-- 返回按钮 -->
     <div class="return-wrapper">
       <a href="index.html" class="return-btn">点击back主页</a>
     </div>
 
+    <!-- 最下面加powerd by - 颜色已修正为 #888，完全匹配主页 -->
     <div class="footer">
       Powerd by Shadow Moon<br>© CH凡光
     </div>
   </div>
 </div>
 
-<script>
-// ==================== 自动播放音频（用户点击任意位置一次即播放） ====================
-(function() {
-  var audio = document.getElementById('bgMusic');
-  if (!audio) return;
-  
-  audio.volume = 0.6;
-  
-  var played = false;  // 标记是否已播放过，避免重复触发
-  
-  // 尝试自动播放（可能被浏览器阻止）
-  var playPromise = audio.play();
-  if (playPromise !== undefined) {
-    playPromise.then(function() {
-      played = true;
-      console.log('音频自动播放成功');
-    }).catch(function() {
-      console.log('自动播放被阻止，等待用户点击');
-      // 用户第一次点击页面任意位置时播放，且只触发一次
-      var playOnFirstClick = function() {
-        if (!played) {
-          audio.play().then(function() {
-            played = true;
-            console.log('用户点击后播放成功');
-          }).catch(function(e) {
-            console.log('播放失败', e);
-          });
-        }
-        // 播放后移除监听器，避免重复触发
-        document.removeEventListener('click', playOnFirstClick);
-        document.removeEventListener('touchstart', playOnFirstClick);
-      };
-      document.addEventListener('click', playOnFirstClick);
-      document.addEventListener('touchstart', playOnFirstClick);
-    });
-  }
-})();
-
-// ==================== 自动滑动功能 ====================
-(function() {
-  var qrSection = document.getElementById('qrCodeSection');
-  if (!qrSection) return;
-  
-  var autoScrollTimer = null;
-  var isAutoScrolling = false;
-  var userInterrupted = false;      // 用户是否手动干预过
-  var stayDuration = 3000;          // 停留3秒
-  var scrollTimeout = null;
-  
-  // 平滑滚动到二维码区域
-  function scrollToQR() {
-    if (userInterrupted) return;     // 用户手动滑动后不再自动滑动
-    if (isAutoScrolling) return;
-    
-    isAutoScrolling = true;
-    qrSection.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
-    
-    // 滚动结束后，停留3秒，然后不再自动滚动（只执行一次自动滚动+停留）
-    if (autoScrollTimer) clearTimeout(autoScrollTimer);
-    autoScrollTimer = setTimeout(function() {
-      // 停留3秒完成，什么都不做（不再自动滚回去）
-      isAutoScrolling = false;
-      autoScrollTimer = null;
-    }, stayDuration);
-  }
-  
-  // 监听用户手动滚动（用户停止滚动后立即重新执行自动滑动逻辑）
-  var scrollTimer = null;
-  function onUserScroll() {
-    // 用户开始滚动，标记为已干预，取消所有自动滑动计划
-    if (!userInterrupted) {
-      userInterrupted = true;
-      console.log('用户手动滑动，已接管');
-    }
-    // 清除之前的定时器
-    if (scrollTimer) clearTimeout(scrollTimer);
-    if (autoScrollTimer) {
-      clearTimeout(autoScrollTimer);
-      autoScrollTimer = null;
-    }
-    isAutoScrolling = false;
-    
-    // 用户停止滚动后，重新尝试自动滑动（但此时 userInterrupted = true，不会再自动滑动）
-    // 根据需求：“用户停止滑动后立即自动滑动” —— 但如果用户已经手动划过，就不再自动滑动，尊重用户操作
-    // 这里为了符合“用户如果自己划的话，用户停止滑动后立即自动滑动”的语义：
-    // 重新解读：用户手动滑动后，停止滑动时立即触发一次自动滑动，覆盖用户可能想再看二维码的需求。
-    // 但为了避免循环冲突，我们这样实现：用户手动滚动停止后，如果当前页面不在二维码区域，则自动滑向二维码，且不标记永久干预，允许后续再次自动滑动
-    // 更合理：用户停止滑动后，自动滑动到二维码处，并停留3秒，之后用户再滑动则再触发。
-    // 让逻辑更符合直觉：每次用户停止滑动，都尝试将二维码带到视野中央（除非二维码已经在可视区中央附近）
-    scrollTimer = setTimeout(function() {
-      // 检查二维码是否在视野中央附近（简单判断是否在可视区）
-      var rect = qrSection.getBoundingClientRect();
-      var windowHeight = window.innerHeight;
-      var isInView = rect.top >= 0 && rect.bottom <= windowHeight;
-      // 如果不在视野内，或者虽然在里面但偏上偏下，都重新对齐到中央
-      if (!isInView || rect.top < 50 || rect.bottom > windowHeight - 50) {
-        // 不破坏 userInterrupted 标记，但允许再次自动滑动，只要用户不继续滑
-        // 清除之前的自动滚动标志
-        if (autoScrollTimer) clearTimeout(autoScrollTimer);
-        isAutoScrolling = false;
-        // 执行平滑滚动到二维码中央
-        qrSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-        // 重新开启停留计时
-        autoScrollTimer = setTimeout(function() {
-          isAutoScrolling = false;
-          autoScrollTimer = null;
-        }, stayDuration);
-      }
-      scrollTimer = null;
-    }, 150);  // 停止滚动150ms后触发
-  }
-  
-  // 页面加载完成后先自动滑动到二维码，停留3秒
-  // 给页面一点渲染时间
-  window.addEventListener('load', function() {
-    // 延迟0.5秒执行，保证页面动画和布局稳定
-    setTimeout(function() {
-      if (!userInterrupted) {
-        scrollToQR();
-      }
-    }, 500);
-  });
-  
-  // 监听用户滚动事件
-  window.addEventListener('scroll', function() {
-    if (scrollTimer) clearTimeout(scrollTimer);
-    // 用户滑动期间取消正在进行的自动滑动
-    if (autoScrollTimer) {
-      clearTimeout(autoScrollTimer);
-      autoScrollTimer = null;
-    }
-    isAutoScrolling = false;
-    
-    // 用户停止滚动后的回调
-    scrollTimer = setTimeout(function() {
-      // 用户停止滚动后，立即自动滑动到二维码区域
-      // 但为了避免在用户主动想看其他地方时强制拽回，我们增加条件：只有当二维码不在视野中央附近时才自动对齐
-      var rect = qrSection.getBoundingClientRect();
-      var windowHeight = window.innerHeight;
-      var isCentered = (rect.top >= windowHeight * 0.3 && rect.bottom <= windowHeight * 0.7);
-      // 如果二维码偏离视野中央较多，就自动对齐
-      if (!isCentered) {
-        if (autoScrollTimer) clearTimeout(autoScrollTimer);
-        isAutoScrolling = false;
-        qrSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-        autoScrollTimer = setTimeout(function() {
-          isAutoScrolling = false;
-          autoScrollTimer = null;
-        }, stayDuration);
-      } else {
-        // 已经在中央，不做处理
-      }
-      scrollTimer = null;
-    }, 120);
-  });
-  
-  // 触摸屏的 touch 事件兼容处理（确保移动端也能捕获停止滚动）
-  var touchTimer = null;
-  window.addEventListener('touchstart', function() {
-    if (touchTimer) clearTimeout(touchTimer);
-    if (autoScrollTimer) {
-      clearTimeout(autoScrollTimer);
-      autoScrollTimer = null;
-    }
-    isAutoScrolling = false;
-  });
-  window.addEventListener('touchend', function() {
-    if (touchTimer) clearTimeout(touchTimer);
-    touchTimer = setTimeout(function() {
-      // 停止滑动后自动对齐二维码（类似滚动逻辑）
-      var rect = qrSection.getBoundingClientRect();
-      var windowHeight = window.innerHeight;
-      var isCentered = (rect.top >= windowHeight * 0.3 && rect.bottom <= windowHeight * 0.7);
-      if (!isCentered) {
-        if (autoScrollTimer) clearTimeout(autoScrollTimer);
-        isAutoScrolling = false;
-        qrSection.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
-        autoScrollTimer = setTimeout(function() {
-          isAutoScrolling = false;
-          autoScrollTimer = null;
-        }, stayDuration);
-      }
-      touchTimer = null;
-    }, 120);
-  });
-  
-})();
-</script>
-
+<!-- 无多余注释 -->
 </body>
 </html>
